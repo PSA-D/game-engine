@@ -12,15 +12,15 @@ Voor de afspraken over hoe het team samenwerkt, zie **CODING_GUIDELINES.md**.
 
 ## 2. Benodigde tools
 
-| Tool | Minimale versie | Doel |
-|---|---|---|
-| Git | — | Versiebeheer |
-| C++20-compiler | C++20-ondersteuning | Compileren |
-| CMake | 3.25 | Buildsysteem |
-| Ninja | recent | Buildgenerator |
-| vcpkg | recent | Third-party dependencies (manifest mode) |
-| clang-format | recent | Codeformattering |
-| clang-tidy | recent | Statische analyse |
+| Tool           | Minimale versie     | Doel                                     |
+| -------------- | ------------------- | ---------------------------------------- |
+| Git            | —                   | Versiebeheer                             |
+| C++20-compiler | C++20-ondersteuning | Compileren                               |
+| CMake          | 3.25                | Buildsysteem                             |
+| Ninja          | recent              | Buildgenerator                           |
+| vcpkg          | recent              | Third-party dependencies (manifest mode) |
+| clang-format   | recent              | Codeformattering                         |
+| clang-tidy     | recent              | Statische analyse                        |
 
 clang-format en clang-tidy worden geleverd door LLVM. De installatie verschilt per platform; zie paragraaf 3.
 
@@ -30,10 +30,10 @@ clang-format en clang-tidy worden geleverd door LLVM. De installatie verschilt p
 
 Ondersteunde compilers:
 
-| Compiler | Installatie |
-|---|---|
-| MSVC | Visual Studio 2022 met de workload "Desktop development with C++" |
-| Clang | LLVM-installer of de optionele component "C++ Clang tools for Windows" in Visual Studio |
+| Compiler | Installatie                                                                             |
+| -------- | --------------------------------------------------------------------------------------- |
+| MSVC     | Visual Studio 2022 met de workload "Desktop development with C++"                       |
+| Clang    | LLVM-installer of de optionele component "C++ Clang tools for Windows" in Visual Studio |
 
 Installeer de overige tools met winget:
 
@@ -184,7 +184,7 @@ De afspraken over wat er getest moet worden staan in CODING_GUIDELINES.md.
 Formatter één bestand:
 
 ```bash
-clang-format -i engine/src/Engine.cpp
+clang-format -i engine/src/core/Engine.cpp
 ```
 
 Formatter alle C++-bestanden (alleen vanuit de projectroot):
@@ -208,7 +208,7 @@ clang-format -i **/*.cpp **/*.h
 clang-tidy gebruikt het door CMake gegenereerde `build/debug/compile_commands.json`:
 
 ```bash
-clang-tidy -p build/debug engine/src/Engine.cpp
+clang-tidy engine/src/core/Engine.cpp -p build
 ```
 
 ## 9 Versies controleren
