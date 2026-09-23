@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.3)
+cmake_minimum_required(VERSION 3.25)
 
 add_executable(EngineTests
     test_engine.cpp
