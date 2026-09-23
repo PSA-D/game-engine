@@ -13,7 +13,7 @@ Engine::~Engine()
 
 void Engine::init()
 {
-    std::cout << "Engine initialized\n";
+    std::cout << "Engine initialized!\n";
     running = true;
 }
 
