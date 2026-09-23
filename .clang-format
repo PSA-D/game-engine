@@ -62,4 +62,4 @@ AllowAllParametersOfDeclarationOnNextLine: true
 
 InsertNewlineAtEOF: true
 KeepEmptyLinesAtEOF: true
-BreakTemplateDeclarations: Yes
+AlwaysBreakTemplateDeclarations: Yes
