@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 4.3)
 
+# The project does not use C++20 modules. Leave module dependency scanning
+# off (CMake enables it by default for C++20+GCC and then injects GCC-only
+# flags like -fmodules-ts into every compile, which clangd cannot parse).
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+
 project(ProjectSystemArchitecture
     VERSION 0.1.0
     LANGUAGES CXX
