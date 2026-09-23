@@ -31,3 +31,5 @@ bool Engine::isRunning() const
     return running;
 }
 } // namespace engine
+
+this does not compile
