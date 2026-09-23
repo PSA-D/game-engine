@@ -326,11 +326,13 @@ Werk niet rechtstreeks op de gedeelde hoofdbranch. Gebruik feature branches:
 ```text
 main
 │
-├── feature/vulkan-renderer
-├── feature/input-system
+├── feat/vulkan-renderer
+├── feat/input-system
 ├── fix/entity-lifetime
-└── refactor/resource-manager
+└── fix/resource-manager
 ```
+
+Elke branch moet beginnen met "feat/" of "fix/".
 
 Pull Requests worden gebruikt om wijzigingen naar `main` te brengen. Een PR moet:
 
