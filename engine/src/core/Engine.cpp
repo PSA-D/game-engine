@@ -26,8 +26,7 @@ void Engine::shutdown()
     std::cout << "Engine shut down\n";
 }
 
-bool Engine::isRunning() const
-{
+bool Engine::isRunning() const {
     return running;
 }
 } // namespace engine
