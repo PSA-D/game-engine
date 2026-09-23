@@ -8,4 +8,9 @@ target_include_directories(engine PUBLIC
     include
 )
 
+target_link_libraries(engine PUBLIC
+    project_sanitizers
+    project_warnings
+)
+
 target_compile_features(engine PUBLIC cxx_std_20)

@@ -11,25 +11,30 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+option(ENGINE_BUILD_TESTS "Build tests" ON)
+option(ENGINE_ENABLE_SANITIZERS "Enable AddressSanitizer and UndefinedBehaviorSanitizer" ON)
+
+add_library(project_warnings INTERFACE)
+
 if(NOT DEFINED ENV{VCPKG_ROOT})
     message(FATAL_ERROR "Environment variable VCPKG_ROOT is not set. Install vcpkg and set VCPKG_ROOT (see DEVELOPMENT_SETUP.md, section 5).")
 endif()
 
 if(MSVC)
-    add_compile_options(/W4)
+    target_compile_options(project_warnings INTERFACE /W4 /WX)
 else()
-    add_compile_options(-Wall -Wextra -Wpedantic)
+    target_compile_options(project_warnings INTERFACE -Wall -Wextra -Wpedantic -Werror)
 endif()
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT MSVC AND NOT MINGW)
-    add_compile_options(-fsanitize=address,undefined)
-    add_link_options(-fsanitize=address,undefined)
+add_library(project_sanitizers INTERFACE)
+
+if(ENGINE_ENABLE_SANITIZERS AND NOT MSVC AND NOT MINGW)
+    target_compile_options(project_sanitizers INTERFACE -fsanitize=address,undefined)
+    target_link_options(project_sanitizers INTERFACE -fsanitize=address,undefined)
 endif()
 
 add_subdirectory(engine)
 add_subdirectory(game)
-
-option(ENGINE_BUILD_TESTS "Build tests" ON)
 
 if(ENGINE_BUILD_TESTS)
     enable_testing()
