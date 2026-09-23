@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.3)
+cmake_minimum_required(VERSION 3.25)
 
 # The project does not use C++20 modules. Leave module dependency scanning
 # off (CMake enables it by default for C++20+GCC and then injects GCC-only
