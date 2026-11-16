@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 add_library(engine STATIC
     src/core/Engine.cpp
+        src/platform
 )
 
 target_include_directories(engine PUBLIC
