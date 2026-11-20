@@ -1,6 +1,7 @@
 #pragma once
-#include "../../engine-platform/EventKinds.h"
-#include "../../engine-platform/Events.h"
+
+#include "platform/EventKinds.h"
+#include "platform/Events.h"
 
 #include <SDL3/SDL_keycode.h>
 #include <SDL3/SDL_scancode.h>

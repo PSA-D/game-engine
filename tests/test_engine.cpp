@@ -1,48 +1,22 @@
+#include <catch2/catch_test_macros.hpp>
+
 #include "Engine.h"
 
-#include <cstdlib>
-#include <iostream>
+TEST_CASE("Engine lifecycle manages running state", "[engine]") {
+    engine::Engine engine;
 
-auto main() -> int
-{
-    int failures = 0;
+    SECTION("Engine is not running before init") {
+        REQUIRE_FALSE(engine.isRunning());
+    }
 
-    {
-        engine::Engine engine;
+    SECTION("Engine is running after init") {
         engine.init();
-        if (!engine.isRunning())
-        {
-            std::cerr << "FAIL: Engine should be running after init\n";
-            failures++;
-        }
+        REQUIRE(engine.isRunning());
     }
 
-    {
-        engine::Engine engine;
-        if (engine.isRunning())
-        {
-            std::cerr << "FAIL: Engine should not be running before init\n";
-            failures++;
-        }
-    }
-
-    {
-        engine::Engine engine;
+    SECTION("Engine is not running after shutdown") {
         engine.init();
         engine.shutdown();
-        if (engine.isRunning())
-        {
-            std::cerr << "FAIL: Engine should not be running after shutdown\n";
-            failures++;
-        }
+        REQUIRE_FALSE(engine.isRunning());
     }
-
-    if (failures > 0)
-    {
-        std::cerr << failures << " test(s) failed\n";
-        return EXIT_FAILURE;
-    }
-
-    std::cout << "All tests passed\n";
-    return EXIT_SUCCESS;
 }

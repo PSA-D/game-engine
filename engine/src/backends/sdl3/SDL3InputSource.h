@@ -1,9 +1,9 @@
 #pragma once
 
 #include "SDL3Window.h"
-#include "../../engine-platform/IInputSource.h"
-#include "../../engine-platform/INativeEventListener.h"
-#include "../../engine-platform/Events.h"
+#include "platform/IInputSource.h"
+#include "platform/INativeEventListener.h"
+#include "platform/Events.h"
 
 #include <SDL3/SDL.h>
 

@@ -2,6 +2,7 @@
 
 namespace engine::platform
 {
+    // For raw events, not a PlatformEvent
     class INativeEventListener
     {
     public:

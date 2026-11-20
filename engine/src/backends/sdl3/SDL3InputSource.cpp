@@ -2,8 +2,6 @@
 
 #include "SDL3KeyMap.h"
 
-#include <algorithm>
-
 using namespace engine::platform;
 
 namespace backend::sdl3
@@ -51,7 +49,7 @@ namespace backend::sdl3
             case SDL_EVENT_WINDOW_RESIZED:
                 return WindowEvent{
                     WindowEventKind::Resized,
-                Vector2{
+                    engine::utils::Vector2{
                     static_cast<float>(event.window.data1),
                     static_cast<float>(event.window.data2)
                     }

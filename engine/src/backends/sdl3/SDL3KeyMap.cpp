@@ -60,16 +60,16 @@ namespace backend::sdl3
             case SDL_SCANCODE_Y: return KeyCode::Y;
             case SDL_SCANCODE_Z: return KeyCode::Z;
 
-            case SDL_SCANCODE_0: return KeyCode::Num00;
-            case SDL_SCANCODE_1: return KeyCode::Num01;
-            case SDL_SCANCODE_2: return KeyCode::Num02;
-            case SDL_SCANCODE_3: return KeyCode::Num03;
-            case SDL_SCANCODE_4: return KeyCode::Num04;
-            case SDL_SCANCODE_5: return KeyCode::Num05;
-            case SDL_SCANCODE_6: return KeyCode::Num06;
-            case SDL_SCANCODE_7: return KeyCode::Num07;
-            case SDL_SCANCODE_8: return KeyCode::Num08;
-            case SDL_SCANCODE_9: return KeyCode::Num09;
+            case SDL_SCANCODE_0: return KeyCode::Num0;
+            case SDL_SCANCODE_1: return KeyCode::Num1;
+            case SDL_SCANCODE_2: return KeyCode::Num2;
+            case SDL_SCANCODE_3: return KeyCode::Num3;
+            case SDL_SCANCODE_4: return KeyCode::Num4;
+            case SDL_SCANCODE_5: return KeyCode::Num5;
+            case SDL_SCANCODE_6: return KeyCode::Num6;
+            case SDL_SCANCODE_7: return KeyCode::Num7;
+            case SDL_SCANCODE_8: return KeyCode::Num8;
+            case SDL_SCANCODE_9: return KeyCode::Num9;
 
             case SDL_SCANCODE_SPACE:     return KeyCode::Space;
             case SDL_SCANCODE_RETURN:    return KeyCode::Enter;

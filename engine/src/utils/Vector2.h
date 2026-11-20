@@ -1,7 +1,10 @@
 #pragma once
 
-struct Vector2
+namespace engine::utils
 {
-    float x;
-    float y;
-};
+    struct Vector2
+    {
+        float x;
+        float y;
+    };
+}

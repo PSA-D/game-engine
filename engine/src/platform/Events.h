@@ -1,7 +1,7 @@
 #pragma once
 
 #include "EventKinds.h"
-#include "../utils/Vector2.h"
+#include "utils/Vector2.h"
 
 #include <variant>
 
@@ -10,7 +10,7 @@ namespace engine::platform
     struct WindowEvent
     {
         WindowEventKind kind;
-        Vector2 size;
+        utils::Vector2 size;
     };
 
     struct QuitEvent
