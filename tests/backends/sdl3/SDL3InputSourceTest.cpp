@@ -30,8 +30,8 @@ namespace {
     };
 
     SDL3Window& getDummyWindow() {
-        alignas(SDL3Window) static std::byte storage[sizeof(SDL3Window)]{};
-        return *reinterpret_cast<SDL3Window*>(storage);
+        static SDL3Window dummy{};
+        return dummy;
     }
 }
 
