@@ -1,54 +1,65 @@
+#include "src/backends/sdl3/SDL3InputSource.h"
+
+#include "src/backends/sdl3/SDL3Window.h"
+#include "src/platform/Events.h"
+#include "src/platform/INativeEventListener.h"
+#include "src/utils/Vector2.h"
+
+#include <SDL3/SDL.h>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include <SDL3/SDL.h>
 #include <variant>
-
-#include "src/backends/sdl3/SDL3InputSource.h"
-#include "src/backends/sdl3/SDL3Window.h"
-#include "src/platform/INativeEventListener.h"
-#include "src/platform/Events.h"
-#include "src/utils/Vector2.h"
 
 using namespace backend::sdl3;
 using namespace engine::platform;
 using Catch::Matchers::WithinRel;
 
-namespace {
-    class MockNativeEventListener : public INativeEventListener {
-    public:
-        int callCount = 0;
-        Uint32 lastEventType = 0;
-        bool shouldConsume = false;
+namespace
+{
+class MockNativeEventListener : public INativeEventListener
+{
+public:
+    int callCount = 0;
+    Uint32 lastEventType = 0;
+    bool shouldConsume = false;
 
-        bool onNativeEvent(const void* nativeEvent) override {
-            ++callCount;
-            if (nativeEvent != nullptr) {
-                lastEventType = static_cast<const SDL_Event*>(nativeEvent)->type;
-            }
-            return shouldConsume;
+    bool onNativeEvent(const void* nativeEvent) override
+    {
+        ++callCount;
+        if (nativeEvent != nullptr)
+        {
+            lastEventType = static_cast<const SDL_Event*>(nativeEvent)->type;
         }
-    };
-
-    SDL3Window& getDummyWindow() {
-        static SDL3Window dummy{};
-        return dummy;
+        return shouldConsume;
     }
-}
+};
 
-TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]") {
+SDL3Window& getDummyWindow()
+{
+    static SDL3Window dummy{};
+    return dummy;
+}
+} // namespace
+
+TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]")
+{
     REQUIRE(SDL_InitSubSystem(SDL_INIT_EVENTS));
 
     SDL_Event discard;
-    while (SDL_PollEvent(&discard)) {}
+    while (SDL_PollEvent(&discard))
+    {
+    }
 
     SDL3InputSource inputSource(getDummyWindow());
 
-    SECTION("Returns std::nullopt when event queue is empty") {
+    SECTION("Returns std::nullopt when event queue is empty")
+    {
         auto event = inputSource.pollEvent();
         REQUIRE_FALSE(event.has_value());
     }
 
-    SECTION("Translates SDL_EVENT_QUIT into QuitEvent") {
+    SECTION("Translates SDL_EVENT_QUIT into QuitEvent")
+    {
         SDL_Event sdlEvent{};
         sdlEvent.type = SDL_EVENT_QUIT;
         REQUIRE(SDL_PushEvent(&sdlEvent));
@@ -58,7 +69,8 @@ TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]") {
         REQUIRE(std::holds_alternative<QuitEvent>(*event));
     }
 
-    SECTION("Translates keyboard events with modifiers") {
+    SECTION("Translates keyboard events with modifiers")
+    {
         SDL_Event sdlEvent{};
         sdlEvent.type = SDL_EVENT_KEY_DOWN;
         sdlEvent.key.scancode = SDL_SCANCODE_W;
@@ -81,7 +93,8 @@ TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]") {
         REQUIRE_FALSE(keyEvent.mods.gui);
     }
 
-    SECTION("Translates mouse button events") {
+    SECTION("Translates mouse button events")
+    {
         SDL_Event sdlEvent{};
         sdlEvent.type = SDL_EVENT_MOUSE_BUTTON_DOWN;
         sdlEvent.button.button = SDL_BUTTON_RIGHT;
@@ -101,7 +114,8 @@ TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]") {
         REQUIRE_THAT(btnEvent.y, WithinRel(256.0f));
     }
 
-    SECTION("Translates mouse motion and mouse wheel events") {
+    SECTION("Translates mouse motion and mouse wheel events")
+    {
         SDL_Event moveEvent{};
         moveEvent.type = SDL_EVENT_MOUSE_MOTION;
         moveEvent.motion.x = 100.0f;
@@ -133,7 +147,8 @@ TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]") {
         REQUIRE_THAT(w.y, WithinRel(-2.0f));
     }
 
-    SECTION("Translates window resized events") {
+    SECTION("Translates window resized events")
+    {
         SDL_Event sdlEvent{};
         sdlEvent.type = SDL_EVENT_WINDOW_RESIZED;
         sdlEvent.window.data1 = 1920;
@@ -150,7 +165,8 @@ TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]") {
         REQUIRE_THAT(winEvent.size.y, WithinRel(1080.0f));
     }
 
-    SECTION("Skips unhandled SDL events and returns next valid event") {
+    SECTION("Skips unhandled SDL events and returns next valid event")
+    {
         SDL_Event ignoredEvent{};
         ignoredEvent.type = SDL_EVENT_CLIPBOARD_UPDATE;
         REQUIRE(SDL_PushEvent(&ignoredEvent));
@@ -164,7 +180,8 @@ TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]") {
         REQUIRE(std::holds_alternative<QuitEvent>(*event));
     }
 
-    SECTION("Forwards raw events to INativeEventListeners and removes them cleanly") {
+    SECTION("Forwards raw events to INativeEventListeners and removes them cleanly")
+    {
         MockNativeEventListener listener;
         inputSource.addNativeEventListener(&listener);
 
