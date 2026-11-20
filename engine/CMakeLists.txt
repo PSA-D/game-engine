@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.25)
 
 add_library(engine STATIC
     src/core/Engine.cpp
+    src/utils/Vector2.h
+    src/engine-platform/NativeHandles.h
+    src/engine-platform/EventKinds.h
+    src/engine-platform/Events.h
 )
 
 target_include_directories(engine PUBLIC
