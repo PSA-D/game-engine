@@ -1,5 +1,8 @@
 {
     "name": "project-systems-programming",
     "version": "0.1.0",
-    "dependencies": []
+    "dependencies": [
+        "sdl3",
+        "catch2"
+    ]
 }
