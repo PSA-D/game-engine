@@ -1,7 +1,7 @@
 #pragma once
 
 #include "EventKinds.h"
-#include "src/utils/Vector2.h"
+#include "../utils/Vector2.h"
 
 #include <variant>
 
