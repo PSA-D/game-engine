@@ -11,7 +11,7 @@ class IInputSource
 {
 public:
     virtual ~IInputSource() = default;
-    virtual std::optional<PlatformEvent> pollEvent() = 0;
+    virtual std::optional<PlatformEvent> pollEvent() const = 0;
     virtual void addNativeEventListener(INativeEventListener* listener) = 0;
     virtual void removeNativeEventListener(INativeEventListener* listener) = 0;
 };

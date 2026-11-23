@@ -6,6 +6,7 @@ add_executable(EngineTests
         test_engine.cpp
         backends/sdl3/SDL3KeyMapTest.cpp
         backends/sdl3/SDL3InputSourceTest.cpp
+        runtime/KeyAndMouseListenersTest.cpp
 )
 
 target_link_libraries(EngineTests PRIVATE engine)

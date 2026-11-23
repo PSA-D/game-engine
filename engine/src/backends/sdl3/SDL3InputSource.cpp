@@ -6,7 +6,7 @@ using namespace engine::platform;
 
 namespace engine::backends
 {
-std::optional<PlatformEvent> SDL3InputSource::pollEvent()
+std::optional<PlatformEvent> SDL3InputSource::pollEvent() const
 {
     SDL_Event sdlEvent;
 

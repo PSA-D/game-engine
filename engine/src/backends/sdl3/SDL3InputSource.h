@@ -18,7 +18,7 @@ public:
         : window_(window)
     {
     }
-    std::optional<platform::PlatformEvent> pollEvent() override;
+    std::optional<platform::PlatformEvent> pollEvent() const override;
     void addNativeEventListener(platform::INativeEventListener* listener) override;
     void removeNativeEventListener(platform::INativeEventListener* listener) override;
 
