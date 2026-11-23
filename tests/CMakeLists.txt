@@ -5,6 +5,7 @@ add_executable(EngineTests
         persistence/JsonSaveStrategyTest.cpp
         runtime/DataNodeTest.cpp
         persistence/PersistenceTestData.h
+        persistence/JsonSaveStrategyIntegrationTest.cpp
 )
 
 target_link_libraries(EngineTests PRIVATE engine)

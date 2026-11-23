@@ -38,7 +38,7 @@ TEST_CASE("Een round trip geeft dezelfde data terug", "[unit][persistence]")
 
     SECTION("Een genest voorbeeld met alle datatypen")
     {
-        const GameData original = test::makeSampleData();
+        const GameData original = makeSampleData();
 
         const auto result = roundTrip(strategy, original);
 

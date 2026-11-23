@@ -69,7 +69,7 @@ auto readFile(const std::filesystem::path& path) -> std::string
 TEST_CASE("Data kan naar een bestand geschreven en weer uitgelezen worden", "[integration][persistence]")
 {
     const JsonSaveStrategy strategy;
-    const GameData original = test::makeSampleData();
+    const GameData original = makeSampleData();
     const TempFile file("engine_save_strategy_roundtrip" + strategy.fileExtension());
 
     writeFile(file.getPath(), strategy.serialize(original));
@@ -97,7 +97,7 @@ TEST_CASE("Tekst met regeleinden overleeft het bestand", "[integration][persiste
 TEST_CASE("Een andere strategie-instantie leest hetzelfde bestand", "[integration][persistence]")
 {
     // De strategie heeft geen toestand: wat de ene schrijft, leest de andere (zoals na een herstart).
-    const GameData original = test::makeSampleData();
+    const GameData original = makeSampleData();
     const TempFile file("engine_save_strategy_instances.json");
 
     writeFile(file.getPath(), JsonSaveStrategy{}.serialize(original));
@@ -114,7 +114,7 @@ TEST_CASE("Een beschadigd bestand op schijf geeft nullopt", "[integration][persi
 
     SECTION("Afgebroken bestand, bijvoorbeeld door een crash tijdens het opslaan")
     {
-        const std::string complete = strategy.serialize(test::makeSampleData());
+        const std::string complete = strategy.serialize(makeSampleData());
         writeFile(file.getPath(), complete.substr(0, complete.size() / 2));
 
         CHECK_FALSE(strategy.deserialize(readFile(file.getPath())).has_value());
@@ -134,7 +134,7 @@ TEST_CASE("Een bestand wordt bij opnieuw opslaan volledig overschreven", "[integ
     const TempFile file("engine_save_strategy_overwrite" + strategy.fileExtension());
     const GameData small{.version = 1, .root = DataNode(1)};
 
-    writeFile(file.getPath(), strategy.serialize(test::makeSampleData())); // lang
+    writeFile(file.getPath(), strategy.serialize(makeSampleData())); // lang
     writeFile(file.getPath(), strategy.serialize(small));                  // kort
 
     const auto result = strategy.deserialize(readFile(file.getPath()));
