@@ -9,23 +9,23 @@
 #include <optional>
 #include <vector>
 
-namespace backend::sdl3
+namespace engine::backends
 {
-class SDL3InputSource : public engine::platform::IInputSource
+class SDL3InputSource : public platform::IInputSource
 {
 public:
     SDL3InputSource(SDL3Window& window)
         : window_(window)
     {
     }
-    std::optional<engine::platform::PlatformEvent> pollEvent() override;
-    void addNativeEventListener(engine::platform::INativeEventListener* listener) override;
-    void removeNativeEventListener(engine::platform::INativeEventListener* listener) override;
+    std::optional<platform::PlatformEvent> pollEvent() override;
+    void addNativeEventListener(platform::INativeEventListener* listener) override;
+    void removeNativeEventListener(platform::INativeEventListener* listener) override;
 
 private:
-    std::optional<engine::platform::PlatformEvent> translateEvent(const SDL_Event& event) const;
+    std::optional<platform::PlatformEvent> translateEvent(const SDL_Event& event) const;
 
     SDL3Window& window_;
-    std::vector<engine::platform::INativeEventListener*> listeners_{};
+    std::vector<platform::INativeEventListener*> listeners_{};
 };
-} // namespace backend::sdl3
+} // namespace engine::backends

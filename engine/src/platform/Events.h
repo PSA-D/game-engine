@@ -5,8 +5,6 @@
 
 #include <variant>
 
-using namespace engine::utils;
-
 namespace engine::platform
 {
 enum class WindowEventKind
@@ -23,7 +21,7 @@ enum class WindowEventKind
 struct WindowEvent
 {
     WindowEventKind kind;
-    utils::Vector2 size;
+    Vector2 size;
 };
 
 struct QuitEvent

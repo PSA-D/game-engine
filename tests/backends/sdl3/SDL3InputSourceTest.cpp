@@ -10,7 +10,8 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <variant>
 
-using namespace backend::sdl3;
+using namespace engine::backends;
+using namespace engine;
 using namespace engine::platform;
 using Catch::Matchers::WithinRel;
 

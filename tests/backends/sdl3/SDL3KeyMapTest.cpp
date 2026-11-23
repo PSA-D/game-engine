@@ -6,8 +6,8 @@
 #include <SDL3/SDL_scancode.h>
 #include <catch2/catch_test_macros.hpp>
 
-using namespace backend::sdl3;
-using engine::utils::KeyCode;
+using namespace engine::backends;
+using engine::KeyCode;
 
 TEST_CASE("SDL3KeyMap translates SDL scancodes to engine KeyCodes", "[input][keymap]")
 {

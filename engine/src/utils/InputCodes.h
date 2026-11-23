@@ -1,6 +1,6 @@
 #pragma once
 
-namespace engine::utils
+namespace engine
 {
 enum class MouseButton
 {
@@ -77,4 +77,4 @@ enum class KeyCode
     F11,
     F12,
 };
-} // namespace engine::utils
+} // namespace engine

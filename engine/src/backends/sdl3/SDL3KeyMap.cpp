@@ -3,9 +3,8 @@
 #include <SDL3/SDL_mouse.h>
 
 using namespace engine::platform;
-using namespace engine::utils;
 
-namespace backend::sdl3
+namespace engine::backends
 {
 KeyModifiers SDL3KeyMap::toKeyModifiers(SDL_Keymod modifier)
 {
@@ -172,4 +171,4 @@ KeyCode SDL3KeyMap::toKeyCode(SDL_Scancode scancode)
         return KeyCode::Unknown;
     }
 }
-} // namespace backend::sdl3
+} // namespace engine::backends

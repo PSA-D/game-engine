@@ -2,14 +2,14 @@
 
 #include "utils/Vector2.h"
 
-namespace backend::sdl3
+namespace engine::backends
 {
 class SDL3Window
 {
 public:
-    engine::utils::Vector2 getSize()
+    Vector2 getSize()
     {
         return {};
     };
 };
-} // namespace backend::sdl3
+} // namespace engine::backends
