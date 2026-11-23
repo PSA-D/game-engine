@@ -1,21 +1,17 @@
-//
-// Created by Jordy on 23/11/2026.
-//
-
 // Laag: UNIT. Alles in het geheugen, geen bestanden, snel en geïsoleerd.
-#include "persistence/ISaveStrategy.h"
 #include "persistence/JsonSaveStrategy.h"
+
 #include "PersistenceTestData.h"
+#include "persistence/ISaveStrategy.h"
 
 #include <catch2/catch_test_macros.hpp>
-
 #include <cstdint>
 #include <limits>
 #include <memory>
 #include <optional>
 #include <string>
 
-namespace engine::persistence
+namespace engine::subsystem::PersistenceSubsystem
 {
 namespace
 {
@@ -105,10 +101,8 @@ TEST_CASE("Getallen behouden hun type", "[unit][persistence]")
         constexpr auto maxValue = std::numeric_limits<std::int64_t>::max();
         constexpr auto minValue = std::numeric_limits<std::int64_t>::min();
 
-        const auto maxResult =
-            roundTrip(strategy, GameData{.version = 1, .root = DataNode(maxValue)});
-        const auto minResult =
-            roundTrip(strategy, GameData{.version = 1, .root = DataNode(minValue)});
+        const auto maxResult = roundTrip(strategy, GameData{.version = 1, .root = DataNode(maxValue)});
+        const auto minResult = roundTrip(strategy, GameData{.version = 1, .root = DataNode(minValue)});
 
         REQUIRE(maxResult.has_value());
         REQUIRE(minResult.has_value());
@@ -152,9 +146,8 @@ TEST_CASE("Een niet-eindig kommagetal wordt null", "[unit][persistence]")
 {
     const JsonSaveStrategy strategy;
 
-    const auto result = roundTrip(
-        strategy,
-        GameData{.version = 1, .root = DataNode(std::numeric_limits<double>::quiet_NaN())});
+    const auto result =
+        roundTrip(strategy, GameData{.version = 1, .root = DataNode(std::numeric_limits<double>::quiet_NaN())});
 
     REQUIRE(result.has_value());
     CHECK(result->root.isNull());
@@ -213,11 +206,10 @@ TEST_CASE("Onbekende extra velden in het bestand worden genegeerd", "[unit][pers
 {
     const JsonSaveStrategy strategy;
 
-    const auto result =
-        strategy.deserialize(R"({"version": 2, "root": {"a": 1}, "extra": "genegeerd"})");
+    const auto result = strategy.deserialize(R"({"version": 2, "root": {"a": 1}, "extra": "genegeerd"})");
 
     REQUIRE(result.has_value());
     CHECK(result->version == 2);
     CHECK(result->root.asObject().at("a").asInt() == 1);
 }
-} // namespace engine::persistence
+} // namespace engine::subsystem::PersistenceSubsystem

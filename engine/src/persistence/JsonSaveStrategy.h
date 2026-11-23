@@ -1,15 +1,8 @@
-//
-// Created by Jordy on 23/11/2026.
-//
-
-#ifndef PROJECTSYSTEMARCHITECTURE_JSONSAVESTRATEGY_H
-#define PROJECTSYSTEMARCHITECTURE_JSONSAVESTRATEGY_H
-
 #pragma once
 
 #include "ISaveStrategy.h"
 
-namespace engine::persistence
+namespace engine::subsystem::PersistenceSubsystem
 {
 // Slaat GameData op als leesbare JSON, met nlohmann::json.
 //
@@ -24,6 +17,4 @@ public:
     [[nodiscard]] std::optional<GameData> deserialize(const std::string& text) const override;
     [[nodiscard]] std::string fileExtension() const override;
 };
-} // namespace engine::persistence
-
-#endif // PROJECTSYSTEMARCHITECTURE_JSONSAVESTRATEGY_H
+} // namespace engine::subsystem::PersistenceSubsystem

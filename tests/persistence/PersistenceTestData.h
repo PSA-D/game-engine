@@ -1,10 +1,3 @@
-//
-// Created by Jordy on 23/11/2026.
-//
-
-#ifndef PROJECTSYSTEMARCHITECTURE_PERSISTENCETESTDATA_H
-#define PROJECTSYSTEMARCHITECTURE_PERSISTENCETESTDATA_H
-
 #pragma once
 
 #include "persistence/GameData.h"
@@ -12,7 +5,7 @@
 
 #include <utility>
 
-namespace engine::persistence::test
+namespace engine::subsystem::PersistenceSubsystem
 {
 // Gedeelde testdata voor de unit- en integratietests van persistence.
 // Bouwt een voorbeeld met elk datatype, ook genest.
@@ -40,6 +33,4 @@ inline auto makeSampleData() -> GameData
     data.root = std::move(root);
     return data;
 }
-} // namespace engine::persistence::test
-
-#endif // PROJECTSYSTEMARCHITECTURE_PERSISTENCETESTDATA_H
+} // namespace engine::subsystem::PersistenceSubsystem

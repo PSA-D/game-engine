@@ -1,12 +1,7 @@
-//
-// Created by Jordy on 23/11/2026.
-//
-
 // Laag: UNIT. Alles in het geheugen, geen bestanden, snel en geïsoleerd.
 #include "runtime/DataNode.h"
 
 #include <catch2/catch_test_macros.hpp>
-
 #include <cstdint>
 #include <string>
 #include <variant>

@@ -1,17 +1,12 @@
-//
-// Created by Jordy on 23/11/2026.
-//
-
 // Laag: INTEGRATIE. Werkt samen met het echte bestandssysteem (en de JSON-bibliotheek).
 // De logica zelf staat in JsonSaveStrategyTest.cpp.
 // Hier controleren we alleen wat er met een echt bestand kan misgaan.
 
+#include "PersistenceTestData.h"
 #include "persistence/ISaveStrategy.h"
 #include "persistence/JsonSaveStrategy.h"
-#include "PersistenceTestData.h"
 
 #include <catch2/catch_test_macros.hpp>
-
 #include <filesystem>
 #include <fstream>
 #include <ios>
@@ -19,7 +14,7 @@
 #include <string>
 #include <system_error>
 
-namespace engine::persistence
+namespace engine::subsystem::PersistenceSubsystem
 {
 namespace
 {
@@ -44,7 +39,10 @@ public:
     TempFile(TempFile&&) = delete;
     auto operator=(TempFile&&) -> TempFile& = delete;
 
-    [[nodiscard]] const std::filesystem::path& getPath() const { return path; }
+    [[nodiscard]] const std::filesystem::path& getPath() const
+    {
+        return path;
+    }
 
 private:
     std::filesystem::path path;
@@ -68,8 +66,7 @@ auto readFile(const std::filesystem::path& path) -> std::string
 }
 } // namespace
 
-TEST_CASE("Data kan naar een bestand geschreven en weer uitgelezen worden",
-          "[integration][persistence]")
+TEST_CASE("Data kan naar een bestand geschreven en weer uitgelezen worden", "[integration][persistence]")
 {
     const JsonSaveStrategy strategy;
     const GameData original = test::makeSampleData();
@@ -146,4 +143,4 @@ TEST_CASE("Een bestand wordt bij opnieuw opslaan volledig overschreven", "[integ
     // geen restanten van de eerste, langere inhoud
     CHECK(*result == small);
 }
-} // namespace engine::persistence
+} // namespace engine::subsystem::PersistenceSubsystem

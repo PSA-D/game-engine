@@ -1,17 +1,12 @@
-//
-// Created by Jordy on 23/11/2026.
-//
-
 #include "JsonSaveStrategy.h"
-
-#include <nlohmann/json.hpp>
 
 #include <cstdint>
 #include <limits>
+#include <nlohmann/json.hpp>
 #include <type_traits>
 #include <variant>
 
-namespace engine::persistence
+namespace engine::subsystem::PersistenceSubsystem
 {
 namespace
 {
@@ -135,4 +130,4 @@ std::string JsonSaveStrategy::fileExtension() const
 {
     return ".json";
 }
-} // namespace engine::persistence
+} // namespace engine::subsystem::PersistenceSubsystem

@@ -1,10 +1,3 @@
-//
-// Created by Jordy on 23/11/2026.
-//
-
-#ifndef PROJECTSYSTEMARCHITECTURE_ISAVESTRATEGY_H
-#define PROJECTSYSTEMARCHITECTURE_ISAVESTRATEGY_H
-
 #pragma once
 
 #include "GameData.h"
@@ -12,7 +5,7 @@
 #include <optional>
 #include <string>
 
-namespace engine::persistence
+namespace engine::subsystem::PersistenceSubsystem
 {
 // Zet GameData om naar tekst en terug.
 // opslagvorm (JSON, binair, ...) is een eigen implementatie van dit interface,
@@ -45,6 +38,5 @@ public:
     // Bestandsextensie van deze opslagvorm, inclusief punt (bijvoorbeeld ".json").
     [[nodiscard]] virtual std::string fileExtension() const = 0;
 };
-} // namespace engine::persistence
+} // namespace engine::subsystem::PersistenceSubsystem
 
-#endif // PROJECTSYSTEMARCHITECTURE_ISAVESTRATEGY_H
