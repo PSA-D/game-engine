@@ -2,8 +2,6 @@
 
 #include "SDL3KeyMap.h"
 
-#include <SDL3/SDL.h>
-
 using namespace engine::platform;
 
 namespace engine::backends
