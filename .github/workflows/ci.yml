@@ -62,7 +62,7 @@ jobs:
 
       - name: Configure MinGW
         if: matrix.compiler == 'mingw'
-        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$env:VCPKG_ROOT"
+        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-mingw-dynamic -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$env:VCPKG_ROOT"
 
       - name: Configure Apple Clang
         if: matrix.compiler == 'apple-clang'
