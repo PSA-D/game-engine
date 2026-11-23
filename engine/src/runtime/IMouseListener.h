@@ -1,7 +1,6 @@
 #pragma once
 
 #include "platform/Events.h"
-#include "utils/Vector2.h"
 
 namespace engine
 {

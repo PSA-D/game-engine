@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <vector>
 
 // Wrapper klasse om de crashes te voorkomen
@@ -29,6 +30,9 @@ struct ListenersList
     {
         if (lis == nullptr)
             return;
+
+        std::erase(pendingAdd, lis);
+
         if (dispatchDepth > 0)
         {
             pendingRemove.push_back(lis);

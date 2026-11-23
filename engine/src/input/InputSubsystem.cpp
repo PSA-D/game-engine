@@ -4,7 +4,7 @@ namespace engine::subsystems
 {
 void InputSubsystem::update(float dt)
 {
-    float a = dt;
+    float a = dt; // Even om een unused error te voorkomen
     a += 1;
 
     auto e = source_.pollEvent();
@@ -38,13 +38,5 @@ void InputSubsystem::update(float dt)
             mouseListeners_.dispatch([&](IMouseListener& l) { l.onMouseWheel(*event); });
         }
     }
-
-    platform::KeyEvent ev{.key = KeyCode::ArrowLeft, .mods = {}, .pressed = true, .repeat = false};
-    keyListeners_.dispatch(
-        [&](IKeyListener& l)
-        {
-            l.onKeyUp(ev);
-            l.onKeyDown(ev);
-        });
 }
 } // namespace engine::subsystems
