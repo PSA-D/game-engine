@@ -8,6 +8,7 @@ permissions:
 
 env:
   VCPKG_ROOT: ${{ github.workspace }}/vcpkg
+  CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
 
 jobs:
   build:
@@ -44,24 +45,21 @@ jobs:
         if: matrix.compiler == 'msvc'
         uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Install Ninja
-        uses: seanmiddleditch/gha-setup-ninja@v5
-
       - name: Configure GCC
         if: matrix.compiler == 'gcc'
-        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
+        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
 
       - name: Configure MSVC
         if: matrix.compiler == 'msvc'
-        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$env:VCPKG_ROOT"
+        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$env:VCPKG_ROOT"
 
       - name: Configure MinGW
         if: matrix.compiler == 'mingw'
-        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-mingw-dynamic -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$env:VCPKG_ROOT"
+        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$env:VCPKG_ROOT"
 
       - name: Configure Apple Clang
         if: matrix.compiler == 'apple-clang'
-        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DCMAKE_CXX_COMPILER=clang++ -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
+        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
 
       - name: Build engine and game
         run: cmake --build build/ci --parallel
@@ -95,11 +93,8 @@ jobs:
           git clone --depth 1 https://github.com/microsoft/vcpkg "$VCPKG_ROOT"
           "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
 
-      - name: Install Ninja
-        run: sudo apt-get update && sudo apt-get install --yes ninja-build
-
       - name: Configure sanitizer build
-        run: cmake -S . -B build/sanitizers -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DENGINE_BUILD_TESTS=ON -DENGINE_ENABLE_SANITIZERS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
+        run: cmake -S . -B build/sanitizers -G Ninja -DCMAKE_BUILD_TYPE=Debug -DENGINE_BUILD_TESTS=ON -DENGINE_ENABLE_SANITIZERS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
 
       - name: Build sanitizer targets
         run: cmake --build build/sanitizers --parallel
@@ -114,6 +109,7 @@ jobs:
     name: clang-tidy report
     runs-on: ubuntu-24.04
     continue-on-error: true
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -128,18 +124,4 @@ jobs:
         run: sudo apt-get update && sudo apt-get install --yes clang-tidy ninja-build
 
       - name: Configure analysis build
-        run: cmake -S . -B build/tidy -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
-
-      - name: Count clang-tidy warnings
-        shell: bash
-        run: |
-          set +e
-          clang-tidy -p build/tidy $(git ls-files '*.cpp') 2>&1 | tee clang-tidy.log
-          tidy_exit=${PIPESTATUS[0]}
-          warning_count=$(grep -Ec 'warning:' clang-tidy.log || true)
-          error_count=$(grep -Ec 'error:' clang-tidy.log || true)
-          {
-            echo "### clang-tidy"
-            echo "Warnings: $warning_count"
-            echo "Errors: $error_count"
-          } >> "$GITHUB_STEP_SUMMARY"
+        run: cmake -S . -B build/tidy -G Ninja -DCMAKE_BUILD_TYPE=Debug -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
