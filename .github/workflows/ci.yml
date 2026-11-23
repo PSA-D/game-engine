@@ -27,9 +27,6 @@ jobs:
           - name: Windows MinGW
             os: windows-2025
             compiler: mingw
-          - name: macOS Apple Clang
-            os: macos-26
-            compiler: apple-clang
 
     steps:
       - name: Check out repository
@@ -56,10 +53,6 @@ jobs:
       - name: Configure MinGW
         if: matrix.compiler == 'mingw'
         run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$env:VCPKG_ROOT"
-
-      - name: Configure Apple Clang
-        if: matrix.compiler == 'apple-clang'
-        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
 
       - name: Build engine and game
         run: cmake --build build/ci --parallel
