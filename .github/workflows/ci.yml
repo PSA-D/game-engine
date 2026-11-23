@@ -28,7 +28,7 @@ jobs:
             os: windows-2025
             compiler: mingw
           - name: macOS Apple Clang
-            os: macos-14
+            os: macos-26
             compiler: apple-clang
 
     steps:
