@@ -28,6 +28,7 @@ target_include_directories(engine PUBLIC
 target_link_libraries(engine PUBLIC
         project_sanitizers
         project_warnings
+        PRIVATE
         SDL3::SDL3
 )
 

@@ -5,9 +5,10 @@
 #include "platform/IInputSource.h"
 #include "platform/INativeEventListener.h"
 
-#include <SDL3/SDL.h>
 #include <optional>
 #include <vector>
+
+union SDL_Event;
 
 namespace engine::backends
 {
