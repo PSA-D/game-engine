@@ -1,12 +1,25 @@
 #pragma once
 
-#include "EventKinds.h"
+#include "utils/InputCodes.h"
 #include "utils/Vector2.h"
 
 #include <variant>
 
+using namespace engine::utils;
+
 namespace engine::platform
 {
+enum class WindowEventKind
+{
+    Resized,
+    FocusGained,
+    FocustLost,
+    Minimized,
+    Maximized,
+    Restored,
+    CloseRequested,
+};
+
 struct WindowEvent
 {
     WindowEventKind kind;

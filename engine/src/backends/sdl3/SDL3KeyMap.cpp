@@ -3,6 +3,7 @@
 #include <SDL3/SDL_mouse.h>
 
 using namespace engine::platform;
+using namespace engine::utils;
 
 namespace backend::sdl3
 {

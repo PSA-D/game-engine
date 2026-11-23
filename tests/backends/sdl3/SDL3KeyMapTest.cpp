@@ -1,13 +1,13 @@
 #include "src/backends/sdl3/SDL3KeyMap.h"
 
 #include "src/backends/sdl3/SDL3InputSource.h"
-#include "src/platform/EventKinds.h"
+#include "src/utils/InputCodes.h"
 
 #include <SDL3/SDL_scancode.h>
 #include <catch2/catch_test_macros.hpp>
 
 using namespace backend::sdl3;
-using engine::platform::KeyCode;
+using engine::utils::KeyCode;
 
 TEST_CASE("SDL3KeyMap translates SDL scancodes to engine KeyCodes", "[input][keymap]")
 {

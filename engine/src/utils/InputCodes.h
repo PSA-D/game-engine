@@ -1,18 +1,7 @@
 #pragma once
 
-namespace engine::platform
+namespace engine::utils
 {
-enum class WindowEventKind
-{
-    Resized,
-    FocusGained,
-    FocustLost,
-    Minimized,
-    Maximized,
-    Restored,
-    CloseRequested,
-};
-
 enum class MouseButton
 {
     Unknown,
@@ -88,4 +77,4 @@ enum class KeyCode
     F11,
     F12,
 };
-} // namespace engine::platform
+} // namespace engine::utils

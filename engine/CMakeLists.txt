@@ -5,7 +5,7 @@ find_package(SDL3 CONFIG REQUIRED)
 add_library(engine STATIC
         src/core/Engine.cpp
         src/utils/Vector2.h
-        src/platform/EventKinds.h
+        src/utils/InputCodes.h
         src/platform/Events.h
         src/platform/IInputSource.h
         src/platform/INativeEventListener.h
