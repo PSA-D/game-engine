@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "persistence/GameData.h"
+#include "GameData.h"
 
 #include <optional>
 #include <string>

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "persistence/ISaveStrategy.h"
+#include "ISaveStrategy.h"
 
 namespace engine::persistence
 {
