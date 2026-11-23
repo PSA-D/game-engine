@@ -14,6 +14,9 @@ add_library(engine STATIC
         src/backends/sdl3/SDL3Window.h
         src/backends/sdl3/SDL3KeyMap.cpp
         src/backends/sdl3/SDL3KeyMap.h
+        src/runtime/IMouseListener.h
+        src/runtime/IKeyListener.h
+        src/input/InputSubsystem.h
 )
 
 target_include_directories(engine PUBLIC
