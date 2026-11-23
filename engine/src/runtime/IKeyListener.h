@@ -4,6 +4,7 @@
 
 namespace engine
 {
+// Event listener voor de toetsen
 class IKeyListener
 {
 public:

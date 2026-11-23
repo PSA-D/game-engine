@@ -4,6 +4,8 @@
 
 namespace engine
 {
+
+// Event listener voor de muis
 class IMouseListener
 {
 public:

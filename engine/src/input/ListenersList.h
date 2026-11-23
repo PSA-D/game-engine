@@ -3,20 +3,17 @@
 #include <algorithm>
 #include <vector>
 
-// Wrapper klasse om de crashes te voorkomen
+// Wrapper klasse voor de listeners om de crashes te voorkomen
+// Het heeft een template, zodat elke listener apart afgehandeld kan worden
 template <class T>
-struct ListenersList
+class ListenersList
 {
-    std::vector<T*> active;
-    std::vector<T*> pendingAdd;
-    std::vector<T*> pendingRemove;
-    int dispatchDepth = 0;
-
+public:
     void add(T* lis)
     {
         if (lis == nullptr)
             return;
-        if (dispatchDepth > 0)
+        if (dispatchCount > 0)
         {
             pendingAdd.push_back(lis);
             return;
@@ -33,7 +30,7 @@ struct ListenersList
 
         std::erase(pendingAdd, lis);
 
-        if (dispatchDepth > 0)
+        if (dispatchCount > 0)
         {
             pendingRemove.push_back(lis);
             return;
@@ -45,7 +42,7 @@ struct ListenersList
     template <class F>
     void dispatch(F&& fn)
     {
-        ++dispatchDepth;
+        ++dispatchCount;
         for (std::size_t i = 0; i < active.size(); ++i)
         {
             T* lis = active[i];
@@ -54,9 +51,9 @@ struct ListenersList
                 continue;
             fn(*lis);
         }
-        --dispatchDepth;
+        --dispatchCount;
 
-        if (dispatchDepth == 0)
+        if (dispatchCount == 0)
             flush();
     }
 
@@ -73,4 +70,10 @@ struct ListenersList
         }
         pendingAdd.clear();
     }
+
+private:
+    std::vector<T*> active;
+    std::vector<T*> pendingAdd;    // De listeners die nog worden toegevoegd
+    std::vector<T*> pendingRemove; // De listeners die nog worden verwijderd
+    int dispatchCount = 0;
 };

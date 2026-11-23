@@ -11,6 +11,7 @@
 
 namespace engine::backends
 {
+// Een SDL3 implementatie van de IInputSource
 class SDL3InputSource : public platform::IInputSource
 {
 public:
@@ -23,6 +24,7 @@ public:
     void removeNativeEventListener(platform::INativeEventListener* listener) override;
 
 private:
+    // Veranderd SDL3 events naar PlatformEvent's
     std::optional<platform::PlatformEvent> translateEvent(const SDL_Event& event) const;
 
     SDL3Window& window_;
