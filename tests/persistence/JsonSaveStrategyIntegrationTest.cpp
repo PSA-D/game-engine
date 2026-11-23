@@ -135,7 +135,7 @@ TEST_CASE("Een bestand wordt bij opnieuw opslaan volledig overschreven", "[integ
     const GameData small{.version = 1, .root = DataNode(1)};
 
     writeFile(file.getPath(), strategy.serialize(makeSampleData())); // lang
-    writeFile(file.getPath(), strategy.serialize(small));                  // kort
+    writeFile(file.getPath(), strategy.serialize(small));            // kort
 
     const auto result = strategy.deserialize(readFile(file.getPath()));
 
