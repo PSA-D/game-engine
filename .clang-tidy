@@ -11,6 +11,9 @@ Checks: >
   -modernize-use-trailing-return-type,
   -readability-braces-around-statements,
   -portability-avoid-pragma-once,
+  -bugprone-easily-swappable-parameters,
+  -modernize-use-auto,
+  -cppcoreguidelines-avoid-const-or-ref-data-members
 
 WarningsAsErrors: ''
 
