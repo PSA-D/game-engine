@@ -16,6 +16,8 @@ target_link_libraries(EngineTests PRIVATE
 target_link_directories(EngineTests PRIVATE ../engine/cmake-build-debug)
 target_include_directories(EngineTests PRIVATE ../engine)
 
+target_include_directories(EngineTests PRIVATE ../engine/src)
+
 add_test(NAME EngineTests COMMAND EngineTests)
 
 add_executable(UtilsTests
