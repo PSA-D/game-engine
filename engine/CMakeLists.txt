@@ -18,6 +18,12 @@ add_library(engine STATIC
         src/runtime/IKeyListener.h
         src/input/ListenersList.h
         src/input/InputSubsystem.cpp
+        src/input/InputHandler.cpp
+        src/input/InputHandler.h
+        src/input/commands/ICommand.h
+        src/input/InputTrigger.h
+        src/input/Bindings.h
+        src/input/InputState.h
 )
 
 target_include_directories(engine PUBLIC
