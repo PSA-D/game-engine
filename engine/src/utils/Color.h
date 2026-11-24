@@ -18,6 +18,6 @@ namespace engine
         friend constexpr bool operator==(const Color&, const Color&) = default;
     };
 
-    constexpr Color Color::WHITE{255, 255, 255, 255};
-    constexpr Color Color::BLACK{0, 0, 0, 255};
+    inline constexpr Color Color::WHITE{255, 255, 255, 255};
+    inline constexpr Color Color::BLACK{0, 0, 0, 255};
 } // namespace engine
