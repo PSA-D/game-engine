@@ -1,10 +1,20 @@
 cmake_minimum_required(VERSION 3.25)
 
+find_package(Catch2 CONFIG REQUIRED)
+
 add_executable(EngineTests
     test_engine.cpp
+        runtime/LevelTest.cpp
+        runtime/RegionTest.cpp
+        runtime/SceneTest.cpp
+        runtime/SceneLoadingIntegrationTest.cpp
 )
 
-target_link_libraries(EngineTests PRIVATE engine)
+target_link_libraries(EngineTests
+        PRIVATE
+        engine
+        Catch2::Catch2WithMain
+)
 
 target_link_libraries(EngineTests PRIVATE
     project_sanitizers

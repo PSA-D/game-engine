@@ -1,5 +1,7 @@
 {
     "name": "project-systems-programming",
     "version": "0.1.0",
-    "dependencies": []
+    "dependencies": [
+        "catch2"
+    ]
 }
