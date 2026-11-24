@@ -4,11 +4,11 @@
 
 namespace engine
 {
-enum class Easing : std::uint8_t
-{
-    Linear,
-    EaseIn,
-    EaseOut,
-    EaseInOut,
-};
+    enum class Easing : std::uint8_t
+    {
+        Linear,
+        EaseIn,
+        EaseOut,
+        EaseInOut,
+    };
 } // namespace engine

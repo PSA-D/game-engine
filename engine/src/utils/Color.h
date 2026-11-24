@@ -5,19 +5,19 @@
 
 namespace engine
 {
-struct Color
-{
-    std::uint8_t r{0};
-    std::uint8_t g{0};
-    std::uint8_t b{0};
-    std::uint8_t a{std::numeric_limits<std::uint8_t>::max()};
+    struct Color
+    {
+        std::uint8_t r{0};
+        std::uint8_t g{0};
+        std::uint8_t b{0};
+        std::uint8_t a{std::numeric_limits<std::uint8_t>::max()};
 
-    static const Color WHITE;
-    static const Color BLACK;
+        static const Color WHITE;
+        static const Color BLACK;
 
-    friend constexpr bool operator==(const Color&, const Color&) = default;
-};
+        friend constexpr bool operator==(const Color&, const Color&) = default;
+    };
 
-constexpr Color Color::WHITE{255, 255, 255, 255};
-constexpr Color Color::BLACK{0, 0, 0, 255};
+    constexpr Color Color::WHITE{255, 255, 255, 255};
+    constexpr Color Color::BLACK{0, 0, 0, 255};
 } // namespace engine

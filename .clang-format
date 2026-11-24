@@ -28,7 +28,7 @@ AllowShortLoopsOnASingleLine: false
 PointerAlignment: Left
 ReferenceAlignment: Left
 
-NamespaceIndentation: None
+NamespaceIndentation: All
 
 SortIncludes: CaseSensitive
 
