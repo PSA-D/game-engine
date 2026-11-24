@@ -18,8 +18,6 @@ add_library(engine STATIC
 
 target_include_directories(engine PUBLIC
         include
-)
-target_include_directories(engine PRIVATE
         src
 )
 
