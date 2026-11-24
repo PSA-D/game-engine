@@ -14,8 +14,8 @@ class Region;
 // Een scene: een verzameling Levels, waarvan er één actief is.
 // De actieve Region van het actieve Level is het deel van de wereld waar het spel zich nu afspeelt.
 //
-// Wat "de actieve inhoud" betekent: createGameObject() en alle find-functies werken op de actieve Region van het actieve Level.
-// Objecten in andere Regions of Levels worden niet gevonden, ook al bestaan ze nog.
+// Wat "de actieve inhoud" betekent: createGameObject() en alle find-functies werken op de actieve Region van het
+// actieve Level. Objecten in andere Regions of Levels worden niet gevonden, ook al bestaan ze nog.
 //
 // - Een nieuw Level is niet vanzelf actief. Activeer het met activateLevel().
 // - Een Scene bezit zijn Levels. Hij kan niet gekopieerd of verplaatst worden.

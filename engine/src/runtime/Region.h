@@ -14,8 +14,10 @@ namespace engine
 // Alleen de actieve Region van een Level doet mee aan het spel.
 //
 // Eigenaarschap en levensduur:
-// - De Region bezit al zijn GameObjects, ook de kinderen in een hiërarchie. De lijst is plat, de ouder-kindrelatie staat in de GameObjects zelf.
-// - Een Region wordt bezeten door een Level. Hij kan niet gekopieerd of verplaatst worden, want GameObjects verwijzen naar hem.
+// - De Region bezit al zijn GameObjects, ook de kinderen in een hiërarchie. De lijst is plat, de ouder-kindrelatie
+// staat in de GameObjects zelf.
+// - Een Region wordt bezeten door een Level. Hij kan niet gekopieerd of verplaatst worden, want GameObjects verwijzen
+// naar hem.
 //
 // Vernietigen is uitgesteld: destroy() op een GameObject vraagt het alleen aan.
 // Het echte opruimen gebeurt in processPendingDestruction(), aan het eind van een frame.

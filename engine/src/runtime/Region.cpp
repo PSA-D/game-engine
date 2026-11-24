@@ -16,7 +16,8 @@ namespace
 std::atomic<std::uint64_t> nextGameObjectId{1};
 } // namespace
 
-Region::Region(std::string regionName) : name(std::move(regionName))
+Region::Region(std::string regionName)
+    : name(std::move(regionName))
 {
 }
 

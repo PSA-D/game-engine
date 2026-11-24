@@ -1,6 +1,8 @@
 #include "Scene.h"
+
 #include "Level.h"
 #include "Region.h"
+
 #include <algorithm>
 #include <stdexcept>
 #include <utility>
@@ -8,7 +10,8 @@
 namespace engine
 {
 Scene::Scene(std::uint64_t sceneId, std::string sceneName)
-    : id(sceneId), name(std::move(sceneName))
+    : id(sceneId)
+    , name(std::move(sceneName))
 {
 }
 
@@ -32,9 +35,8 @@ Level& Scene::createLevel(std::string_view levelName)
 
 bool Scene::activateLevel(Level& level)
 {
-    const bool owned = std::any_of(levels.begin(), levels.end(),
-                                   [&level](const auto& candidate)
-                                   { return candidate.get() == &level; });
+    const bool owned = std::any_of(
+        levels.begin(), levels.end(), [&level](const auto& candidate) { return candidate.get() == &level; });
     if (!owned)
         return false;
 
@@ -77,8 +79,8 @@ void Scene::replaceLevel(std::unique_ptr<Level> level)
 
     Level* incoming = level.get();
 
-    const auto current = std::find_if(levels.begin(), levels.end(),
-                                      [this](const auto& owned) { return owned.get() == activeLevel; });
+    const auto current =
+        std::find_if(levels.begin(), levels.end(), [this](const auto& owned) { return owned.get() == activeLevel; });
     if (activeLevel != nullptr && current != levels.end())
         *current = std::move(level);
     // op dezelfde plek, het oude level wordt hier vernietigd
@@ -133,11 +135,11 @@ void Scene::replaceLevel(std::unique_ptr<Level> level)
 
 // void Scene::processPendingDestruction()
 // {
-    // for (auto& level : levels)
-    // {
-    //     for (auto* region : level->getRegions())
-    //         region->processPendingDestruction();
-    // }
+// for (auto& level : levels)
+// {
+//     for (auto* region : level->getRegions())
+//         region->processPendingDestruction();
+// }
 // }
 // TODO: Uncomment de bovenstaande code zodra GameObject beschikbaar is
 

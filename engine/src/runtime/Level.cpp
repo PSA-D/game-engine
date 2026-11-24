@@ -1,12 +1,14 @@
 #include "Level.h"
 
 #include "Region.h"
+
 #include <algorithm>
 #include <utility>
 
 namespace engine
 {
-Level::Level(std::string levelName) : name(std::move(levelName))
+Level::Level(std::string levelName)
+    : name(std::move(levelName))
 {
 }
 
@@ -43,9 +45,8 @@ Region& Level::createRegion(std::string_view regionName)
 
 bool Level::activateRegion(Region& region)
 {
-    const bool owned = std::any_of(regions.begin(), regions.end(),
-                                   [&region](const auto& candidate)
-                                   { return candidate.get() == &region; });
+    const bool owned = std::any_of(
+        regions.begin(), regions.end(), [&region](const auto& candidate) { return candidate.get() == &region; });
     if (!owned)
         return false;
 

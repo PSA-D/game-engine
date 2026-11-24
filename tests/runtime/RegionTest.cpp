@@ -1,6 +1,7 @@
 // Laag: UNIT. Alles in het geheugen. Region wordt getest met echte GameObjects.
 
 #include "src/runtime/Region.h"
+
 #include <catch2/catch_test_macros.hpp>
 #include <cstdint>
 #include <set>
