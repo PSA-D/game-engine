@@ -20,6 +20,7 @@ auto main() -> int
     while (gameEngine.isRunning())
     {
         inputSubsystem.update(0.1f);
+
         // Game loop placeholder
         std::cout << "Engine is running\n";
         gameEngine.shutdown();
