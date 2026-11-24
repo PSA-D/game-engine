@@ -82,7 +82,8 @@ TEST_CASE("InputHandler binds and executes key commands from PlatformEvents", "[
     {
         // Frame 1: Custom KeyEvent (Space pressed)
         resetFrameState(state);
-        applyPlatformEvent(state, PlatformEvent{KeyEvent{.key = KeyCode::Space, .mods = {}, .pressed = true, .repeat = false}});
+        applyPlatformEvent(
+            state, PlatformEvent{KeyEvent{.key = KeyCode::Space, .mods = {}, .pressed = true, .repeat = false}});
         handler.handleInput(state);
 
         REQUIRE(jumpPressedCount == 1);
@@ -99,7 +100,8 @@ TEST_CASE("InputHandler binds and executes key commands from PlatformEvents", "[
 
         // Frame 3: Custom KeyEvent (Space released)
         resetFrameState(state);
-        applyPlatformEvent(state, PlatformEvent{KeyEvent{.key = KeyCode::Space, .mods = {}, .pressed = false, .repeat = false}});
+        applyPlatformEvent(
+            state, PlatformEvent{KeyEvent{.key = KeyCode::Space, .mods = {}, .pressed = false, .repeat = false}});
         handler.handleInput(state);
 
         REQUIRE(jumpPressedCount == 1);
@@ -112,7 +114,8 @@ TEST_CASE("InputHandler binds and executes key commands from PlatformEvents", "[
         handler.unbindKey(KeyCode::Space, InputTrigger::Pressed);
 
         resetFrameState(state);
-        applyPlatformEvent(state, PlatformEvent{KeyEvent{.key = KeyCode::Space, .mods = {}, .pressed = true, .repeat = false}});
+        applyPlatformEvent(
+            state, PlatformEvent{KeyEvent{.key = KeyCode::Space, .mods = {}, .pressed = true, .repeat = false}});
         handler.handleInput(state);
 
         REQUIRE(jumpPressedCount == 0);
