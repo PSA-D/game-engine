@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 add_executable(EngineTests
+    test_game_object.cpp
     test_engine.cpp
 )
 

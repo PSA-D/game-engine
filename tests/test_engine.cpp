@@ -3,9 +3,11 @@
 #include <cstdlib>
 #include <iostream>
 
+auto runGameObjectTests() -> int;
+
 auto main() -> int
 {
-    int failures = 0;
+    int failures = runGameObjectTests();
 
     {
         engine::Engine engine;
