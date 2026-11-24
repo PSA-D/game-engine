@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
+find_package(Catch2 CONFIG REQUIRED)
+
 add_executable(EngineTests
     test_engine.cpp
         persistence/JsonSaveStrategyTest.cpp
