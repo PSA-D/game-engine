@@ -4,7 +4,7 @@
 
 #include <cstdint>
 
-namespace engine::subsystem
+namespace engine::subsystems
 {
 // De bestandsvorm van opgeslagen gegevens: een versienummer en een boom met de data.
 // De betekenis van de boom hangt af van wat er opgeslagen wordt.
@@ -15,4 +15,4 @@ struct GameData
 
     bool operator==(const GameData&) const = default;
 };
-} // namespace engine::subsystem
+} // namespace engine::subsystems

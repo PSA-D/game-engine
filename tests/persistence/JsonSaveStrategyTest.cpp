@@ -11,7 +11,7 @@
 #include <optional>
 #include <string>
 
-namespace engine::subsystem
+namespace engine::subsystems
 {
 namespace
 {
@@ -212,4 +212,4 @@ TEST_CASE("Onbekende extra velden in het bestand worden genegeerd", "[unit][pers
     CHECK(result->version == 2);
     CHECK(result->root.asObject().at("a").asInt() == 1);
 }
-} // namespace engine::subsystem
+} // namespace engine::subsystems

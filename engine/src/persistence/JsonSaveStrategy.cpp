@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <variant>
 
-namespace engine::subsystem
+namespace engine::subsystems
 {
 namespace
 {
@@ -130,4 +130,4 @@ std::string JsonSaveStrategy::fileExtension() const
 {
     return ".json";
 }
-} // namespace engine::subsystem
+} // namespace engine::subsystems

@@ -5,7 +5,7 @@
 #include <optional>
 #include <string>
 
-namespace engine::subsystem
+namespace engine::subsystems
 {
 // Zet GameData om naar tekst en terug.
 // opslagvorm (JSON, binair, ...) is een eigen implementatie van dit interface,
@@ -38,5 +38,5 @@ public:
     // Bestandsextensie van deze opslagvorm, inclusief punt (bijvoorbeeld ".json").
     [[nodiscard]] virtual std::string fileExtension() const = 0;
 };
-} // namespace engine::subsystem
+} // namespace engine::subsystems
 

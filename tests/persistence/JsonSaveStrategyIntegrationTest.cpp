@@ -14,7 +14,7 @@
 #include <string>
 #include <system_error>
 
-namespace engine::subsystem
+namespace engine::subsystems
 {
 namespace
 {
@@ -143,4 +143,4 @@ TEST_CASE("Een bestand wordt bij opnieuw opslaan volledig overschreven", "[integ
     // geen restanten van de eerste, langere inhoud
     CHECK(*result == small);
 }
-} // namespace engine::subsystem
+} // namespace engine::subsystems
