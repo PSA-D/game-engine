@@ -11,7 +11,7 @@ auto main() -> int
     engine::Engine gameEngine;
     gameEngine.init();
 
-    engine::backends::SDL3Window window{};
+    engine::backends::SDL3Window window{{}};
     engine::backends::SDL3InputSource source{window};
     engine::subsystems::InputSubsystem inputSubsystem{source};
     PlayerInput playerInput{};

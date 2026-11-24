@@ -37,7 +37,7 @@ namespace
 
     SDL3Window& getDummyWindow()
     {
-        static SDL3Window dummy{};
+        static SDL3Window dummy{{}};
         return dummy;
     }
 } // namespace

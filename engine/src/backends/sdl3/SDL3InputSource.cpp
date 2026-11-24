@@ -56,7 +56,7 @@ namespace engine::backends
         case SDL_EVENT_WINDOW_FOCUS_GAINED:
             return WindowEvent{WindowEventKind::FocusGained, window_.getSize()};
         case SDL_EVENT_WINDOW_FOCUS_LOST:
-            return WindowEvent{WindowEventKind::FocustLost, window_.getSize()};
+            return WindowEvent{WindowEventKind::FocusLost, window_.getSize()};
         case SDL_EVENT_WINDOW_MINIMIZED:
             return WindowEvent{WindowEventKind::Minimized, window_.getSize()};
         case SDL_EVENT_WINDOW_MAXIMIZED:

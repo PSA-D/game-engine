@@ -26,6 +26,8 @@ add_library(engine STATIC
         src/input/commands/FunctionCommand.h
         src/utils/KeyCode.h
         src/utils/MouseButton.h
+        src/platform/IWindow.h
+        src/platform/WindowConfig.h
 )
 
 target_include_directories(engine PUBLIC

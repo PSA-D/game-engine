@@ -218,7 +218,8 @@ TEST_CASE("InputSubsystem: dispatches platform events to registered listeners sa
     {
         inputSubsystem.removeKeyListener(&keyListener2);
 
-        source.pushEvent(engine::platform::KeyEvent{});
+        source.pushEvent(
+            engine::platform::KeyEvent{.key = engine::KeyCode::Unknown, .mods = {}, .pressed = true, .repeat = false});
         inputSubsystem.update();
 
         REQUIRE(keyListener1.keyDownCount == 1);
@@ -238,7 +239,8 @@ TEST_CASE("InputSubsystem: dispatches platform events to registered listeners sa
             inputSubsystem.removeKeyListener(&keyListener2);
         };
 
-        source.pushEvent(engine::platform::KeyEvent{});
+        source.pushEvent(
+            engine::platform::KeyEvent{.key = engine::KeyCode::Unknown, .mods = {}, .pressed = true, .repeat = false});
         REQUIRE_NOTHROW(inputSubsystem.update());
 
         REQUIRE(keyListener1.keyDownCount == 1);
