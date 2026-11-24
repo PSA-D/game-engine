@@ -12,7 +12,7 @@ enum class WindowEventKind
 {
     Resized,
     FocusGained,
-    FocustLost,
+    FocusLost,
     Minimized,
     Maximized,
     Restored,
