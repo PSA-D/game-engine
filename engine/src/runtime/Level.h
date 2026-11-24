@@ -42,6 +42,6 @@ public:
 private:
     std::string name;
     std::vector<std::unique_ptr<Region>> regions;
-    Region* activeRegion{nullptr}; // niet-bezittend, wijst naar een van de regions
+    Region* activeRegion{nullptr};
 };
 } // namespace engine

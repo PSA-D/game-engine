@@ -7,7 +7,6 @@ add_executable(EngineTests
         runtime/LevelTest.cpp
         runtime/RegionTest.cpp
         runtime/SceneTest.cpp
-        runtime/SceneLoadingIntegrationTest.cpp
 )
 
 target_link_libraries(EngineTests

@@ -8,7 +8,7 @@
 
 namespace engine
 {
-class GameObject;
+// class GameObject;
 
 // Een afgebakend deel van een Level waarin GameObjects leven, bijvoorbeeld een kamer of gebied.
 // Alleen de actieve Region van een Level doet mee aan het spel.
@@ -30,30 +30,30 @@ public:
     Region(Region&&) = delete;
     auto operator=(Region&&) -> Region& = delete;
 
-    // Maakt een GameObject met een nieuw, uniek id (nooit 0).
-    // De referentie blijft geldig tot het object vernietigd wordt.
-    GameObject& createGameObject(std::string_view objectName);
-
-    // Vraagt aan om een object (en al zijn kinderen) te vernietigen.
-    // Meerdere keren aanvragen mag. Een object van een andere Region wordt genegeerd.
-    void requestDestroy(GameObject& gameObject);
+    // GameObject& createGameObject(std::string_view objectName);
+    // void requestDestroy(GameObject& gameObject);
+    // TODO: Uncomment de bovenstaande methods zodra GameObject beschikbaar is
 
     // Voert alle aangevraagde vernietigingen uit.
     // Een verzoek dat tijdens het opruimen ontstaat, wordt in dezelfde aanroep afgehandeld.
-    void processPendingDestruction();
+    // void processPendingDestruction();
+    // TODO: Uncomment de bovenstaande method zodra GameObject beschikbaar is
 
     [[nodiscard]] const std::string& getName() const;
 
     // In volgorde van aanmaken. Objecten die op vernietiging wachten staan er nog in(zie GameObject::isPendingDestroy).
-    [[nodiscard]] std::vector<GameObject*> getGameObjects();
-    [[nodiscard]] std::vector<const GameObject*> getGameObjects() const;
+    // [[nodiscard]] std::vector<GameObject*> getGameObjects();
+    // [[nodiscard]] std::vector<const GameObject*> getGameObjects() const;
+    // TODO: Uncomment de bovenstaande method zodra GameObject beschikbaar is
 
 private:
     // Vernietigt eerst alle kinderen, daarna het object zelf.
-    void destroyRecursive(GameObject& gameObject);
+    // void destroyRecursive(GameObject& gameObject);
+    // TODO: Uncomment de bovenstaande method zodra GameObject beschikbaar is
 
     std::string name;
-    std::vector<std::unique_ptr<GameObject>> gameObjects;
+    // std::vector<std::unique_ptr<GameObject>> gameObjects;
+    // TODO: Uncomment de bovenstaande method zodra GameObject beschikbaar is
     std::vector<std::uint64_t> pendingDestruction;
     // ids, geen pointers: een object kan al weg zijn
 };
