@@ -24,6 +24,7 @@ add_library(engine STATIC
         src/input/InputTrigger.h
         src/input/Bindings.h
         src/input/InputState.h
+        src/input/commands/FunctionCommand.h
 )
 
 target_include_directories(engine PUBLIC

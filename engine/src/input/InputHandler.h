@@ -18,7 +18,7 @@ namespace engine::subsystems
         void bindMouseButton(MouseButton button, InputTrigger trigger, std::unique_ptr<ICommand> command);
         void unbindMouseButton(MouseButton button, InputTrigger trigger);
         void clear();
-        void handleInput(InputState state);
+        void handleInput(const InputState& state) const;
 
     private:
         std::vector<KeyBinding> keyBindings_;
