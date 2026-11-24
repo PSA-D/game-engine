@@ -8,6 +8,7 @@ add_executable(EngineTests
         backends/sdl3/SDL3InputSourceTest.cpp
         runtime/InputListenersTest.cpp
         input/InputHandlerTests.cpp
+        integration/InputSubsystemTests.cpp
 )
 
 target_link_libraries(EngineTests PRIVATE engine)

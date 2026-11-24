@@ -12,94 +12,94 @@
 
 namespace
 {
-// Mock IInputSource so we can feed controlled events in unit tests without SDL3
-class MockInputSource : public engine::platform::IInputSource
-{
-public:
-    void pushEvent(engine::platform::PlatformEvent event)
+    // Mock IInputSource so we can feed controlled events in unit tests without SDL3
+    class MockInputSource : public engine::platform::IInputSource
     {
-        events_.push(event);
-    }
+    public:
+        void pushEvent(engine::platform::PlatformEvent event)
+        {
+            events_.push(event);
+        }
 
-    std::optional<engine::platform::PlatformEvent> pollEvent() override
+        std::optional<engine::platform::PlatformEvent> pollEvent() override
+        {
+            if (events_.empty())
+                return std::nullopt;
+
+            auto ev = events_.front();
+            events_.pop();
+            return ev;
+        }
+
+        // Add stubs here if IInputSource has other pure virtual methods
+        // (e.g., addNativeEventListener / removeNativeEventListener)
+        void addNativeEventListener(engine::platform::INativeEventListener* /*listener*/) override {}
+        void removeNativeEventListener(engine::platform::INativeEventListener* /*listener*/) override {}
+
+    private:
+        std::queue<engine::platform::PlatformEvent> events_;
+    };
+
+    // Spy implementation of IKeyListener
+    class SpyKeyListener : public engine::IKeyListener
     {
-        if (events_.empty())
-            return std::nullopt;
+    public:
+        int keyDownCount = 0;
+        int keyUpCount = 0;
+        engine::platform::KeyEvent lastEvent{};
+        std::function<void()> onCallback;
 
-        auto ev = events_.front();
-        events_.pop();
-        return ev;
-    }
+        void onKeyDown(const engine::platform::KeyEvent& event) override
+        {
+            ++keyDownCount;
+            lastEvent = event;
+            if (onCallback)
+                onCallback();
+        }
 
-    // Add stubs here if IInputSource has other pure virtual methods
-    // (e.g., addNativeEventListener / removeNativeEventListener)
-    void addNativeEventListener(engine::platform::INativeEventListener* /*listener*/) override {}
-    void removeNativeEventListener(engine::platform::INativeEventListener* /*listener*/) override {}
+        void onKeyUp(const engine::platform::KeyEvent& event) override
+        {
+            ++keyUpCount;
+            lastEvent = event;
+        }
+    };
 
-private:
-    std::queue<engine::platform::PlatformEvent> events_;
-};
-
-// Spy implementation of IKeyListener
-class SpyKeyListener : public engine::IKeyListener
-{
-public:
-    int keyDownCount = 0;
-    int keyUpCount = 0;
-    engine::platform::KeyEvent lastEvent{};
-    std::function<void()> onCallback;
-
-    void onKeyDown(const engine::platform::KeyEvent& event) override
+    // Spy implementation of IMouseListener
+    class SpyMouseListener : public engine::IMouseListener
     {
-        ++keyDownCount;
-        lastEvent = event;
-        if (onCallback)
-            onCallback();
-    }
+    public:
+        int buttonDownCount = 0;
+        int buttonUpCount = 0;
+        int moveCount = 0;
+        int wheelCount = 0;
+        std::function<void()> onCallback;
 
-    void onKeyUp(const engine::platform::KeyEvent& event) override
-    {
-        ++keyUpCount;
-        lastEvent = event;
-    }
-};
+        void onMouseButtonDown(const engine::platform::MouseButtonEvent&) override
+        {
+            ++buttonDownCount;
+            if (onCallback)
+                onCallback();
+        }
 
-// Spy implementation of IMouseListener
-class SpyMouseListener : public engine::IMouseListener
-{
-public:
-    int buttonDownCount = 0;
-    int buttonUpCount = 0;
-    int moveCount = 0;
-    int wheelCount = 0;
-    std::function<void()> onCallback;
+        void onMouseButtonUp(const engine::platform::MouseButtonEvent&) override
+        {
+            ++buttonUpCount;
+        }
 
-    void onMouseButtonDown(const engine::platform::MouseButtonEvent&) override
-    {
-        ++buttonDownCount;
-        if (onCallback)
-            onCallback();
-    }
+        void onMouseMove(const engine::platform::MouseMoveEvent&) override
+        {
+            ++moveCount;
+            if (onCallback)
+                onCallback();
+        }
 
-    void onMouseButtonUp(const engine::platform::MouseButtonEvent&) override
-    {
-        ++buttonUpCount;
-    }
-
-    void onMouseMove(const engine::platform::MouseMoveEvent&) override
-    {
-        ++moveCount;
-        if (onCallback)
-            onCallback();
-    }
-
-    void onMouseWheel(const engine::platform::MouseWheelEvent&) override
-    {
-        ++wheelCount;
-        if (onCallback)
-            onCallback();
-    }
-};
+        void onMouseWheel(const engine::platform::MouseWheelEvent&) override
+        {
+            ++wheelCount;
+            if (onCallback)
+                onCallback();
+        }
+    };
 } // namespace
 
 TEST_CASE("ListenersList: registered listener receives events, unregistered does not", "[input][listeners]")
@@ -219,13 +219,13 @@ TEST_CASE("InputSubsystem: dispatches platform events to registered listeners sa
         inputSubsystem.removeKeyListener(&keyListener2);
 
         source.pushEvent(engine::platform::KeyEvent{});
-        inputSubsystem.update(0.016f);
+        inputSubsystem.update();
 
         REQUIRE(keyListener1.keyDownCount == 1);
         REQUIRE(keyListener2.keyDownCount == 0);
 
         source.pushEvent(engine::platform::MouseMoveEvent{});
-        inputSubsystem.update(0.016f);
+        inputSubsystem.update();
 
         REQUIRE(mouseListener.moveCount == 1);
     }
@@ -239,14 +239,14 @@ TEST_CASE("InputSubsystem: dispatches platform events to registered listeners sa
         };
 
         source.pushEvent(engine::platform::KeyEvent{});
-        REQUIRE_NOTHROW(inputSubsystem.update(0.016f));
+        REQUIRE_NOTHROW(inputSubsystem.update());
 
         REQUIRE(keyListener1.keyDownCount == 1);
         REQUIRE(keyListener2.keyDownCount == 0);
 
         // Next event should not reach either removed listener
         source.pushEvent(engine::platform::KeyEvent{});
-        inputSubsystem.update(0.016f);
+        inputSubsystem.update();
 
         REQUIRE(keyListener1.keyDownCount == 1);
         REQUIRE(keyListener2.keyDownCount == 0);

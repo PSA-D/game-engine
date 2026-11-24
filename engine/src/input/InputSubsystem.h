@@ -1,5 +1,6 @@
 #pragma once
 
+#include "InputHandler.h"
 #include "InputState.h"
 #include "ListenersList.h"
 #include "platform/IInputSource.h"
@@ -19,7 +20,7 @@ namespace engine::subsystems
         {
         }
 
-        void update(float dt);
+        void update();
         void processEvent(const platform::PlatformEvent& event);
 
         void addKeyListener(IKeyListener* listener)
@@ -39,6 +40,44 @@ namespace engine::subsystems
             mouseListeners_.remove(listener);
         }
 
+        InputHandler& getHandler()
+        {
+            return inputHandler_;
+        }
+
+        bool getKey(KeyCode key)
+        {
+            const auto index = static_cast<std::size_t>(key);
+            if (index >= state_.keysDown.size())
+                return false;
+
+            return state_.keysDown.at(index);
+        };
+        bool getKeyDown(KeyCode key)
+        {
+            const auto index = static_cast<std::size_t>(key);
+            if (index >= state_.keysPressed.size())
+                return false;
+
+            return state_.keysPressed.at(index);
+        };
+        bool getKeyUp(KeyCode key)
+        {
+            const auto index = static_cast<std::size_t>(key);
+            if (index >= state_.keysReleased.size())
+                return false;
+
+            return state_.keysReleased.at(index);
+        };
+        bool getMouseButton(MouseButton button)
+        {
+            const auto index = static_cast<std::size_t>(button);
+            if (index >= state_.mouseButtonsDown.size())
+                return false;
+
+            return state_.mouseButtonsDown.at(index);
+        };
+
     private:
         template <class T>
         static bool contains(const std::vector<T*>& vec, T* item)
@@ -46,8 +85,14 @@ namespace engine::subsystems
             return std::find(vec.begin(), vec.end(), item) != vec.end();
         }
 
+        void beginFrame();
+
         platform::IInputSource& source_;
         InputState state_;
+        InputHandler inputHandler_;
+
+        bool quitRequested_{false};
+        std::vector<platform::WindowEvent> windowEvents_;
 
         ListenersList<IKeyListener> keyListeners_;
         ListenersList<IMouseListener> mouseListeners_;
