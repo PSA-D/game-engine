@@ -13,9 +13,11 @@ public:
     [[nodiscard]] GameObject& getOwner() noexcept;
     [[nodiscard]] const GameObject& getOwner() const noexcept;
 
-    bool enabled{true};
+    [[nodiscard]] bool isEnabled() const noexcept;
+    void setEnabled(bool enabled) noexcept;
 
 private:
     GameObject& owner;
+    bool enabled{true};
 };
 } // namespace engine

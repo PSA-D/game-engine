@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Component.h"
-#include "utils/Matrix3.h"
+#include "utils/Matrix.h"
 
 namespace engine
 {
@@ -20,7 +20,7 @@ public:
     [[nodiscard]] Vector2 getWorldPosition() const;
     [[nodiscard]] float getWorldRotation() const;
     [[nodiscard]] Vector2 getWorldScale() const;
-    [[nodiscard]] Matrix3 getWorldTransform() const;
+    [[nodiscard]] Matrix getWorldTransform() const;
 
 private:
     Vector2 localPosition{};

@@ -18,4 +18,14 @@ const GameObject& Component::getOwner() const noexcept
 {
     return owner;
 }
+
+bool Component::isEnabled() const noexcept
+{
+    return enabled;
+}
+
+void Component::setEnabled(bool newEnabled) noexcept
+{
+    enabled = newEnabled;
+}
 } // namespace engine

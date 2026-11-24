@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "Region.h"
 
 #include <cmath>
 #include <cstddef>
@@ -33,7 +34,7 @@ auto nearlyEqual(float first, float second) -> bool
     return std::abs(first - second) < 1.0e-4F;
 }
 
-auto nearlyEqual(const engine::Matrix3& first, const engine::Matrix3& second) -> bool
+auto nearlyEqual(const engine::Matrix& first, const engine::Matrix& second) -> bool
 {
     for (std::size_t row = 0; row < 3; ++row)
     {
@@ -64,7 +65,8 @@ auto runGameObjectTests() -> int
 
     {
         const int groupFailures = failures;
-        engine::GameObject object;
+        engine::Region region;
+        engine::GameObject& object = region.createGameObject();
         auto& first = object.addComponent<TestComponent>(1);
         auto& second = object.addComponent<TestComponent>(2);
         check(object.getComponent<TestComponent>() == &first, "first component is found");
@@ -73,7 +75,7 @@ auto runGameObjectTests() -> int
         check(object.getTransform().getOwner().getId() == object.getId(), "GameObject owns a Transform");
         check(object.getComponents<TestComponent>().size() == 2, "getComponents returns all matching components");
 
-        second.enabled = false;
+        second.setEnabled(false);
         std::size_t enabledCount = 0;
         for (std::size_t index = 0;; ++index)
         {
@@ -82,7 +84,7 @@ auto runGameObjectTests() -> int
             {
                 break;
             }
-            if (component->enabled)
+            if (component->isEnabled())
             {
                 ++enabledCount;
             }
@@ -96,7 +98,8 @@ auto runGameObjectTests() -> int
 
     {
         const int groupFailures = failures;
-        engine::GameObject object;
+        engine::Region region;
+        engine::GameObject& object = region.createGameObject();
         bool destroyed = false;
         auto& first = object.addComponent<TestComponent>(1, &destroyed);
         object.addComponent<TestComponent>(2);
@@ -116,8 +119,9 @@ auto runGameObjectTests() -> int
 
     {
         const int groupFailures = failures;
-        engine::GameObject parent;
-        engine::GameObject child;
+        engine::Region region;
+        engine::GameObject& parent = region.createGameObject();
+        engine::GameObject& child = region.createGameObject();
         parent.getTransform().setLocalPosition({10.0F, 20.0F});
         parent.getTransform().setLocalRotation(0.4F);
         parent.getTransform().setLocalScale({2.0F, 2.0F});
@@ -127,7 +131,8 @@ auto runGameObjectTests() -> int
         check(child.getTransform().getLocalPosition() == engine::Vector2{4.0F, 5.0F}, "local position has a getter");
         check(nearlyEqual(child.getTransform().getLocalRotation(), -0.3F), "local rotation has a getter");
         check(child.getTransform().getLocalScale() == engine::Vector2{1.5F, 0.75F}, "local scale has a getter");
-        const engine::Matrix3 worldTransform = child.getTransform().getWorldTransform();
+        const engine::Matrix worldTransform = child.getTransform().getWorldTransform();
+        check(&child.getRegion() == &region, "GameObject refers to its Region");
         check(child.setParent(&parent), "setParent accepts a valid parent");
         check(nearlyEqual(worldTransform, child.getTransform().getWorldTransform()),
               "parenting preserves the representable world transform");
@@ -145,7 +150,8 @@ auto runGameObjectTests() -> int
 
     {
         const int groupFailures = failures;
-        engine::GameObject object;
+        engine::Region region;
+        engine::GameObject& object = region.createGameObject();
         object.destroy();
         check(object.isPendingDestroy(), "destroy only marks the object for deferred removal");
         if (failures == groupFailures)
@@ -156,8 +162,9 @@ auto runGameObjectTests() -> int
 
     {
         const int groupFailures = failures;
-        engine::GameObject parent;
-        engine::GameObject child;
+        engine::Region region;
+        engine::GameObject& parent = region.createGameObject();
+        engine::GameObject& child = region.createGameObject();
         check(child.setParent(&parent, false), "setParent changes hierarchy without preserving transforms");
         check(!parent.setParent(&child, false), "setParent rejects a hierarchy cycle");
         check(parent.getChildren().size() == 1, "failed reparenting leaves existing hierarchy unchanged");

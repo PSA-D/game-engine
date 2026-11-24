@@ -16,10 +16,11 @@
 
 namespace engine
 {
+class Region;
+
 class GameObject
 {
 public:
-    explicit GameObject(std::string objectName = {});
     ~GameObject();
 
     GameObject(const GameObject&) = delete;
@@ -146,15 +147,13 @@ public:
     [[nodiscard]] Transform& getTransform() noexcept;
     [[nodiscard]] const Transform& getTransform() const noexcept;
 
+    [[nodiscard]] Region& getRegion() noexcept;
+    [[nodiscard]] const Region& getRegion() const noexcept;
     [[nodiscard]] std::uint64_t getId() const noexcept;
     [[nodiscard]] const std::string& getName() const noexcept;
     void setName(std::string newName);
     [[nodiscard]] const std::string& getTag() const noexcept;
     void setTag(std::string_view newTag);
-    [[nodiscard]] std::uint32_t getLayer() const noexcept;
-    void setLayer(std::uint32_t newLayer) noexcept;
-    [[nodiscard]] bool isActive() const noexcept;
-    void setActive(bool newActive) noexcept;
 
     [[nodiscard]] GameObject* getParent() const noexcept;
     [[nodiscard]] const std::vector<GameObject*>& getChildren() const noexcept;
@@ -164,13 +163,16 @@ public:
     [[nodiscard]] bool isPendingDestroy() const noexcept;
 
 private:
+    friend class Region;
+
+    GameObject(Region& ownerRegion, std::string objectName);
+
     static std::atomic<std::uint64_t> nextId;
 
     std::uint64_t id;
     std::string name;
     std::string tag;
-    std::uint32_t layer{0};
-    bool active{true};
+    Region* region;
     GameObject* parent{nullptr};
     std::vector<GameObject*> children;
     Transform transform;

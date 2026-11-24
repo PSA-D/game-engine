@@ -9,15 +9,15 @@
 
 namespace engine
 {
-class Matrix3
+class Matrix
 {
 public:
-    Matrix3()
+    Matrix()
         : elements{1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F}
     {
     }
 
-    explicit Matrix3(const std::array<float, 9>& values)
+    explicit Matrix(const std::array<float, 9>& values)
         : elements(values)
     {
     }
@@ -40,9 +40,9 @@ public:
         };
     }
 
-    [[nodiscard]] auto operator*(const Matrix3& other) const noexcept -> Matrix3
+    [[nodiscard]] auto operator*(const Matrix& other) const noexcept -> Matrix
     {
-        Matrix3 result{std::array<float, 9>{}};
+        Matrix result{std::array<float, 9>{}};
         for (std::size_t row = 0; row < 3; ++row)
         {
             for (std::size_t column = 0; column < 3; ++column)
@@ -56,7 +56,7 @@ public:
         return result;
     }
 
-    [[nodiscard]] auto inverse() const noexcept -> std::optional<Matrix3>
+    [[nodiscard]] auto inverse() const noexcept -> std::optional<Matrix>
     {
         const float a = at(0, 0);
         const float b = at(0, 1);
@@ -75,7 +75,7 @@ public:
         }
 
         const float inverseDeterminant = 1.0F / determinant;
-        return Matrix3{std::array<float, 9>{
+        return Matrix{std::array<float, 9>{
             (e * i - f * h) * inverseDeterminant,
             (c * h - b * i) * inverseDeterminant,
             (b * f - c * e) * inverseDeterminant,

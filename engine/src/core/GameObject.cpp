@@ -1,5 +1,7 @@
 #include "GameObject.h"
 
+#include "Region.h"
+
 #include <algorithm>
 #include <cmath>
 #include <utility>
@@ -8,7 +10,7 @@ namespace engine
 {
 namespace
 {
-bool decompose(const Matrix3& matrix, Vector2& position, float& rotation, Vector2& scale)
+bool decompose(const Matrix& matrix, Vector2& position, float& rotation, Vector2& scale)
 {
     constexpr float epsilon = 1.0e-5F;
     position = {matrix.at(0, 2), matrix.at(1, 2)};
@@ -41,9 +43,10 @@ bool decompose(const Matrix3& matrix, Vector2& position, float& rotation, Vector
 
 std::atomic<std::uint64_t> GameObject::nextId{1};
 
-GameObject::GameObject(std::string objectName)
+GameObject::GameObject(Region& ownerRegion, std::string objectName)
     : id(nextId.fetch_add(1))
     , name(std::move(objectName))
+    , region(&ownerRegion)
     , transform(*this)
 {
 }
@@ -72,6 +75,16 @@ Transform& GameObject::getTransform() noexcept
 const Transform& GameObject::getTransform() const noexcept
 {
     return transform;
+}
+
+Region& GameObject::getRegion() noexcept
+{
+    return *region;
+}
+
+const Region& GameObject::getRegion() const noexcept
+{
+    return *region;
 }
 
 bool GameObject::removeComponent(Component& component)
@@ -113,26 +126,6 @@ void GameObject::setTag(std::string_view newTag)
     tag.assign(newTag);
 }
 
-std::uint32_t GameObject::getLayer() const noexcept
-{
-    return layer;
-}
-
-void GameObject::setLayer(std::uint32_t newLayer) noexcept
-{
-    layer = newLayer;
-}
-
-bool GameObject::isActive() const noexcept
-{
-    return active;
-}
-
-void GameObject::setActive(bool newActive) noexcept
-{
-    active = newActive;
-}
-
 GameObject* GameObject::getParent() const noexcept
 {
     return parent;
@@ -162,7 +155,7 @@ bool GameObject::setParent(GameObject* newParent, bool preserveWorldTransform)
     Vector2 localScale = transform.getLocalScale();
     if (preserveWorldTransform)
     {
-        Matrix3 local = transform.getWorldTransform();
+        Matrix local = transform.getWorldTransform();
         if (newParent != nullptr)
         {
             const auto inverse = newParent->getTransform().getWorldTransform().inverse();
