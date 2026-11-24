@@ -1,18 +1,10 @@
 #pragma once
 
+#include <cstdint>
+
 namespace engine
 {
-enum class MouseButton
-{
-    Unknown,
-    Left,
-    Right,
-    Middle,
-    X1,
-    X2,
-};
-
-enum class KeyCode
+enum class KeyCode : uint8_t
 {
     Unknown,
     A,

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "utils/InputCodes.h"
+#include "utils/KeyCode.h"
+#include "utils/MouseButton.h"
 #include "utils/Vector2.h"
 
 #include <variant>
@@ -32,22 +33,18 @@ struct MouseButtonEvent
 {
     MouseButton button = MouseButton::Unknown;
     bool pressed = false;
-    float x = 0.0f;
-    float y = 0.0f;
+    Vector2 position = {0.0f, 0.0f};
 };
 
 struct MouseMoveEvent
 {
-    float x = 0.0f;
-    float y = 0.0f;
-    float dx = 0.0f;
-    float dy = 0.0f;
+    Vector2 position = {0.0f, 0.0f};
+    Vector2 difference = {0.0f, 0.0f};
 };
 
 struct MouseWheelEvent
 {
-    float x = 0.0f;
-    float y = 0.0f;
+    Vector2 scroll = {0.0f, 0.0f};
 };
 
 struct KeyModifiers

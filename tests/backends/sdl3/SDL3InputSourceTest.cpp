@@ -111,8 +111,8 @@ TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]")
         const auto& btnEvent = std::get<MouseButtonEvent>(*event);
         REQUIRE(btnEvent.button == MouseButton::Right);
         REQUIRE(btnEvent.pressed);
-        REQUIRE_THAT(btnEvent.x, WithinRel(128.5f));
-        REQUIRE_THAT(btnEvent.y, WithinRel(256.0f));
+        REQUIRE_THAT(btnEvent.position.x, WithinRel(128.5f));
+        REQUIRE_THAT(btnEvent.position.y, WithinRel(256.0f));
     }
 
     SECTION("Translates mouse motion and mouse wheel events")
@@ -135,17 +135,17 @@ TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]")
         REQUIRE(first.has_value());
         REQUIRE(std::holds_alternative<MouseMoveEvent>(*first));
         const auto& m = std::get<MouseMoveEvent>(*first);
-        REQUIRE_THAT(m.x, WithinRel(100.0f));
-        REQUIRE_THAT(m.y, WithinRel(200.0f));
-        REQUIRE_THAT(m.dx, WithinRel(5.0f));
-        REQUIRE_THAT(m.dy, WithinRel(-3.0f));
+        REQUIRE_THAT(m.position.x, WithinRel(100.0f));
+        REQUIRE_THAT(m.position.y, WithinRel(200.0f));
+        REQUIRE_THAT(m.difference.x, WithinRel(5.0f));
+        REQUIRE_THAT(m.difference.y, WithinRel(-3.0f));
 
         auto second = inputSource.pollEvent();
         REQUIRE(second.has_value());
         REQUIRE(std::holds_alternative<MouseWheelEvent>(*second));
         const auto& w = std::get<MouseWheelEvent>(*second);
-        REQUIRE_THAT(w.x, WithinRel(1.0f));
-        REQUIRE_THAT(w.y, WithinRel(-2.0f));
+        REQUIRE_THAT(w.scroll.x, WithinRel(1.0f));
+        REQUIRE_THAT(w.scroll.y, WithinRel(-2.0f));
     }
 
     SECTION("Translates window resized events")
