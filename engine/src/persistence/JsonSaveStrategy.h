@@ -2,7 +2,7 @@
 
 #include "ISaveStrategy.h"
 
-namespace engine::subsystem::PersistenceSubsystem
+namespace engine::subsystem
 {
 // Slaat GameData op als leesbare JSON, met nlohmann::json.
 //
@@ -17,4 +17,4 @@ public:
     [[nodiscard]] std::optional<GameData> deserialize(const std::string& text) const override;
     [[nodiscard]] std::string fileExtension() const override;
 };
-} // namespace engine::subsystem::PersistenceSubsystem
+} // namespace engine::subsystem

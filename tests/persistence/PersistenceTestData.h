@@ -5,7 +5,7 @@
 
 #include <utility>
 
-namespace engine::subsystem::PersistenceSubsystem
+namespace engine::subsystem
 {
 // Gedeelde testdata voor de unit- en integratietests van persistence.
 // Bouwt een voorbeeld met elk datatype, ook genest.
@@ -33,4 +33,4 @@ inline auto makeSampleData() -> GameData
     data.root = std::move(root);
     return data;
 }
-} // namespace engine::subsystem::PersistenceSubsystem
+} // namespace engine::subsystem
