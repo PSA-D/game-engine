@@ -4,6 +4,7 @@ find_package(SDL3 CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 
 add_library(engine STATIC
+    include/BehaviourScript.h
     include/Component.h
     include/GameObject.h
     include/Region.h
@@ -11,6 +12,7 @@ add_library(engine STATIC
     include/utils/Matrix.h
     include/utils/Vector2.h
     src/core/Component.cpp
+    src/core/BehaviourScript.cpp
     src/core/Engine.cpp
     src/core/GameObject.cpp
     src/core/Transform.cpp

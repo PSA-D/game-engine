@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.25)
 find_package(Catch2 3 CONFIG REQUIRED)
 
 add_executable(EngineTests
+    test_behaviour_script.cpp
     test_game_object.cpp
     runtime/LevelTest.cpp
     runtime/RegionTest.cpp
