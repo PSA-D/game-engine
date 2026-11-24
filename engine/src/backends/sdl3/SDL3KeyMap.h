@@ -1,7 +1,8 @@
 #pragma once
 
 #include "platform/Events.h"
-#include "utils/InputCodes.h"
+#include "utils/KeyCode.h"
+#include "utils/MouseButton.h"
 
 #include <SDL3/SDL_keycode.h>
 #include <SDL3/SDL_scancode.h>
