@@ -8,6 +8,7 @@
 
 namespace engine::subsystems
 {
+    // Een soort config object voor inputs
     struct InputState
     {
         static constexpr std::size_t KEY_COUNT = static_cast<std::size_t>(KeyCode::Count);

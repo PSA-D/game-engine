@@ -11,6 +11,7 @@
 
 namespace engine::subsystems
 {
+    // De handler die alle events bind en uitvoert
     class InputHandler
     {
     public:
