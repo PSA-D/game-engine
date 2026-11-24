@@ -4,17 +4,6 @@
 
 namespace engine
 {
-    enum class MouseButton : uint8_t
-    {
-        Left,
-        Right,
-        Middle,
-        X1,
-        X2,
-        Count,
-        Unknown,
-    };
-
     enum class KeyCode : uint8_t
     {
         A,

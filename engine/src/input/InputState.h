@@ -1,5 +1,7 @@
 #pragma once
 
+#include "utils/KeyCode.h"
+#include "utils/MouseButton.h"
 #include "utils/Vector2.h"
 
 #include <array>

@@ -4,7 +4,8 @@
 #include "InputState.h"
 #include "InputTrigger.h"
 #include "commands/ICommand.h"
-#include "utils/InputCodes.h"
+#include "utils/KeyCode.h"
+#include "utils/MouseButton.h"
 
 #include <vector>
 

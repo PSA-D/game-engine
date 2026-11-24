@@ -1,7 +1,8 @@
 #pragma once
 
 #include "src/runtime/IKeyListener.h"
-#include "src/utils/InputCodes.h"
+#include "src/utils/KeyCode.h"
+#include "src/utils/MouseButton.h"
 
 #include <iostream>
 #include <ostream>
