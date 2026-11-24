@@ -12,7 +12,7 @@ namespace engine::platform
     {
         Resized,
         FocusGained,
-        FocustLost,
+        FocusLost,
         Minimized,
         Maximized,
         Restored,
