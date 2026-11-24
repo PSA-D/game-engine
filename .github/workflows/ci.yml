@@ -43,13 +43,13 @@ jobs:
           git clone --depth 1 https://github.com/microsoft/vcpkg "$VCPKG_ROOT"
           "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
 
+      - name: Set up GCC
+        if: matrix.compiler == 'gcc'
+        run: sudo apt-get update && sudo apt-get install --yes ninja-build autoconf autoconf-archive automake libtool
+
       - name: Set up MSVC
         if: matrix.compiler == 'msvc'
         uses: ilammy/msvc-dev-cmd@v1
-
-      - name: Set up GCC
-        if: matrix.compiler == 'msvc'
-        run: sudo apt-get update && sudo apt-get install --yes ninja-build autoconf autoconf-archive automake libtool
 
       - name: Configure GCC
         if: matrix.compiler == 'gcc'
