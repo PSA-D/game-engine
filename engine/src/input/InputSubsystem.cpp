@@ -1,11 +1,15 @@
 #include "InputSubsystem.h"
 
+#include <iostream>
+#include <ostream>
+
 namespace engine::subsystems
 {
 void InputSubsystem::update(float dt)
 {
     float a = dt; // Even om een unused error te voorkomen
     a += 1;
+    std::cout << "a = " << a << '\n';
 
     auto e = source_.pollEvent();
 
