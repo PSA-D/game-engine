@@ -73,16 +73,16 @@ TEST_CASE("InputHandler binds and executes key commands from PlatformEvents", "[
     int jumpReleasedCount = 0;
 
     handler.bindKey(
-        KeyCode::Space, InputTrigger::Pressed, std::make_unique<FunctionCommand>([&]() { ++jumpPressedCount; }));
-    handler.bindKey(KeyCode::Space, InputTrigger::Held, std::make_unique<FunctionCommand>([&]() { ++jumpHeldCount; }));
+        KeyCode::Space, InputTrigger::Pressed, std::make_unique<FunctionCommand>([&] { ++jumpPressedCount; }));
+    handler.bindKey(KeyCode::Space, InputTrigger::Held, std::make_unique<FunctionCommand>([&] { ++jumpHeldCount; }));
     handler.bindKey(
-        KeyCode::Space, InputTrigger::Released, std::make_unique<FunctionCommand>([&]() { ++jumpReleasedCount; }));
+        KeyCode::Space, InputTrigger::Released, std::make_unique<FunctionCommand>([&] { ++jumpReleasedCount; }));
 
     SECTION("Key press, hold across frames, and release trigger the matching commands")
     {
         // Frame 1: Custom KeyEvent (Space pressed)
         resetFrameState(state);
-        applyPlatformEvent(state, PlatformEvent{KeyEvent{.key = KeyCode::Space, .pressed = true, .repeat = false}});
+        applyPlatformEvent(state, PlatformEvent{KeyEvent{.key = KeyCode::Space, .mods = {}, .pressed = true, .repeat = false}});
         handler.handleInput(state);
 
         REQUIRE(jumpPressedCount == 1);
@@ -99,7 +99,7 @@ TEST_CASE("InputHandler binds and executes key commands from PlatformEvents", "[
 
         // Frame 3: Custom KeyEvent (Space released)
         resetFrameState(state);
-        applyPlatformEvent(state, PlatformEvent{KeyEvent{.key = KeyCode::Space, .pressed = false, .repeat = false}});
+        applyPlatformEvent(state, PlatformEvent{KeyEvent{.key = KeyCode::Space, .mods = {}, .pressed = false, .repeat = false}});
         handler.handleInput(state);
 
         REQUIRE(jumpPressedCount == 1);
@@ -112,7 +112,7 @@ TEST_CASE("InputHandler binds and executes key commands from PlatformEvents", "[
         handler.unbindKey(KeyCode::Space, InputTrigger::Pressed);
 
         resetFrameState(state);
-        applyPlatformEvent(state, PlatformEvent{KeyEvent{.key = KeyCode::Space, .pressed = true, .repeat = false}});
+        applyPlatformEvent(state, PlatformEvent{KeyEvent{.key = KeyCode::Space, .mods = {}, .pressed = true, .repeat = false}});
         handler.handleInput(state);
 
         REQUIRE(jumpPressedCount == 0);
@@ -129,9 +129,9 @@ TEST_CASE("InputHandler binds, unbinds, and clears mouse button commands from Pl
     int rightReleaseCount = 0;
 
     handler.bindMouseButton(
-        MouseButton::Left, InputTrigger::Pressed, std::make_unique<FunctionCommand>([&]() { ++leftClickCount; }));
+        MouseButton::Left, InputTrigger::Pressed, std::make_unique<FunctionCommand>([&] { ++leftClickCount; }));
     handler.bindMouseButton(
-        MouseButton::Right, InputTrigger::Released, std::make_unique<FunctionCommand>([&]() { ++rightReleaseCount; }));
+        MouseButton::Right, InputTrigger::Released, std::make_unique<FunctionCommand>([&] { ++rightReleaseCount; }));
 
     // Frame 1: Left pressed, Right pressed
     resetFrameState(state);
