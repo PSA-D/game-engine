@@ -8,7 +8,7 @@
 
 namespace engine::platform
 {
-    enum class WindowEventKind
+    enum class WindowEventKind : uint8_t
     {
         Resized,
         FocusGained,
@@ -21,8 +21,8 @@ namespace engine::platform
 
     struct WindowEvent
     {
-        WindowEventKind kind;
-        Vector2 size;
+        WindowEventKind kind{};
+        Vector2 size{};
     };
 
     struct QuitEvent
@@ -31,7 +31,7 @@ namespace engine::platform
 
     struct MouseButtonEvent
     {
-        MouseButton button = MouseButton::Unknown;
+        MouseButton button{};
         bool pressed = false;
         Vector2 position = {0.0f, 0.0f};
     };
@@ -65,7 +65,6 @@ namespace engine::platform
         bool repeat = false;
     };
 
-    // Een typedef voor alle event types
     using PlatformEvent =
         std::variant<WindowEvent, MouseWheelEvent, QuitEvent, MouseMoveEvent, MouseButtonEvent, KeyEvent>;
 

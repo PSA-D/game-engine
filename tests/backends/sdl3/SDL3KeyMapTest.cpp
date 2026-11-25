@@ -1,8 +1,7 @@
 #include "src/backends/sdl3/SDL3KeyMap.h"
 
 #include "src/backends/sdl3/SDL3InputSource.h"
-#include "src/utils/KeyCode.h"
-#include "src/utils/MouseButton.h"
+#include "src/utils/InputCodes.h"
 
 #include <SDL3/SDL_scancode.h>
 #include <catch2/catch_test_macros.hpp>

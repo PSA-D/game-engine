@@ -4,8 +4,11 @@
 
 namespace engine
 {
-    enum class KeyCode : uint8_t
+    enum class KeyCode : std::uint8_t
     {
+        Unknown = 0,
+
+        // Letters
         A,
         B,
         C,
@@ -32,6 +35,9 @@ namespace engine
         X,
         Y,
         Z,
+
+        // Cijfers (bovenste rij)
+        Num0,
         Num1,
         Num2,
         Num3,
@@ -41,20 +47,27 @@ namespace engine
         Num7,
         Num8,
         Num9,
-        Num0,
+
+        // Speciale toetsen
         Space,
         Enter,
         Escape,
         Tab,
         Backspace,
-        ArrowUp,
-        ArrowDown,
-        ArrowLeft,
-        ArrowRight,
+
+        // Pijltjestoetsen
+        Up,
+        Down,
+        Left,
+        Right,
+
+        // Navigatie
         PageUp,
         PageDown,
         Home,
         End,
+
+        // Functietoetsen
         F1,
         F2,
         F3,
@@ -67,7 +80,5 @@ namespace engine
         F10,
         F11,
         F12,
-        Count,
-        Unknown,
     };
 } // namespace engine
