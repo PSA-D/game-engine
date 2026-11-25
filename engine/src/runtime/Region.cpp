@@ -1,21 +1,12 @@
 #include "Region.h"
 
-#include <algorithm>
-#include <atomic>
-#include <cstdint>
-#include <stdexcept>
+#include "GameObject.h"
+
 #include <string>
 #include <utility>
 
 namespace engine
 {
-    namespace
-    {
-        // Elk GameObject in het hele proces krijgt een uniek id, ook over Regions en Levels heen.
-        // Zo kan een id overal zonder verwarring opgezocht worden. 0 is ongeldig.
-        std::atomic<std::uint64_t> nextGameObjectId{1};
-    } // namespace
-
     Region::Region(std::string regionName)
         : name(std::move(regionName))
     {
@@ -23,13 +14,14 @@ namespace engine
 
     Region::~Region() = default;
 
-    // GameObject& Region::createGameObject(std::string_view objectName)
-    // {
-    //     const auto id = nextGameObjectId.fetch_add(1, std::memory_order_relaxed);
-    //     gameObjects.push_back(std::make_unique<GameObject>(id, std::string(objectName), *this));
-    //     return *gameObjects.back();
-    // }
-    //    // TODO: Uncomment de bovenstaande method zodra GameObject beschikbaar is
+    GameObject& Region::createGameObject(std::string_view objectName)
+    {
+        auto gameObject = std::unique_ptr<GameObject>(new GameObject(*this, std::string(objectName)));
+        GameObject& result = *gameObject;
+        gameObjects.push_back(std::move(gameObject));
+        return result;
+    }
+
     // void Region::requestDestroy(GameObject& gameObject)
     // {
     //     if (&gameObject.getRegion() != this)

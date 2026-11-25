@@ -1,7 +1,9 @@
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace engine
@@ -19,11 +21,12 @@ public:
     Region(Region&&) = delete;
     auto operator=(Region&&) -> Region& = delete;
 
-    [[nodiscard]] const std::string& getName() const noexcept;
-    GameObject& createGameObject(std::string objectName = {});
+    [[nodiscard]] const std::string& getName() const;
+    GameObject& createGameObject(std::string_view objectName = {});
 
 private:
     std::string name;
     std::vector<std::unique_ptr<GameObject>> gameObjects;
+    std::vector<std::uint64_t> pendingDestruction;
 };
 } // namespace engine
