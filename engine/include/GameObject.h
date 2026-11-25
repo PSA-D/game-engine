@@ -16,167 +16,167 @@
 
 namespace engine
 {
-class Region;
+    class Region;
 
-class GameObject
-{
-public:
-    ~GameObject();
-
-    GameObject(const GameObject&) = delete;
-    auto operator=(const GameObject&) -> GameObject& = delete;
-    GameObject(GameObject&&) = delete;
-    auto operator=(GameObject&&) -> GameObject& = delete;
-
-    template <typename T, typename... Args>
-    T& addComponent(Args&&... args)
+    class GameObject
     {
-        static_assert(std::is_base_of_v<Component, T>);
-        auto component = std::make_unique<T>(*this, std::forward<Args>(args)...);
-        T& result = *component;
-        components.push_back(std::move(component));
-        return result;
-    }
+    public:
+        ~GameObject();
 
-    template <typename T>
-    [[nodiscard]] T* getComponent(std::size_t idx = 0) noexcept
-    {
-        static_assert(std::is_base_of_v<Component, T>);
-        for (const auto& component : components)
+        GameObject(const GameObject&) = delete;
+        auto operator=(const GameObject&) -> GameObject& = delete;
+        GameObject(GameObject&&) = delete;
+        auto operator=(GameObject&&) -> GameObject& = delete;
+
+        template <typename T, typename... Args>
+        T& addComponent(Args&&... args)
         {
-            if (auto* typedComponent = dynamic_cast<T*>(component.get()))
+            static_assert(std::is_base_of_v<Component, T>);
+            auto component = std::make_unique<T>(*this, std::forward<Args>(args)...);
+            T& result = *component;
+            components.push_back(std::move(component));
+            return result;
+        }
+
+        template <typename T>
+        [[nodiscard]] T* getComponent(std::size_t idx = 0) noexcept
+        {
+            static_assert(std::is_base_of_v<Component, T>);
+            for (const auto& component : components)
             {
-                if (idx == 0)
+                if (auto* typedComponent = dynamic_cast<T*>(component.get()))
                 {
-                    return typedComponent;
+                    if (idx == 0)
+                    {
+                        return typedComponent;
+                    }
+                    --idx;
                 }
-                --idx;
             }
+            return nullptr;
         }
-        return nullptr;
-    }
 
-    template <typename T>
-    [[nodiscard]] const T* getComponent(std::size_t idx = 0) const noexcept
-    {
-        static_assert(std::is_base_of_v<Component, T>);
-        for (const auto& component : components)
+        template <typename T>
+        [[nodiscard]] const T* getComponent(std::size_t idx = 0) const noexcept
         {
-            if (const auto* typedComponent = dynamic_cast<const T*>(component.get()))
+            static_assert(std::is_base_of_v<Component, T>);
+            for (const auto& component : components)
             {
-                if (idx == 0)
+                if (const auto* typedComponent = dynamic_cast<const T*>(component.get()))
                 {
-                    return typedComponent;
+                    if (idx == 0)
+                    {
+                        return typedComponent;
+                    }
+                    --idx;
                 }
-                --idx;
             }
+            return nullptr;
         }
-        return nullptr;
-    }
 
-    template <typename T>
-    [[nodiscard]] std::vector<T*> getComponents()
-    {
-        static_assert(std::is_base_of_v<Component, T>);
-        std::vector<T*> result;
-        for (const auto& component : components)
+        template <typename T>
+        [[nodiscard]] std::vector<T*> getComponents()
         {
-            if (auto* typedComponent = dynamic_cast<T*>(component.get()))
+            static_assert(std::is_base_of_v<Component, T>);
+            std::vector<T*> result;
+            for (const auto& component : components)
             {
-                result.push_back(typedComponent);
-            }
-        }
-        return result;
-    }
-
-    template <typename T>
-    [[nodiscard]] std::vector<const T*> getComponents() const
-    {
-        static_assert(std::is_base_of_v<Component, T>);
-        std::vector<const T*> result;
-        for (const auto& component : components)
-        {
-            if (const auto* typedComponent = dynamic_cast<const T*>(component.get()))
-            {
-                result.push_back(typedComponent);
-            }
-        }
-        return result;
-    }
-
-    template <typename T>
-    [[nodiscard]] bool hasComponent() const noexcept
-    {
-        return getComponent<T>() != nullptr;
-    }
-
-    template <typename T>
-    [[nodiscard]] bool removeComponent(std::size_t idx = 0)
-    {
-        static_assert(std::is_base_of_v<Component, T>);
-        for (auto component = components.begin(); component != components.end(); ++component)
-        {
-            if (dynamic_cast<T*>(component->get()) != nullptr)
-            {
-                if (idx == 0)
+                if (auto* typedComponent = dynamic_cast<T*>(component.get()))
                 {
-                    components.erase(component);
-                    return true;
+                    result.push_back(typedComponent);
                 }
-                --idx;
             }
+            return result;
         }
-        return false;
-    }
 
-    [[nodiscard]] bool removeComponent(Component& component);
+        template <typename T>
+        [[nodiscard]] std::vector<const T*> getComponents() const
+        {
+            static_assert(std::is_base_of_v<Component, T>);
+            std::vector<const T*> result;
+            for (const auto& component : components)
+            {
+                if (const auto* typedComponent = dynamic_cast<const T*>(component.get()))
+                {
+                    result.push_back(typedComponent);
+                }
+            }
+            return result;
+        }
 
-    template <typename T>
-    [[nodiscard]] std::size_t removeComponents()
-    {
-        static_assert(std::is_base_of_v<Component, T>);
-        const auto oldSize = components.size();
-        components.erase(std::remove_if(components.begin(),
-                                        components.end(),
-                                        [](const auto& component)
-                                        { return dynamic_cast<T*>(component.get()) != nullptr; }),
-                         components.end());
-        return oldSize - components.size();
-    }
+        template <typename T>
+        [[nodiscard]] bool hasComponent() const noexcept
+        {
+            return getComponent<T>() != nullptr;
+        }
 
-    [[nodiscard]] Transform& getTransform() noexcept;
-    [[nodiscard]] const Transform& getTransform() const noexcept;
+        template <typename T>
+        [[nodiscard]] bool removeComponent(std::size_t idx = 0)
+        {
+            static_assert(std::is_base_of_v<Component, T>);
+            for (auto component = components.begin(); component != components.end(); ++component)
+            {
+                if (dynamic_cast<T*>(component->get()) != nullptr)
+                {
+                    if (idx == 0)
+                    {
+                        components.erase(component);
+                        return true;
+                    }
+                    --idx;
+                }
+            }
+            return false;
+        }
 
-    [[nodiscard]] Region& getRegion() noexcept;
-    [[nodiscard]] const Region& getRegion() const noexcept;
-    [[nodiscard]] std::uint64_t getId() const noexcept;
-    [[nodiscard]] const std::string& getName() const noexcept;
-    void setName(std::string newName);
-    [[nodiscard]] const std::string& getTag() const noexcept;
-    void setTag(std::string_view newTag);
+        [[nodiscard]] bool removeComponent(Component& component);
 
-    [[nodiscard]] GameObject* getParent() const noexcept;
-    [[nodiscard]] const std::vector<GameObject*>& getChildren() const noexcept;
-    [[nodiscard]] bool setParent(GameObject* newParent, bool preserveWorldTransform = true);
+        template <typename T>
+        [[nodiscard]] std::size_t removeComponents()
+        {
+            static_assert(std::is_base_of_v<Component, T>);
+            const auto oldSize = components.size();
+            components.erase(std::remove_if(components.begin(),
+                                            components.end(),
+                                            [](const auto& component)
+                                            { return dynamic_cast<T*>(component.get()) != nullptr; }),
+                             components.end());
+            return oldSize - components.size();
+        }
 
-    void destroy() noexcept;
-    [[nodiscard]] bool isPendingDestroy() const noexcept;
+        [[nodiscard]] Transform& getTransform() noexcept;
+        [[nodiscard]] const Transform& getTransform() const noexcept;
 
-private:
-    friend class Region;
+        [[nodiscard]] Region& getRegion() noexcept;
+        [[nodiscard]] const Region& getRegion() const noexcept;
+        [[nodiscard]] std::uint64_t getId() const noexcept;
+        [[nodiscard]] const std::string& getName() const noexcept;
+        void setName(std::string newName);
+        [[nodiscard]] const std::string& getTag() const noexcept;
+        void setTag(std::string_view newTag);
 
-    GameObject(Region& ownerRegion, std::string objectName);
+        [[nodiscard]] GameObject* getParent() const noexcept;
+        [[nodiscard]] const std::vector<GameObject*>& getChildren() const noexcept;
+        [[nodiscard]] bool setParent(GameObject* newParent, bool preserveWorldTransform = true);
 
-    static std::atomic<std::uint64_t> nextId;
+        void destroy() noexcept;
+        [[nodiscard]] bool isPendingDestroy() const noexcept;
 
-    std::uint64_t id;
-    std::string name;
-    std::string tag;
-    Region* region;
-    GameObject* parent{nullptr};
-    std::vector<GameObject*> children;
-    Transform transform;
-    std::vector<std::unique_ptr<Component>> components;
-    bool pendingDestroy{false};
-};
+    private:
+        friend class Region;
+
+        GameObject(Region& ownerRegion, std::string objectName);
+
+        static std::atomic<std::uint64_t> nextId;
+
+        std::uint64_t id;
+        std::string name;
+        std::string tag;
+        Region* region;
+        GameObject* parent{nullptr};
+        std::vector<GameObject*> children;
+        Transform transform;
+        std::vector<std::unique_ptr<Component>> components;
+        bool pendingDestroy{false};
+    };
 } // namespace engine

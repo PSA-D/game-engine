@@ -2,22 +2,22 @@
 
 namespace engine
 {
-class GameObject;
+    class GameObject;
 
-class Component
-{
-public:
-    explicit Component(GameObject& owner) noexcept;
-    virtual ~Component();
+    class Component
+    {
+    public:
+        explicit Component(GameObject& owner) noexcept;
+        virtual ~Component();
 
-    [[nodiscard]] GameObject& getOwner() noexcept;
-    [[nodiscard]] const GameObject& getOwner() const noexcept;
+        [[nodiscard]] GameObject& getOwner() noexcept;
+        [[nodiscard]] const GameObject& getOwner() const noexcept;
 
-    [[nodiscard]] bool isEnabled() const noexcept;
-    void setEnabled(bool enabled) noexcept;
+        [[nodiscard]] bool isEnabled() const noexcept;
+        void setEnabled(bool enabled) noexcept;
 
-private:
-    GameObject& owner;
-    bool enabled{true};
-};
+    private:
+        GameObject& owner;
+        bool enabled{true};
+    };
 } // namespace engine
