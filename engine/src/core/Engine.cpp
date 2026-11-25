@@ -1,33 +1,18 @@
 #include "Engine.h"
 
-#include <iostream>
+#include "core/EngineImpl.h"
 
 namespace engine
 {
-    Engine::Engine() = default;
-
-    Engine::~Engine()
+    Engine::Engine(const EngineConfig& config)
+        : impl(std::make_unique<EngineImpl>(config))
     {
-        shutdown();
     }
 
-    void Engine::init()
-    {
-        std::cout << "Engine initialized\n";
-        running = true;
-    }
+    Engine::~Engine() = default;
 
-    void Engine::shutdown()
+    void Engine::run()
     {
-        if (!running)
-            return;
-
-        running = false;
-        std::cout << "Engine shut down\n";
-    }
-
-    bool Engine::isRunning() const
-    {
-        return running;
+        impl->run();
     }
 } // namespace engine

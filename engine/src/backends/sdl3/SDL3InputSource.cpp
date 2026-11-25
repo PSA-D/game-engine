@@ -6,6 +6,14 @@ using namespace engine::platform;
 
 namespace engine::backends
 {
+    namespace
+    {
+        Vector2 toVector2(Size size)
+        {
+            return {static_cast<float>(size.width), static_cast<float>(size.height)};
+        }
+    } // namespace
+
     std::optional<PlatformEvent> SDL3InputSource::pollEvent()
     {
         SDL_Event sdlEvent;
@@ -54,17 +62,17 @@ namespace engine::backends
             return WindowEvent{WindowEventKind::Resized,
                                Vector2{static_cast<float>(event.window.data1), static_cast<float>(event.window.data2)}};
         case SDL_EVENT_WINDOW_FOCUS_GAINED:
-            return WindowEvent{WindowEventKind::FocusGained, window_.getSize()};
+            return WindowEvent{WindowEventKind::FocusGained, toVector2(window_.getSize())};
         case SDL_EVENT_WINDOW_FOCUS_LOST:
-            return WindowEvent{WindowEventKind::FocusLost, window_.getSize()};
+            return WindowEvent{WindowEventKind::FocusLost, toVector2(window_.getSize())};
         case SDL_EVENT_WINDOW_MINIMIZED:
-            return WindowEvent{WindowEventKind::Minimized, window_.getSize()};
+            return WindowEvent{WindowEventKind::Minimized, toVector2(window_.getSize())};
         case SDL_EVENT_WINDOW_MAXIMIZED:
-            return WindowEvent{WindowEventKind::Maximized, window_.getSize()};
+            return WindowEvent{WindowEventKind::Maximized, toVector2(window_.getSize())};
         case SDL_EVENT_WINDOW_RESTORED:
-            return WindowEvent{WindowEventKind::Restored, window_.getSize()};
+            return WindowEvent{WindowEventKind::Restored, toVector2(window_.getSize())};
         case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
-            return WindowEvent{WindowEventKind::CloseRequested, window_.getSize()};
+            return WindowEvent{WindowEventKind::CloseRequested, toVector2(window_.getSize())};
 
         // Mouse Events
         case SDL_EVENT_MOUSE_MOTION:

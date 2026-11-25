@@ -38,6 +38,10 @@ if(ENGINE_ENABLE_SANITIZERS AND NOT MSVC AND NOT MINGW)
     target_link_options(project_sanitizers INTERFACE -fsanitize=address,undefined)
 endif()
 
+add_subdirectory(engine-utils)
+add_subdirectory(engine-platform)
+add_subdirectory(engine-backends/null)
+add_subdirectory(engine-backends/sdl3)
 add_subdirectory(engine)
 add_subdirectory(game)
 
