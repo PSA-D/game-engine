@@ -8,8 +8,6 @@
 
 namespace engine::core
 {
-    // Vrije functies van de composition root, los van EngineImpl zodat ze te testen zijn.
-
     // Stelt de WindowConfig op uit de EngineConfig (appName wordt de titel).
     [[nodiscard]] platform::WindowConfig makeWindowConfig(const EngineConfig& config);
 

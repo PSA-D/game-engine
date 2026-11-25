@@ -6,16 +6,14 @@
 
 namespace engine::platform
 {
-    // Instellingen voor het aanmaken van een venster. Pure data.
-    // Wordt door de composition root opgesteld uit de EngineConfig.
     struct WindowConfig
     {
         static constexpr Size defaultSize{1280, 720};
 
         std::string title{"Game"};
-        Size size{defaultSize}; // in schermeenheden, niet in pixels
+        Size size{defaultSize};
         bool fullscreen{false};
         bool resizable{true};
-        bool vsync{true}; // wordt toegepast door de renderer, zodra die er is
+        bool vsync{true};
     };
 } // namespace engine::platform

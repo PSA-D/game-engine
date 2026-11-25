@@ -31,16 +31,16 @@ namespace engine
         // │ van afhangt, en voeg het op dezelfde plek toe in de init-lijst.      │
         // └──────────────────────────────────────────────────────────────────────┘
 
-        // ── 1. Platform ────────────────────────────────────────────────────────
-        std::unique_ptr<platform::IPlatformFactory> factory; // eerst aan, laatst uit (SDL_Init/SDL_Quit)
+        // 1. Platform
+        std::unique_ptr<platform::IPlatformFactory> factory;
         std::unique_ptr<platform::IWindow> window;
-        // renderer komt HIER (na window, vóór inputSource)
+        // renderer komt HIER (na window, voor inputSource)
         // inputSource komt HIER (stap 8, na merge van feat/input-source)
         // audioBackend, paths komen hier
 
-        // ── 2. Subsystemen ─────────────────────────────────────────────────────
+        // 2. Subsystemen
         // assets, input, physics, render, audio, animation, ui, ai, persistence, editor, debug
 
-        // ── 3. SceneManager + GameLoop (gameloop-US) ───────────────────────────
+        // 3. SceneManager + GameLoop
     };
 } // namespace engine
