@@ -58,6 +58,9 @@ add_test(NAME BackendTests COMMAND BackendTests)
 add_executable(RuntimeTests
         runtime/InputListenersTest.cpp
         runtime/DataNodeTest.cpp
+        runtime/LevelTest.cpp
+        runtime/RegionTest.cpp
+        runtime/SceneTest.cpp
 )
 
 target_link_libraries(RuntimeTests PRIVATE
