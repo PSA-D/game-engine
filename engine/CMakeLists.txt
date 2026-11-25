@@ -10,14 +10,14 @@ add_library(engine STATIC
     include/SceneManager.h
     include/utils/Matrix.h
     include/utils/Vector2.h
-    src/core/Component.cpp
-    src/core/Engine.cpp
-    src/core/EventBus.cpp
-    src/core/GameObject.cpp
-    src/core/Region.cpp
-    src/core/Scene.cpp
-    src/core/SceneManager.cpp
-    src/core/Transform.cpp
+    src/Engine.cpp
+    src/runtime/Component.cpp
+    src/runtime/EventBus.cpp
+    src/runtime/GameObject.cpp
+    src/runtime/Region.cpp
+    src/runtime/Scene.cpp
+    src/runtime/SceneManager.cpp
+    src/runtime/Transform.cpp
 )
 
 target_include_directories(engine PUBLIC
