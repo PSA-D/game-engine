@@ -20,7 +20,6 @@ namespace engine::core
 
     std::unique_ptr<platform::IPlatformFactory> createPlatformFactory(PlatformBackend backend)
     {
-        // Bewust geen default: met -Werror geeft de compiler een fout als een nieuwe backend hier ontbreekt.
         switch (backend)
         {
         case PlatformBackend::SDL3:

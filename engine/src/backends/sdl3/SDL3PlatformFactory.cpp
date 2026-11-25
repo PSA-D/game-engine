@@ -10,7 +10,6 @@ namespace engine::backends
 {
     SDL3PlatformFactory::SDL3PlatformFactory()
     {
-        // Let op: in SDL3 geeft SDL_Init true terug bij succes (in SDL2 was dat 0).
         if (!SDL_Init(SDL_INIT_VIDEO))
             throw std::runtime_error(std::string{"SDL_Init mislukt: "} + SDL_GetError());
     }

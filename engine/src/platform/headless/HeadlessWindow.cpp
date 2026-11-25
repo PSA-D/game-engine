@@ -21,7 +21,6 @@ namespace engine::platform
 
     Size HeadlessWindow::getPixelSize() const
     {
-        // Geen scherm, dus ook geen high-DPI-schaal.
         return config.size;
     }
 

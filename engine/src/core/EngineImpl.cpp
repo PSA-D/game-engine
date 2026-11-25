@@ -17,7 +17,6 @@ namespace engine
 
     EngineImpl::~EngineImpl()
     {
-        // De members worden hierna in omgekeerde volgorde opgeruimd: window, daarna factory.
         std::cout << "[Engine] Afsluiten\n";
     }
 

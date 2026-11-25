@@ -4,9 +4,6 @@
 
 namespace engine::backends
 {
-    // Factory voor de SDL3-backend.
-    // - Constructor: SDL_Init. Destructor: SDL_Quit.
-    // - Moet daarom als eerste aangemaakt en als laatste vernietigd worden.
     class SDL3PlatformFactory final : public platform::IPlatformFactory
     {
     public:
