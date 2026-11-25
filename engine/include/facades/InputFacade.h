@@ -5,6 +5,8 @@
 
 namespace engine
 {
+    // De facade voor de input.
+    // De gamedeveloper gebruikt alleen deze facade voor input handelingen.
     class InputFacade
     {
     public:

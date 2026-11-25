@@ -30,7 +30,7 @@ add_library(engine STATIC
         src/platform/WindowConfig.h
         src/core/facades/InputFacade.cpp
         include/facades/InputFacade.h
-        include/EngineImpl.h
+        src/core/EngineImpl.h
 )
 
 target_include_directories(engine PUBLIC
