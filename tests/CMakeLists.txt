@@ -12,6 +12,7 @@ add_executable(EngineTests
         persistence/JsonSaveStrategyIntegrationTest.cpp
         persistence/LevelSerializerTest.cpp
         persistence/LevelSerializerIntegrationTest.cpp
+    	test_game_object.cpp
 )
 
 target_link_libraries(EngineTests PRIVATE

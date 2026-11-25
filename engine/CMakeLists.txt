@@ -4,7 +4,16 @@ find_package(SDL3 CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 
 add_library(engine STATIC
+    include/Component.h
+    include/GameObject.h
+    include/Region.h
+    include/Transform.h
+    include/utils/Matrix.h
+    include/utils/Vector2.h
+    src/core/Component.cpp
     src/core/Engine.cpp
+    src/core/GameObject.cpp
+    src/core/Transform.cpp
     src/runtime/Level.cpp
     src/runtime/Region.cpp
     src/runtime/Scene.cpp
