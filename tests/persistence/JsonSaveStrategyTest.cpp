@@ -15,7 +15,7 @@ namespace engine::subsystems
 {
     namespace
     {
-        using runtime::DataNode;
+        using engine::DataNode;
 
         // Serialiseert en leest meteen terug.
         auto roundTrip(const ISaveStrategy& strategy, const GameData& data) -> std::optional<GameData>

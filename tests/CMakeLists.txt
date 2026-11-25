@@ -3,13 +3,15 @@ cmake_minimum_required(VERSION 3.25)
 find_package(Catch2 3 CONFIG REQUIRED)
 
 add_executable(EngineTests
-    test_engine.cpp
-    runtime/LevelTest.cpp
-    runtime/RegionTest.cpp
-    runtime/SceneTest.cpp
-    persistence/JsonSaveStrategyTest.cpp
-    runtime/DataNodeTest.cpp
-    persistence/JsonSaveStrategyIntegrationTest.cpp
+        test_engine.cpp
+        runtime/LevelTest.cpp
+        runtime/RegionTest.cpp
+        runtime/SceneTest.cpp
+        runtime/DataNodeTest.cpp
+        persistence/JsonSaveStrategyTest.cpp
+        persistence/JsonSaveStrategyIntegrationTest.cpp
+        persistence/LevelSerializerTest.cpp
+        persistence/LevelSerializerIntegrationTest.cpp
 )
 
 target_link_libraries(EngineTests PRIVATE
