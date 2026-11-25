@@ -11,17 +11,19 @@ class GameObject;
 class Region
 {
 public:
-    Region() = default;
+    explicit Region(std::string regionName = {});
     ~Region();
 
     Region(const Region&) = delete;
-    Region& operator=(const Region&) = delete;
+    auto operator=(const Region&) -> Region& = delete;
     Region(Region&&) = delete;
-    Region& operator=(Region&&) = delete;
+    auto operator=(Region&&) -> Region& = delete;
 
-    GameObject& createGameObject(std::string name = {});
+    [[nodiscard]] const std::string& getName() const noexcept;
+    GameObject& createGameObject(std::string objectName = {});
 
 private:
+    std::string name;
     std::vector<std::unique_ptr<GameObject>> gameObjects;
 };
 } // namespace engine

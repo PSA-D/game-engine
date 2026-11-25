@@ -43,18 +43,19 @@ const Vector2& Transform::getLocalScale() const noexcept
 
 Vector2 Transform::getWorldPosition() const
 {
-    return getWorldTransform().transformPoint({});
+    const Matrix3 world = getWorldTransform();
+    return {world.at(0, 2), world.at(1, 2)};
 }
 
 float Transform::getWorldRotation() const
 {
-    const Matrix world = getWorldTransform();
+    const Matrix3 world = getWorldTransform();
     return std::atan2(world.at(1, 0), world.at(0, 0));
 }
 
 Vector2 Transform::getWorldScale() const
 {
-    const Matrix world = getWorldTransform();
+    const Matrix3 world = getWorldTransform();
     const float scaleX = std::hypot(world.at(0, 0), world.at(1, 0));
     const float scaleY = std::hypot(world.at(0, 1), world.at(1, 1));
     if (scaleX == 0.0F)
@@ -65,11 +66,11 @@ Vector2 Transform::getWorldScale() const
     return {scaleX, determinant / scaleX};
 }
 
-Matrix Transform::getWorldTransform() const
+Matrix3 Transform::getWorldTransform() const
 {
     const float cosine = std::cos(localRotation);
     const float sine = std::sin(localRotation);
-    const Matrix local{std::array<float, 9>{
+    const Matrix3 local{std::array<float, Matrix3::ARRAY_SIZE>{
         cosine * localScale.x,
         -sine * localScale.y,
         localPosition.x,
