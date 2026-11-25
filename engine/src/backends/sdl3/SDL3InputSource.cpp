@@ -1,6 +1,8 @@
 #include "SDL3InputSource.h"
 
 #include "SDL3KeyMap.h"
+#include "utils/KeyCode.h"
+#include "utils/MouseButton.h"
 
 using namespace engine::platform;
 
@@ -10,7 +12,7 @@ namespace engine::backends
     {
         SDL_Event sdlEvent;
 
-        // Blijft pollen tot het een translatable event vind of de queue leeg is
+        // Keeps polling until it finds a translatable event or the queue is empty
         while (SDL_PollEvent(&sdlEvent))
         {
             bool consumed = false;
@@ -20,7 +22,7 @@ namespace engine::backends
                     consumed = true;
             }
 
-            // Continue, zodat een UI button klikken niet de speler laat springen ofzo
+            // Continue, so clicking a UI button doesn't make the player jump or whatever
             if (consumed)
                 continue;
 
@@ -68,7 +70,10 @@ namespace engine::backends
 
         // Mouse Events
         case SDL_EVENT_MOUSE_MOTION:
-            return MouseMoveEvent{event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel};
+            return MouseMoveEvent{
+                Vector2{event.motion.x, event.motion.y},
+                Vector2{event.motion.xrel, event.motion.yrel},
+            };
         case SDL_EVENT_MOUSE_BUTTON_DOWN:
         case SDL_EVENT_MOUSE_BUTTON_UP:
         {
@@ -76,7 +81,7 @@ namespace engine::backends
             if (btn == MouseButton::Unknown)
                 return std::nullopt;
 
-            return MouseButtonEvent{btn, event.button.down, event.button.x, event.button.y};
+            return MouseButtonEvent{btn, event.button.down, Vector2{event.button.x, event.button.y}};
         }
         case SDL_EVENT_MOUSE_WHEEL:
             return MouseWheelEvent{event.wheel.x, event.wheel.y};
