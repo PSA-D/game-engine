@@ -6,17 +6,21 @@
 
 #include <stdexcept>
 
-namespace engine::persistence
+namespace engine
+{
+    class Level;
+}
+namespace engine::subsystems
 {
 
 LevelSerializer::LevelSerializer(
-    runtime::ComponentRegistry& registry)
+    engine::ComponentRegistry& registry)
     : registry(registry)
 {
 }
 
 GameData LevelSerializer::toGameData(
-    const runtime::Level& level) const
+    const Level& level) const
 {
     // TODO:
     // Serialize:
@@ -28,7 +32,7 @@ GameData LevelSerializer::toGameData(
     GameData data;
     data.version = CurrentVersion;
 
-    auto root = runtime::DataNode::makeObject();
+    auto root = DataNode::makeObject();
 
     // root["name"] = level.getName();
     // root["regions"] = ...

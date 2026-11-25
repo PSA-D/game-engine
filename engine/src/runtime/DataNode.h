@@ -7,7 +7,7 @@
 #include <variant>
 #include <vector>
 
-namespace engine::runtime
+namespace engine
 {
     // Generieke gegevensboom, vergelijkbaar met JSON, maar zonder afhankelijkheid van een bibliotheek.
     // Een DataNode is leeg (null), een bool, een geheel getal, een kommagetal, een tekst, een lijst of een object met
@@ -135,4 +135,4 @@ namespace engine::runtime
     private:
         Value data;
     };
-} // namespace engine::runtime
+} // namespace engine

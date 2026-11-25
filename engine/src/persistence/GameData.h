@@ -11,7 +11,7 @@ namespace engine::subsystems
     struct GameData
     {
         std::uint32_t version{1};
-        runtime::DataNode root;
+        DataNode root;
 
         bool operator==(const GameData&) const = default;
     };
