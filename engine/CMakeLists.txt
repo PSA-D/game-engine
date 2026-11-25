@@ -44,6 +44,11 @@ add_library(engine STATIC
         src/core/ComponentRegistry.cpp
         src/core/ComponentRegistry.h
         src/core/Region.cpp
+        src/core/Persistence.cpp
+        src/core/Persistence.h
+        src/persistence/PersistenceError.h
+        src/persistence/PersistenceSubsystem.cpp
+        src/persistence/PersistenceSubsystem.h
 )
 
 target_link_libraries(engine
