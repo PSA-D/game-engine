@@ -1,9 +1,9 @@
-#include "src/backends/sdl3/SDL3InputSource.h"
+#include "backends/sdl3/SDL3InputSource.h"
 
-#include "src/backends/sdl3/SDL3Window.h"
-#include "src/platform/Events.h"
-#include "src/platform/INativeEventListener.h"
-#include "src/utils/Vector2.h"
+#include "backends/sdl3/SDL3Window.h"
+#include "platform/Events.h"
+#include "platform/INativeEventListener.h"
+#include "utils/Vector2.h"
 
 #include <SDL3/SDL.h>
 #include <catch2/catch_test_macros.hpp>

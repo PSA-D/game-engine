@@ -4,14 +4,16 @@
 
 namespace engine
 {
-    enum class MouseButton : uint8_t
+    enum class MouseButton : std::uint8_t
     {
+        Unknown = 0,
+
         Left,
         Right,
         Middle,
-        X1,
-        X2,
+        Button4,
+        Button5,
+
         Count,
-        Unknown,
     };
 } // namespace engine
