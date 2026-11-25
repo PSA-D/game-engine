@@ -67,7 +67,10 @@ namespace engine::backends
 
         // Mouse Events
         case SDL_EVENT_MOUSE_MOTION:
-            return MouseMoveEvent{event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel};
+            return MouseMoveEvent{
+                Vector2{event.motion.x, event.motion.y},
+                Vector2{event.motion.xrel, event.motion.yrel},
+            };
         case SDL_EVENT_MOUSE_BUTTON_DOWN:
         case SDL_EVENT_MOUSE_BUTTON_UP:
         {
@@ -75,7 +78,7 @@ namespace engine::backends
             if (btn == MouseButton::Unknown)
                 return std::nullopt;
 
-            return MouseButtonEvent{btn, event.button.down, event.button.x, event.button.y};
+            return MouseButtonEvent{btn, event.button.down, Vector2{event.button.x, event.button.y}};
         }
         case SDL_EVENT_MOUSE_WHEEL:
             return MouseWheelEvent{event.wheel.x, event.wheel.y};

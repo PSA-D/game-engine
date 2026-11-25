@@ -4,7 +4,16 @@ find_package(SDL3 CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 
 add_library(engine STATIC
+        include/Component.h
+        include/GameObject.h
+        include/Region.h
+        include/Transform.h
+        include/utils/Matrix.h
+        include/utils/Vector2.h
+        src/core/Component.cpp
         src/core/Engine.cpp
+        src/core/GameObject.cpp
+        src/core/Transform.cpp
         src/persistence/JsonSaveStrategy.cpp
         src/platform/Events.h
         src/platform/IInputSource.h
@@ -20,24 +29,25 @@ add_library(engine STATIC
         src/input/InputSubsystem.cpp
         src/input/InputHandler.cpp
         src/input/InputHandler.h
+        src/input/commands/ICommand.h
         src/input/InputTrigger.h
         src/input/Bindings.h
         src/input/InputState.h
-        src/input/commands/ICommand.h
         src/input/commands/FunctionCommand.h
-        src/platform/IWindow.h
-        src/platform/WindowConfig.h
-        src/core/facades/InputFacade.cpp
-        src/core/EngineImpl.h
         src/utils/Interpolator.cpp
         src/utils/Rect.cpp
         src/runtime/Level.cpp
         src/runtime/Region.cpp
         src/runtime/Scene.cpp
+        src/platform/IWindow.h
+        src/platform/WindowConfig.h
+        src/core/facades/InputFacade.cpp
+        src/core/EngineImpl.h
         src/core/EngineImpl.cpp
         include/EngineConfig.h
         include/utils/Size.h
 )
+
 
 target_link_libraries(engine
         PUBLIC
