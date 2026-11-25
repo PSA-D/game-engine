@@ -1,6 +1,8 @@
 #include "SDL3InputSource.h"
 
 #include "SDL3KeyMap.h"
+#include "utils/KeyCode.h"
+#include "utils/MouseButton.h"
 
 using namespace engine::platform;
 
@@ -10,7 +12,7 @@ namespace engine::backends
     {
         SDL_Event sdlEvent;
 
-        // Blijft pollen tot het een translatable event vind of de queue leeg is
+        // Keeps polling until it finds a translatable event or the queue is empty
         while (SDL_PollEvent(&sdlEvent))
         {
             bool consumed = false;
@@ -20,7 +22,7 @@ namespace engine::backends
                     consumed = true;
             }
 
-            // Continue, zodat een UI button klikken niet de speler laat springen ofzo
+            // Continue, so clicking a UI button doesn't make the player jump or whatever
             if (consumed)
                 continue;
 

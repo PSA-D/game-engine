@@ -2,7 +2,7 @@
 
 namespace engine::platform
 {
-    // Een event listener voor rauwe events (zoals SDL Events), niet PlatformEvent's
+    // For raw events, not a PlatformEvent
     class INativeEventListener
     {
     public:
