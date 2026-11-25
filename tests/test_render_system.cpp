@@ -1,6 +1,7 @@
 #include "backends/null/NullRenderer.h"
 #include "components/SpriteRenderer.h"
 #include "core/GameObject.h"
+#include "Region.h"
 #include "systems/RenderSystem.h"
 
 #include <cstddef>
@@ -72,11 +73,12 @@ auto main() -> int
     {
         RecordingRenderer renderer;
         TestTexture texture;
-        engine::GameObject visibleObject;
+        engine::Region region;
+        engine::GameObject& visibleObject = region.createGameObject("visible");
         visibleObject.addComponent<engine::SpriteRenderer>(texture,
                                                            engine::DrawParams{{32.0F, 48.0F}, {16.0F, 16.0F}, 0.0F});
 
-        engine::GameObject disabledObject;
+        engine::GameObject& disabledObject = region.createGameObject("disabled");
         auto& disabledSprite = disabledObject.addComponent<engine::SpriteRenderer>(texture);
         disabledSprite.setEnabled(false);
 
@@ -92,7 +94,8 @@ auto main() -> int
         image.width = 16;
         image.height = 16;
         std::unique_ptr<engine::platform::ITexture> texture = renderer.createTexture(image);
-        engine::GameObject object;
+        engine::Region region;
+        engine::GameObject& object = region.createGameObject("null renderer");
         object.addComponent<engine::SpriteRenderer>(*texture);
         engine::RenderSystem renderSystem(renderer);
         renderSystem.render({&object}, engine::Color{0, 0, 0, 255});

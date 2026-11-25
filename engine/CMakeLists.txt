@@ -108,9 +108,6 @@ target_link_libraries(engine
         SDL3::SDL3
         nlohmann_json::nlohmann_json
 )
-    # Backends zijn een implementatiedetail: de game ziet SDL niet (package-diagram).
-    PRIVATE
-        SDL3::SDL3
 
 
 target_compile_features(engine PUBLIC cxx_std_20)

@@ -1,10 +1,9 @@
-#include "Engine.h"
-#include "EngineConfig.h"
 #include "backends/null/NullRenderer.h"
 #include "backends/sdl3/SDL3Renderer.h"
 #include "backends/sdl3/SDL3Window.h"
 #include "components/SpriteRenderer.h"
 #include "core/GameObject.h"
+#include "Region.h"
 #include "systems/RenderSystem.h"
 
 #include <chrono>
@@ -44,21 +43,21 @@ auto createTestSprite() -> engine::ImageData
 }
 
 template <typename ShouldContinue>
-void runValidation(engine::Engine& gameEngine, engine::platform::IRenderer& renderer, ShouldContinue shouldContinue)
+void runValidation(engine::platform::IRenderer& renderer, ShouldContinue shouldContinue)
 {
     std::unique_ptr<engine::platform::ITexture> texture = renderer.createTexture(createTestSprite());
-    engine::GameObject sprite;
-    sprite.addComponent<engine::SpriteRenderer>(*texture, engine::DrawParams{{352.0F, 252.0F}, {96.0F, 96.0F}, 0.0F});
+    engine::Region region;
+    engine::GameObject& sprite = region.createGameObject("validation sprite");
+    sprite.addComponent<engine::SpriteRenderer>(
+        *texture, engine::DrawParams{{352.0F, 252.0F}, {96.0F, 96.0F}, 0.0F});
     engine::RenderSystem renderSystem(renderer);
     const std::vector<engine::GameObject*> gameObjects{&sprite};
 
-    gameEngine.init();
     while (shouldContinue())
     {
         renderSystem.render(gameObjects, engine::Color{24, 28, 38, 255});
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
-    gameEngine.shutdown();
 }
 } // namespace
 
@@ -66,13 +65,11 @@ auto main(int argc, char* argv[]) -> int
 {
     try
     {
-        engine::Engine gameEngine;
         if (argc > 1 && std::string_view(argv[1]) == "--null")
         {
             engine::backends::NullRenderer renderer;
             bool rendered = false;
-            runValidation(gameEngine,
-                          renderer,
+            runValidation(renderer,
                           [&rendered]
                           {
                               if (rendered)
@@ -87,7 +84,7 @@ auto main(int argc, char* argv[]) -> int
 
         engine::backends::SDL3Window window("Validation Game", 800, 600);
         engine::backends::SDL3Renderer renderer(window);
-        runValidation(gameEngine, renderer, [&window] { return window.pollEvents(); });
+        runValidation(renderer, [&window] { return window.pollEvents(); });
         return EXIT_SUCCESS;
     }
     catch (const std::exception& error)
