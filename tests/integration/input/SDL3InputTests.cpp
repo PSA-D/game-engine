@@ -76,8 +76,9 @@ namespace
 TEST_CASE("SDL3InputSource integrates end-to-end with InputSubsystem and InputHandler", "[input][sdl3][integration]")
 {
     SDLTestFixture sdl;
-    SDL3Window window{{1280, 720}};
-    SDL3InputSource inputSource(window);
+    WindowConfig windowConfig{1280, 720};
+    std::unique_ptr<SDL3Window> window = std::make_unique<SDL3Window>(windowConfig);
+    SDL3InputSource inputSource(window.get());
     InputSubsystem inputSubsystem(inputSource);
 
     int jumpPressedCount = 0;
@@ -164,8 +165,9 @@ TEST_CASE("SDL3InputSource native event listener consumes events before InputSub
     };
 
     SDLTestFixture sdl;
-    SDL3Window window{{1280, 720}};
-    SDL3InputSource inputSource(window);
+    WindowConfig windowConfig{1280, 720};
+    std::unique_ptr<SDL3Window> window = std::make_unique<SDL3Window>(windowConfig);
+    SDL3InputSource inputSource(window.get());
     InputSubsystem inputSubsystem(inputSource);
 
     ConsumingNativeListener uiListener;
@@ -184,8 +186,9 @@ TEST_CASE("SDL3InputSource native event listener consumes events before InputSub
 TEST_CASE("SDL3InputSource translates FocusLost and Quit events through InputSubsystem", "[input][sdl3][integration]")
 {
     SDLTestFixture sdl;
-    SDL3Window window{{1280, 720}};
-    SDL3InputSource inputSource(window);
+    WindowConfig windowConfig{1280, 720};
+    std::unique_ptr<SDL3Window> window = std::make_unique<SDL3Window>(windowConfig);
+    SDL3InputSource inputSource(window.get());
     InputSubsystem inputSubsystem(inputSource);
 
     pushSDLKeyEvent(SDL_SCANCODE_W, true, false);

@@ -2,6 +2,7 @@
 
 #include "utils/KeyCode.h"
 #include "utils/MouseButton.h"
+#include "utils/Size.h"
 #include "utils/Vector2.h"
 
 #include <variant>
@@ -22,7 +23,7 @@ namespace engine::platform
     struct WindowEvent
     {
         WindowEventKind kind{};
-        Vector2 size{};
+        Size size{};
     };
 
     struct QuitEvent

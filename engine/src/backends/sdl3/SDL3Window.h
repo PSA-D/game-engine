@@ -2,7 +2,7 @@
 
 #include "platform/IWindow.h"
 #include "platform/WindowConfig.h"
-#include "utils/Vector2.h"
+#include "utils/Size.h"
 
 namespace engine::backends
 {
@@ -13,12 +13,12 @@ namespace engine::backends
             : size_(config.size)
         {
         }
-        Vector2 getSize() const override
+        Size getSize() const override
         {
             return {};
         };
 
     private:
-        Vector2 size_;
+        Size size_;
     };
 } // namespace engine::backends

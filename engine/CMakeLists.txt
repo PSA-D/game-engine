@@ -34,6 +34,9 @@ add_library(engine STATIC
         src/runtime/Level.cpp
         src/runtime/Region.cpp
         src/runtime/Scene.cpp
+        src/core/EngineImpl.cpp
+        include/EngineConfig.h
+        include/utils/Size.h
 )
 
 target_link_libraries(engine

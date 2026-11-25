@@ -92,6 +92,7 @@ target_include_directories(InputTests PRIVATE ../engine/src)
 add_executable(IntegrationTests
         integration/input/InputSubsystemTests.cpp
         integration/input/SDL3InputTests.cpp
+        integration/input/InputFacadeTests.cpp
 )
 
 target_link_libraries(IntegrationTests PRIVATE

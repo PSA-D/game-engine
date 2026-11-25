@@ -51,20 +51,19 @@ namespace engine::backends
 
         // Window Events
         case SDL_EVENT_WINDOW_RESIZED:
-            return WindowEvent{WindowEventKind::Resized,
-                               Vector2{static_cast<float>(event.window.data1), static_cast<float>(event.window.data2)}};
+            return WindowEvent{WindowEventKind::Resized, Size{event.window.data1, event.window.data2}};
         case SDL_EVENT_WINDOW_FOCUS_GAINED:
-            return WindowEvent{WindowEventKind::FocusGained, window_.getSize()};
+            return WindowEvent{WindowEventKind::FocusGained, window_->getSize()};
         case SDL_EVENT_WINDOW_FOCUS_LOST:
-            return WindowEvent{WindowEventKind::FocusLost, window_.getSize()};
+            return WindowEvent{WindowEventKind::FocusLost, window_->getSize()};
         case SDL_EVENT_WINDOW_MINIMIZED:
-            return WindowEvent{WindowEventKind::Minimized, window_.getSize()};
+            return WindowEvent{WindowEventKind::Minimized, window_->getSize()};
         case SDL_EVENT_WINDOW_MAXIMIZED:
-            return WindowEvent{WindowEventKind::Maximized, window_.getSize()};
+            return WindowEvent{WindowEventKind::Maximized, window_->getSize()};
         case SDL_EVENT_WINDOW_RESTORED:
-            return WindowEvent{WindowEventKind::Restored, window_.getSize()};
+            return WindowEvent{WindowEventKind::Restored, window_->getSize()};
         case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
-            return WindowEvent{WindowEventKind::CloseRequested, window_.getSize()};
+            return WindowEvent{WindowEventKind::CloseRequested, window_->getSize()};
 
         // Mouse Events
         case SDL_EVENT_MOUSE_MOTION:

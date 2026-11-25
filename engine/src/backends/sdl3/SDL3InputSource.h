@@ -15,7 +15,7 @@ namespace engine::backends
     class SDL3InputSource : public platform::IInputSource
     {
     public:
-        SDL3InputSource(SDL3Window& window)
+        SDL3InputSource(SDL3Window* window)
             : window_(window)
         {
         }
@@ -27,7 +27,7 @@ namespace engine::backends
         // Veranderd SDL3 events naar PlatformEvent's
         std::optional<platform::PlatformEvent> translateEvent(const SDL_Event& event) const;
 
-        SDL3Window& window_;
+        SDL3Window* window_;
         std::vector<platform::INativeEventListener*> listeners_{};
     };
 } // namespace engine::backends

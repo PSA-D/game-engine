@@ -35,10 +35,11 @@ namespace
         }
     };
 
-    SDL3Window& getDummyWindow()
+    std::unique_ptr<SDL3Window> getDummyWindow()
     {
-        static SDL3Window dummy{{}};
-        return dummy;
+        WindowConfig windowConfig;
+        static std::unique_ptr<SDL3Window> dummy = std::make_unique<SDL3Window>(windowConfig);
+        return std::move(dummy);
     }
 } // namespace
 
@@ -51,7 +52,7 @@ TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]")
     {
     }
 
-    SDL3InputSource inputSource(getDummyWindow());
+    SDL3InputSource inputSource(getDummyWindow().get());
 
     SECTION("Returns std::nullopt when event queue is empty")
     {
@@ -162,8 +163,8 @@ TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]")
 
         const auto& winEvent = std::get<WindowEvent>(*event);
         REQUIRE(winEvent.kind == WindowEventKind::Resized);
-        REQUIRE_THAT(winEvent.size.x, WithinRel(1920.0f));
-        REQUIRE_THAT(winEvent.size.y, WithinRel(1080.0f));
+        REQUIRE_THAT(winEvent.size.width, WithinRel(1920.0f));
+        REQUIRE_THAT(winEvent.size.height, WithinRel(1080.0f));
     }
 
     SECTION("Skips unhandled SDL events and returns next valid event")

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utils/Vector2.h"
+#include "utils/Size.h"
 
 namespace engine::platform
 {
@@ -8,6 +8,6 @@ namespace engine::platform
     {
     public:
         virtual ~IWindow() = default;
-        virtual Vector2 getSize() const = 0;
+        virtual Size getSize() const = 0;
     };
 } // namespace engine::platform
