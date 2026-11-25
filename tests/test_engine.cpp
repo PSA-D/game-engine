@@ -13,4 +13,11 @@ namespace engine
 
         CHECK_NOTHROW(Engine{config});
     }
+
+    TEST_CASE("EngineConfig heeft standaard een framerate-limiet van 60", "[unit][engine]")
+    {
+        const EngineConfig config;
+
+        CHECK(config.targetFrameRate == 60);
+    }
 } // namespace engine

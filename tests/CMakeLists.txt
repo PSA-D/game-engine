@@ -5,6 +5,8 @@ find_package(Catch2 3 CONFIG REQUIRED)
 add_executable(EngineTests
     test_engine.cpp
     core/CompositionRootTest.cpp
+    core/GameLoopTest.cpp
+    core/TimeTest.cpp
     platform/HeadlessPlatformTest.cpp
 )
 

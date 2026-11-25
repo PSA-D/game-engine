@@ -38,12 +38,15 @@ namespace engine
     struct EngineConfig
     {
         static constexpr Size defaultWindowSize{1280, 720};
+        static constexpr int defaultTargetFrameRate{60};
 
-        std::string appName{"Game"};        // wordt ook de venstertitel
-        Size windowSize{defaultWindowSize}; // in schermeenheden
+        std::string appName{"Game"};
+        Size windowSize{defaultWindowSize};
         bool fullscreen{false};
         bool resizable{true};
         bool vsync{true};
+
+        int targetFrameRate{defaultTargetFrameRate};
 
         PlatformBackend platformBackend{PlatformBackend::SDL3};
         PhysicsBackend physicsBackend{PhysicsBackend::None};
