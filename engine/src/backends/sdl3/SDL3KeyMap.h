@@ -9,6 +9,7 @@
 
 namespace engine::backends
 {
+    // Veranderd een SDL input naar een KeyCode of MouseButton
     class SDL3KeyMap
     {
     public:
