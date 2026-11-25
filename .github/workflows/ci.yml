@@ -28,6 +28,7 @@ jobs:
           - name: Windows MinGW
             os: windows-2025
             compiler: mingw
+            triplet: x64-mingw-dynamic
 
     steps:
       - name: Check out repository
