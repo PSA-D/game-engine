@@ -7,30 +7,30 @@
 
 namespace
 {
-class CountingBehaviour final : public engine::BehaviourScript
-{
-public:
-    using BehaviourScript::BehaviourScript;
-
-    int startCount{0};
-    int updateCount{0};
-    int destroyCount{0};
-
-    void onStart() override
+    class CountingBehaviour final : public engine::BehaviourScript
     {
-        ++startCount;
-    }
+    public:
+        using BehaviourScript::BehaviourScript;
 
-    void onUpdate() override
-    {
-        ++updateCount;
-    }
+        int startCount{0};
+        int updateCount{0};
+        int destroyCount{0};
 
-    void onDestroy() override
-    {
-        ++destroyCount;
-    }
-};
+        void onStart() override
+        {
+            ++startCount;
+        }
+
+        void onUpdate() override
+        {
+            ++updateCount;
+        }
+
+        void onDestroy() override
+        {
+            ++destroyCount;
+        }
+    };
 } // namespace
 
 auto runBehaviourScriptTests() -> int
