@@ -25,6 +25,8 @@ add_library(engine STATIC
         src/input/Bindings.h
         src/input/InputState.h
         src/input/commands/FunctionCommand.h
+        src/utils/Interpolator.cpp
+        src/utils/Rect.cpp
 )
 
 target_link_libraries(engine
