@@ -10,7 +10,7 @@ namespace engine
 {
 namespace
 {
-bool decompose(const Matrix3& matrix, Vector2& position, float& rotation, Vector2& scale)
+bool decompose(const Matrix& matrix, Vector2& position, float& rotation, Vector2& scale)
 {
     constexpr float epsilon = 1.0e-5F;
     position = {matrix.at(0, 2), matrix.at(1, 2)};
@@ -155,7 +155,7 @@ bool GameObject::setParent(GameObject* newParent, bool preserveWorldTransform)
     Vector2 localScale = transform.getLocalScale();
     if (preserveWorldTransform)
     {
-        Matrix3 local = transform.getWorldTransform();
+        Matrix local = transform.getWorldTransform();
         if (newParent != nullptr)
         {
             const auto inverse = newParent->getTransform().getWorldTransform().inverse();
