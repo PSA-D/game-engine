@@ -4,9 +4,13 @@ find_package(SDL3 CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 
 add_library(engine STATIC
-        src/core/Engine.cpp
         src/persistence/JsonSaveStrategy.cpp
+        src/platform/Events.h
+        src/platform/IInputSource.h
+        src/platform/INativeEventListener.h
         src/backends/sdl3/SDL3InputSource.cpp
+        src/backends/sdl3/SDL3InputSource.h
+        src/backends/sdl3/SDL3Window.h
         src/backends/sdl3/SDL3KeyMap.cpp
         src/backends/sdl3/SDL3KeyMap.h
         src/runtime/IMouseListener.h
