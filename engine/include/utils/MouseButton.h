@@ -13,5 +13,7 @@ namespace engine
         Middle,
         Button4,
         Button5,
+
+        Count,
     };
 } // namespace engine

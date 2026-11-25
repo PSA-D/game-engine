@@ -80,5 +80,7 @@ namespace engine
         F10,
         F11,
         F12,
+
+        Count,
     };
 } // namespace engine
