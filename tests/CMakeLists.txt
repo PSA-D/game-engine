@@ -4,7 +4,6 @@ find_package(Catch2 3 CONFIG REQUIRED)
 
 add_executable(EngineTests
         test_engine.cpp
-        runtime/InputListenersTest.cpp
 )
 
 target_link_libraries(EngineTests PRIVATE engine)
@@ -56,3 +55,18 @@ target_link_libraries(BackendTests PRIVATE
 add_test(NAME BackendTests COMMAND BackendTests)
 
 target_include_directories(BackendTests PRIVATE ../engine/src)
+
+add_executable(RuntimeTests
+        runtime/InputListenersTest.cpp
+)
+
+target_link_libraries(RuntimeTests PRIVATE
+        engine
+        project_sanitizers
+        project_warnings
+        Catch2::Catch2WithMain
+)
+
+add_test(NAME RuntimeTests COMMAND RuntimeTests)
+
+target_include_directories(RuntimeTests PRIVATE ../engine/src)
