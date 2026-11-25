@@ -1,34 +1,34 @@
 cmake_minimum_required(VERSION 3.25)
 
-add_library(engine STATIC
-        src/core/Engine.cpp
-        src/persistence/JsonSaveStrategy.cpp
-        src/persistence/LevelSerializer.cpp
-        src/persistence/LevelSerializer.h
-)
-
+find_package(SDL3 CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 
-target_include_directories(engine PUBLIC
-        include
-        src
+add_library(engine STATIC
+    src/core/Engine.cpp
+    src/runtime/Level.cpp
+    src/runtime/Region.cpp
+    src/runtime/Scene.cpp
+    src/persistence/JsonSaveStrategy.cpp
+    src/persistence/LevelSerializer.cpp
+    src/backends/sdl3/SDL3InputSource.cpp
+    src/backends/sdl3/SDL3KeyMap.cpp
+    src/utils/Interpolator.cpp
+    src/utils/Rect.cpp
 )
 
-target_link_libraries(engine PUBLIC
-    project_sanitizers
-    project_warnings
-        PRIVATE
+target_link_libraries(engine
+    PUBLIC
+        project_sanitizers
+        project_warnings
+        SDL3::SDL3
+
+    PRIVATE
         nlohmann_json::nlohmann_json
 )
 
-target_compile_features(engine PUBLIC cxx_std_20)
-
-include(FetchContent)
-
-FetchContent_Declare(
-        Catch2
-        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-        GIT_TAG v3.11.0
+target_include_directories(engine
+    PUBLIC include
+    PRIVATE src
 )
 
-FetchContent_MakeAvailable(Catch2)
+target_compile_features(engine PUBLIC cxx_std_20)
