@@ -31,7 +31,11 @@ add_library(engine STATIC
         src/core/Engine.cpp
         src/utils/Interpolator.cpp
         src/utils/Rect.cpp
+        src/runtime/Level.cpp
+        src/runtime/Region.cpp
+        src/runtime/Scene.cpp
 )
+
 
 target_link_libraries(engine
         PUBLIC

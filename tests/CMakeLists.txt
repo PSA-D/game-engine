@@ -4,10 +4,11 @@ find_package(Catch2 3 CONFIG REQUIRED)
 
 add_executable(EngineTests
         test_engine.cpp
-
+        runtime/LevelTest.cpp
+        runtime/RegionTest.cpp
+        runtime/SceneTest.cpp
         persistence/JsonSaveStrategyTest.cpp
         runtime/DataNodeTest.cpp
-        persistence/PersistenceTestData.h
         persistence/JsonSaveStrategyIntegrationTest.cpp
 )
 
