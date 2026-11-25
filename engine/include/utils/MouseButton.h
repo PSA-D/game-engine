@@ -6,6 +6,8 @@ namespace engine
 {
     enum class MouseButton : std::uint8_t
     {
+        Unknown = 0,
+
         Left,
         Right,
         Middle,

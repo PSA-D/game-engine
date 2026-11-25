@@ -8,63 +8,64 @@
 
 namespace engine::platform
 {
-enum class WindowEventKind
-{
-    Resized,
-    FocusGained,
-    FocusLost,
-    Minimized,
-    Maximized,
-    Restored,
-    CloseRequested,
-};
+    enum class WindowEventKind : uint8_t
+    {
+        Resized,
+        FocusGained,
+        FocusLost,
+        Minimized,
+        Maximized,
+        Restored,
+        CloseRequested,
+    };
 
-struct WindowEvent
-{
-    WindowEventKind kind;
-    Vector2 size;
-};
+    struct WindowEvent
+    {
+        WindowEventKind kind{};
+        Vector2 size{};
+    };
 
-struct QuitEvent
-{
-};
+    struct QuitEvent
+    {
+    };
 
-struct MouseButtonEvent
-{
-    MouseButton button = MouseButton::Unknown;
-    bool pressed = false;
-    Vector2 position = {0.0f, 0.0f};
-};
+    struct MouseButtonEvent
+    {
+        MouseButton button{};
+        bool pressed = false;
+        Vector2 position = {0.0f, 0.0f};
+    };
 
-struct MouseMoveEvent
-{
-    Vector2 position = {0.0f, 0.0f};
-    Vector2 difference = {0.0f, 0.0f};
-};
+    struct MouseMoveEvent
+    {
+        Vector2 position = {0.0f, 0.0f};
+        Vector2 difference = {0.0f, 0.0f};
+    };
 
-struct MouseWheelEvent
-{
-    Vector2 scroll = {0.0f, 0.0f};
-};
+    struct MouseWheelEvent
+    {
+        Vector2 scroll = {0.0f, 0.0f};
+    };
 
-struct KeyModifiers
-{
-    bool shift = false;
-    bool ctrl = false;
-    bool alt = false;
-    bool gui = false;
-    bool capslock = false;
-    bool numlock = false;
-};
+    struct KeyModifiers
+    {
+        bool shift = false;
+        bool ctrl = false;
+        bool alt = false;
+        bool gui = false;
+        bool capslock = false;
+        bool numlock = false;
+    };
 
-struct KeyEvent
-{
-    KeyCode key = KeyCode::Unknown;
-    KeyModifiers mods;
-    bool pressed = false;
-    bool repeat = false;
-};
+    struct KeyEvent
+    {
+        KeyCode key = KeyCode::Unknown;
+        KeyModifiers mods;
+        bool pressed = false;
+        bool repeat = false;
+    };
 
-using PlatformEvent = std::variant<WindowEvent, MouseWheelEvent, QuitEvent, MouseMoveEvent, MouseButtonEvent, KeyEvent>;
+    using PlatformEvent =
+        std::variant<WindowEvent, MouseWheelEvent, QuitEvent, MouseMoveEvent, MouseButtonEvent, KeyEvent>;
 
 } // namespace engine::platform

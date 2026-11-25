@@ -1,9 +1,9 @@
 #include "src/backends/sdl3/SDL3InputSource.h"
 
+#include "include/utils/Vector2.h"
 #include "src/backends/sdl3/SDL3Window.h"
 #include "src/platform/Events.h"
 #include "src/platform/INativeEventListener.h"
-#include "src/utils/Vector2.h"
 
 #include <SDL3/SDL.h>
 #include <catch2/catch_test_macros.hpp>
@@ -17,29 +17,29 @@ using Catch::Matchers::WithinRel;
 
 namespace
 {
-class MockNativeEventListener : public INativeEventListener
-{
-public:
-    int callCount = 0;
-    Uint32 lastEventType = 0;
-    bool shouldConsume = false;
-
-    bool onNativeEvent(const void* nativeEvent) override
+    class MockNativeEventListener : public INativeEventListener
     {
-        ++callCount;
-        if (nativeEvent != nullptr)
-        {
-            lastEventType = static_cast<const SDL_Event*>(nativeEvent)->type;
-        }
-        return shouldConsume;
-    }
-};
+    public:
+        int callCount = 0;
+        Uint32 lastEventType = 0;
+        bool shouldConsume = false;
 
-SDL3Window& getDummyWindow()
-{
-    static SDL3Window dummy{};
-    return dummy;
-}
+        bool onNativeEvent(const void* nativeEvent) override
+        {
+            ++callCount;
+            if (nativeEvent != nullptr)
+            {
+                lastEventType = static_cast<const SDL_Event*>(nativeEvent)->type;
+            }
+            return shouldConsume;
+        }
+    };
+
+    SDL3Window& getDummyWindow()
+    {
+        static SDL3Window dummy{};
+        return dummy;
+    }
 } // namespace
 
 TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]")

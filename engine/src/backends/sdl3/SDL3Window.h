@@ -4,12 +4,12 @@
 
 namespace engine::backends
 {
-class SDL3Window
-{
-public:
-    Vector2 getSize()
+    class SDL3Window
     {
-        return {};
+    public:
+        Vector2 getSize()
+        {
+            return {};
+        };
     };
-};
 } // namespace engine::backends
