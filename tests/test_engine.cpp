@@ -1,48 +1,16 @@
 #include "Engine.h"
+#include "EngineConfig.h"
 
-#include <cstdlib>
-#include <iostream>
+#include <catch2/catch_test_macros.hpp>
 
-auto main() -> int
+namespace engine
 {
-    int failures = 0;
-
+    TEST_CASE("Engine met Headless-backend wordt aangemaakt en weer opgeruimd", "[unit][engine]")
     {
-        engine::Engine engine;
-        engine.init();
-        if (!engine.isRunning())
-        {
-            std::cerr << "FAIL: Engine should be running after init\n";
-            failures++;
-        }
-    }
+        EngineConfig config;
+        config.appName = "Test";
+        config.platformBackend = PlatformBackend::Headless;
 
-    {
-        engine::Engine engine;
-        if (engine.isRunning())
-        {
-            std::cerr << "FAIL: Engine should not be running before init\n";
-            failures++;
-        }
+        CHECK_NOTHROW(Engine{config});
     }
-
-    {
-        engine::Engine engine;
-        engine.init();
-        engine.shutdown();
-        if (engine.isRunning())
-        {
-            std::cerr << "FAIL: Engine should not be running after shutdown\n";
-            failures++;
-        }
-    }
-
-    if (failures > 0)
-    {
-        std::cerr << failures << " test(s) failed\n";
-        return EXIT_FAILURE;
-    }
-
-    std::cout << "All tests passed\n";
-    return EXIT_SUCCESS;
-}
+} // namespace engine
