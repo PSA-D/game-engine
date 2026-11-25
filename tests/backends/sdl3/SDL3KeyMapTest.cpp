@@ -1,13 +1,14 @@
 #include "src/backends/sdl3/SDL3KeyMap.h"
 
 #include "src/backends/sdl3/SDL3InputSource.h"
-#include "src/utils/InputCodes.h"
+#include "utils/KeyCode.h"
+#include "utils/MouseButton.h"
 
 #include <SDL3/SDL_scancode.h>
 #include <catch2/catch_test_macros.hpp>
 
 using namespace engine::backends;
-using engine::KeyCode;
+using namespace engine;
 
 TEST_CASE("SDL3KeyMap translates SDL scancodes to engine KeyCodes", "[input][keymap]")
 {
@@ -35,10 +36,10 @@ TEST_CASE("SDL3KeyMap translates SDL scancodes to engine KeyCodes", "[input][key
         REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_ESCAPE) == KeyCode::Escape);
         REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_TAB) == KeyCode::Tab);
 
-        REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_UP) == KeyCode::ArrowUp);
-        REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_DOWN) == KeyCode::ArrowDown);
-        REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_LEFT) == KeyCode::ArrowLeft);
-        REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_RIGHT) == KeyCode::ArrowRight);
+        REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_UP) == KeyCode::Up);
+        REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_DOWN) == KeyCode::Down);
+        REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_LEFT) == KeyCode::Left);
+        REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_RIGHT) == KeyCode::Right);
 
         REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_PAGEUP) == KeyCode::PageUp);
         REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_PAGEDOWN) == KeyCode::PageDown);
@@ -51,3 +52,23 @@ TEST_CASE("SDL3KeyMap translates SDL scancodes to engine KeyCodes", "[input][key
         REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_COUNT) == KeyCode::Unknown);
     }
 }
+
+TEST_CASE("SDL3KeyMap translates SDL mouse buttons to engine MouseButtons", "[input][keymap]"){
+    SECTION("Maps standard mouse buttons"){REQUIRE(SDL3KeyMap::toMouseButton(SDL_BUTTON_LEFT) == MouseButton::Left);
+REQUIRE(SDL3KeyMap::toMouseButton(SDL_BUTTON_MIDDLE) == MouseButton::Middle);
+REQUIRE(SDL3KeyMap::toMouseButton(SDL_BUTTON_RIGHT) == MouseButton::Right);
+}
+
+SECTION("Maps extra side mouse buttons")
+{
+    REQUIRE(SDL3KeyMap::toMouseButton(SDL_BUTTON_X1) == MouseButton::Button4);
+    REQUIRE(SDL3KeyMap::toMouseButton(SDL_BUTTON_X2) == MouseButton::Button5);
+}
+
+SECTION("Unmapped or unknown mouse buttons return Unknown")
+{
+    REQUIRE(SDL3KeyMap::toMouseButton(0) == MouseButton::Unknown);
+    REQUIRE(SDL3KeyMap::toMouseButton(255) == MouseButton::Unknown);
+}
+}
+;
