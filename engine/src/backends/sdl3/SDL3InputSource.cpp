@@ -1,8 +1,6 @@
 #include "SDL3InputSource.h"
 
 #include "SDL3KeyMap.h"
-#include "utils/KeyCode.h"
-#include "utils/MouseButton.h"
 
 using namespace engine::platform;
 

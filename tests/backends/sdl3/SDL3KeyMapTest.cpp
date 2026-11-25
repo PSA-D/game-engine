@@ -52,3 +52,23 @@ TEST_CASE("SDL3KeyMap translates SDL scancodes to engine KeyCodes", "[input][key
         REQUIRE(SDL3KeyMap::toKeyCode(SDL_SCANCODE_COUNT) == KeyCode::Unknown);
     }
 }
+
+TEST_CASE("SDL3KeyMap translates SDL mouse buttons to engine MouseButtons", "[input][keymap]"){
+    SECTION("Maps standard mouse buttons"){REQUIRE(SDL3KeyMap::toMouseButton(SDL_BUTTON_LEFT) == MouseButton::Left);
+REQUIRE(SDL3KeyMap::toMouseButton(SDL_BUTTON_MIDDLE) == MouseButton::Middle);
+REQUIRE(SDL3KeyMap::toMouseButton(SDL_BUTTON_RIGHT) == MouseButton::Right);
+}
+
+SECTION("Maps extra side mouse buttons")
+{
+    REQUIRE(SDL3KeyMap::toMouseButton(SDL_BUTTON_X1) == MouseButton::Button4);
+    REQUIRE(SDL3KeyMap::toMouseButton(SDL_BUTTON_X2) == MouseButton::Button5);
+}
+
+SECTION("Unmapped or unknown mouse buttons return Unknown")
+{
+    REQUIRE(SDL3KeyMap::toMouseButton(0) == MouseButton::Unknown);
+    REQUIRE(SDL3KeyMap::toMouseButton(255) == MouseButton::Unknown);
+}
+}
+;
