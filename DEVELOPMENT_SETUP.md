@@ -4,7 +4,7 @@
 
 Dit document beschrijft hoe je het project lokaal aan de praat krijgt en hoe je met de gebruikte tools werkt. Het bevat:
 
-- installatie-instructies voor Windows, macOS en Linux;
+- installatie-instructies voor Windows en Linux;
 - de commands om het project te configureren, te bouwen en te testen;
 - een uitleg van vcpkg, clang-format en clang-tidy en hoe je ze gebruikt.
 
@@ -55,28 +55,6 @@ setx VCPKG_ROOT "C:\dev\vcpkg"
 ```
 
 Sluit en heropen de terminal en/of IDE na `setx`.
-
-## 3.2 macOS
-
-Installeer de Xcode Command Line Tools (bevat Apple Clang):
-
-```bash
-xcode-select --install
-```
-
-Installeer de overige tools met Homebrew:
-
-```bash
-brew install cmake ninja git vcpkg
-brew install llvm
-```
-
-De `llvm`-formula is keg-only; voeg het pad handmatig toe:
-
-```bash
-echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> ~/.zshrc
-echo 'export VCPKG_ROOT="/opt/homebrew/opt/vcpkg"' >> ~/.zshrc
-```
 
 ## 3.3 Linux (Debian/Ubuntu)
 
@@ -148,7 +126,7 @@ De gegenereerde bestanden komen in `build/debug` en `build/release` te staan, in
 
 ### Compiler kiezen
 
-Standaard kiest CMake de compiler van het platform: GCC op Linux, MSVC of Clang op Windows, Apple Clang op macOS. Wil je lokaal een andere ondersteunde compiler gebruiken, stel die dan in `CMakeUserPresets.json` in, bijvoorbeeld:
+Standaard kiest CMake de compiler van het platform: GCC op Linux, MSVC of Clang op Windows. Wil je lokaal een andere ondersteunde compiler gebruiken, stel die dan in `CMakeUserPresets.json` in, bijvoorbeeld:
 
 ```json
 {
@@ -197,7 +175,7 @@ Get-ChildItem -Recurse -File -Include *.cpp,*.h | ForEach-Object {
 }
 ```
 
-- Bash (macOS, Linux, Git Bash op Windows):
+- Bash (Linux, Git Bash op Windows):
 
 ```bash
 clang-format -i **/*.cpp **/*.h
@@ -245,5 +223,4 @@ Platform-specifieke enginecode wordt geisoleerd per platform:
 engine/platform/
     Windows/
     Linux/
-    MacOS/
 ```

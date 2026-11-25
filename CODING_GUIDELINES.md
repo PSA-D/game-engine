@@ -26,11 +26,11 @@ Het project gebruikt **C++20**. We gebruiken het standaard C++-dialect en geen c
 
 Iedere developer mag de compiler gebruiken die passend is voor het eigen platform.
 
-| Platform | Compiler      |
-| -------- | ------------- |
-| Linux    | GCC           |
-| Windows  | MSVC of MinGW |
-| macOS    | Apple Clang   |
+| Platform | Compiler       |
+| -------- | -------------- |
+| Linux    | GCC            |
+| Windows  | MSVC of MinGW  |
+| macOS    | Niet supported |
 
 We proberen **niet** iedereen dezelfde compiler te laten gebruiken. De code moet standaard-conform zijn en wordt in CI met meerdere compilers getest. Een developer mag lokaal een andere ondersteunde compiler gebruiken dan de andere teamleden.
 
@@ -46,8 +46,7 @@ engine/
 ├── audio/
 └── platform/
     ├── Windows/
-    ├── Linux/
-    └── MacOS/
+    └── Linux/
 ```
 
 # 3. Bestandsstructuur
@@ -65,7 +64,7 @@ We organiseren files **per module**. Bijvoorbeeld:
 │   ├── audio_source.cpp
 │   ├── rigidbody.h
 │   └── rigidbody.cpp
-├── /systems
+├── /subsystems
 │   ├── renderer.h
 │   └── renderer.cpp
 └── /utils
@@ -97,7 +96,7 @@ Gebruik const waar je const kunt gebruiken.
 
 ## 7.1. `#pragma once`
 
-We gebruiken `#pragma once` als header guard. Hoewel dit formeel geen onderdeel van de ISO C++-standaard is, wordt het door alle ondersteunde compilers betrouwbaar ondersteund (GCC, Clang, Apple Clang en MSVC) en vermijdt het onnodige boilerplate.
+We gebruiken `#pragma once` als header guard. Hoewel dit formeel geen onderdeel van de ISO C++-standaard is, wordt het door alle ondersteunde compilers betrouwbaar ondersteund (GCC, Clang en MSVC) en vermijdt het onnodige boilerplate.
 
 ## 7.2. Include wat je gebruikt
 
@@ -120,16 +119,16 @@ Source-files eindigen op `.cpp`. Header-files eindigen op `.h` (en dus niet `.hp
 
 # 9. Naamgevingsconventies
 
-| Element    | Convention   | Voorbeeld          |
-| ---------- | ------------ | ------------------ |
-| Classes    | `PascalCase` | `RenderSystem`     |
-| Structs    | `PascalCase` | `Vertex`           |
-| Functions  | `camelCase`  | `createWindow()`   |
-| Variables  | `camelCase`  | `windowSize`       |
-| Members    | `camelCase`  | `windowHandle`     |
-| Constants  | `ALL_CAPS`   | `MAX_VERTICES`     |
-| Namespaces | `lowercase`  | `engine::graphics` |
-| Files      | `PascalCase` | `RenderSystem.h`   |
+| Element    | Convention   | Voorbeeld           |
+| ---------- | ------------ | ------------------- |
+| Classes    | `PascalCase` | `RenderSubsystem`   |
+| Structs    | `PascalCase` | `Vertex`            |
+| Functions  | `camelCase`  | `createWindow()`    |
+| Variables  | `camelCase`  | `windowSize`        |
+| Members    | `camelCase`  | `windowHandle`      |
+| Constants  | `ALL_CAPS`   | `MAX_VERTICES`      |
+| Namespaces | `lowercase`  | `engine::graphics`  |
+| Files      | `PascalCase` | `RenderSubsystem.h` |
 
 Private members krijgen geen underscore-prefix, tenzij een specifiek onderdeel van de codebase daar een expliciete reden voor heeft.
 
@@ -157,7 +156,7 @@ Get-ChildItem -Recurse -File -Include *.cpp,*.h | ForEach-Object {
 }
 ```
 
-- Bash (macOS, Linux, Git Bash op Windows):
+- Bash (Linux, Git Bash op Windows):
 
 ```bash
 clang-format -i **/*.cpp **/*.h
@@ -197,7 +196,7 @@ Get-ChildItem -Recurse -File -Include *.cpp,*.h |
     }
 ```
 
-- Bash (macOS, Linux, Git Bash op Windows):
+- Bash (Linux, Git Bash op Windows):
 
 ```bash
 find . -path './build' -prune -o -type f \( -name '*.cpp' -o -name '*.h' \) -exec clang-tidy -p build/debug {} +
@@ -266,7 +265,7 @@ Activeer de hook-map (dezelfde opdracht op alle platforms):
 git config core.hooksPath .githooks
 ```
 
-Op macOS en Linux moet het script uitvoerbaar zijn:
+Op Linux moet het script uitvoerbaar zijn:
 
 ```bash
 chmod +x .githooks/pre-commit
@@ -327,7 +326,7 @@ Werk niet rechtstreeks op de gedeelde hoofdbranch. Gebruik feature branches:
 main
 │
 ├── feat/vulkan-renderer
-├── feat/input-system
+├── feat/input-subsystem
 ├── fix/entity-lifetime
 └── fix/resource-manager
 ```
