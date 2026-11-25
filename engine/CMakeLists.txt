@@ -15,6 +15,7 @@ add_library(engine STATIC
     src/core/GameObject.cpp
     src/core/Region.cpp
     src/core/Transform.cpp
+    src/core/Engine.cpp
     src/runtime/Level.cpp
     src/runtime/Region.cpp
     src/runtime/Scene.cpp
