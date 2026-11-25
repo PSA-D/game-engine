@@ -4,7 +4,6 @@ find_package(SDL3 CONFIG REQUIRED)
 
 add_library(engine STATIC
         src/core/Engine.cpp
-        src/utils/Vector2.h
         src/platform/Events.h
         src/platform/IInputSource.h
         src/platform/INativeEventListener.h
@@ -13,17 +12,25 @@ add_library(engine STATIC
         src/backends/sdl3/SDL3Window.h
         src/backends/sdl3/SDL3KeyMap.cpp
         src/backends/sdl3/SDL3KeyMap.h
-        src/runtime/IMouseListener.h
-        src/runtime/IKeyListener.h
-        src/input/ListenersList.h
-        src/input/InputSubsystem.cpp
-        src/utils/KeyCode.h
-        src/utils/MouseButton.h
+        include/Engine.h
+        include/utils/AssetHandle.h
+        include/utils/BodyType.h
+        include/utils/Color.h
+        include/utils/Easing.h
+        include/utils/Interpolator.h
+        include/utils/KeyCode.h
+        include/utils/Matrix.h
+        include/utils/MouseButton.h
+        include/utils/Rect.h
+        include/utils/Vector2.h
+        src/core/Engine.cpp
+        src/utils/Interpolator.cpp
+        src/utils/Rect.cpp
 )
 
-target_include_directories(engine PUBLIC
-        include
-        src
+target_include_directories(engine
+        PUBLIC include
+        PRIVATE src
 )
 
 target_link_libraries(engine PUBLIC
