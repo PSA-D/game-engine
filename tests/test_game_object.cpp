@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <cstddef>
+#include <cstdint>
 #include <iostream>
 
 namespace
@@ -34,11 +35,11 @@ auto nearlyEqual(float first, float second) -> bool
     return std::abs(first - second) < 1.0e-4F;
 }
 
-auto nearlyEqual(const engine::Matrix& first, const engine::Matrix& second) -> bool
+auto nearlyEqual(const engine::Matrix3& first, const engine::Matrix3& second) -> bool
 {
-    for (std::size_t row = 0; row < 3; ++row)
+    for (std::uint32_t row = 0; row < 3; ++row)
     {
-        for (std::size_t column = 0; column < 3; ++column)
+        for (std::uint32_t column = 0; column < 3; ++column)
         {
             if (!nearlyEqual(first.at(row, column), second.at(row, column)))
             {
@@ -131,7 +132,7 @@ auto runGameObjectTests() -> int
         check(child.getTransform().getLocalPosition() == engine::Vector2{4.0F, 5.0F}, "local position has a getter");
         check(nearlyEqual(child.getTransform().getLocalRotation(), -0.3F), "local rotation has a getter");
         check(child.getTransform().getLocalScale() == engine::Vector2{1.5F, 0.75F}, "local scale has a getter");
-        const engine::Matrix worldTransform = child.getTransform().getWorldTransform();
+        const engine::Matrix3 worldTransform = child.getTransform().getWorldTransform();
         check(&child.getRegion() == &region, "GameObject refers to its Region");
         check(child.setParent(&parent), "setParent accepts a valid parent");
         check(nearlyEqual(worldTransform, child.getTransform().getWorldTransform()),

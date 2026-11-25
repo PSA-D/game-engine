@@ -4,9 +4,11 @@
 
 auto runGameObjectTests() -> int;
 
-auto main() -> int
+TEST_CASE("GameObject behavior tests pass", "[game-object]")
 {
-    int failures = runGameObjectTests();
+    REQUIRE(runGameObjectTests() == 0);
+}
+
 TEST_CASE("Engine lifecycle manages running state", "[engine]")
 {
     engine::Engine engine;
