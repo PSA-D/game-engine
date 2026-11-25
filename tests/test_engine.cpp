@@ -1,50 +1,29 @@
 #include "Engine.h"
 
-#include <cstdlib>
-#include <iostream>
+#include <catch2/catch_test_macros.hpp>
 
-auto runGameObjectTests() -> int;
-
-auto main() -> int
+TEST_CASE("Engine is not running before init", "[engine]")
 {
-    int failures = runGameObjectTests();
+    engine::Engine engine;
 
-    {
-        engine::Engine engine;
-        engine.init();
-        if (!engine.isRunning())
-        {
-            std::cerr << "FAIL: Engine should be running after init\n";
-            failures++;
-        }
-    }
+    REQUIRE(engine.isRunning() == false);
+}
 
-    {
-        engine::Engine engine;
-        if (engine.isRunning())
-        {
-            std::cerr << "FAIL: Engine should not be running before init\n";
-            failures++;
-        }
-    }
+TEST_CASE("Engine is running after init", "[engine]")
+{
+    engine::Engine engine;
 
-    {
-        engine::Engine engine;
-        engine.init();
-        engine.shutdown();
-        if (engine.isRunning())
-        {
-            std::cerr << "FAIL: Engine should not be running after shutdown\n";
-            failures++;
-        }
-    }
+    engine.init();
 
-    if (failures > 0)
-    {
-        std::cerr << failures << " test(s) failed\n";
-        return EXIT_FAILURE;
-    }
+    REQUIRE(engine.isRunning() == true);
+}
 
-    std::cout << "All tests passed\n";
-    return EXIT_SUCCESS;
+TEST_CASE("Engine is not running after shutdown", "[engine]")
+{
+    engine::Engine engine;
+
+    engine.init();
+    engine.shutdown();
+
+    REQUIRE(engine.isRunning() == false);
 }
