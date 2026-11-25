@@ -23,8 +23,8 @@ add_library(engine STATIC
         src/backends/sdl3/SDL3Window.h
         src/backends/sdl3/SDL3KeyMap.cpp
         src/backends/sdl3/SDL3KeyMap.h
-        src/runtime/IMouseListener.h
-        src/runtime/IKeyListener.h
+        include/IMouseListener.h
+        include/IKeyListener.h
         src/input/ListenersList.h
         src/input/InputSubsystem.cpp
         src/input/InputHandler.cpp

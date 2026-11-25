@@ -1,11 +1,11 @@
 #pragma once
 
+#include "IKeyListener.h"
+#include "IMouseListener.h"
 #include "InputHandler.h"
 #include "InputState.h"
 #include "ListenersList.h"
 #include "platform/IInputSource.h"
-#include "runtime/IKeyListener.h"
-#include "runtime/IMouseListener.h"
 
 #include <vector>
 

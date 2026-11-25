@@ -1,8 +1,8 @@
+#include "../../engine/include/IKeyListener.h"
+#include "IMouseListener.h"
 #include "input/InputSubsystem.h"
 #include "input/ListenersList.h"
 #include "platform/IInputSource.h"
-#include "runtime/IKeyListener.h"
-#include "runtime/IMouseListener.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <functional>
