@@ -2,6 +2,13 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+auto runGameObjectTests() -> int;
+
+TEST_CASE("GameObject behavior tests pass", "[game-object]")
+{
+    REQUIRE(runGameObjectTests() == 0);
+}
+
 TEST_CASE("Engine lifecycle manages running state", "[engine]")
 {
     engine::Engine engine;
