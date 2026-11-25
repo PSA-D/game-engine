@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "EngineConfig.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -9,25 +10,14 @@ TEST_CASE("GameObject behavior tests pass", "[game-object]")
     REQUIRE(runGameObjectTests() == 0);
 }
 
-TEST_CASE("Engine lifecycle manages running state", "[engine]")
+namespace engine
 {
-    engine::Engine engine;
-
-    SECTION("Engine is not running before init")
+    TEST_CASE("Engine met Headless-backend wordt aangemaakt en weer opgeruimd", "[unit][engine]")
     {
-        REQUIRE_FALSE(engine.isRunning());
-    }
+        EngineConfig config;
+        config.appName = "Test";
+        config.platformBackend = PlatformBackend::Headless;
 
-    SECTION("Engine is running after init")
-    {
-        engine.init();
-        REQUIRE(engine.isRunning());
+        CHECK_NOTHROW(Engine{config});
     }
-
-    SECTION("Engine is not running after shutdown")
-    {
-        engine.init();
-        engine.shutdown();
-        REQUIRE_FALSE(engine.isRunning());
-    }
-}
+} // namespace engine

@@ -1,8 +1,8 @@
 #include "backends/sdl3/SDL3InputSource.h"
 
-#include "backends/sdl3/SDL3Window.h"
 #include "platform/Events.h"
 #include "platform/INativeEventListener.h"
+#include "platform/IWindow.h"
 #include "utils/Vector2.h"
 
 #include <SDL3/SDL.h>
@@ -17,6 +17,31 @@ using Catch::Matchers::WithinRel;
 
 namespace
 {
+    class MockWindow final : public IWindow
+    {
+    public:
+        std::string getTitle() const override
+        {
+            return "Mock";
+        }
+
+        Size getSize() const override
+        {
+            return {640, 480};
+        }
+
+        Size getPixelSize() const override
+        {
+            return {640, 480};
+        }
+
+        void setTitle(const std::string&) override {}
+
+        void setFullscreen(bool) override {}
+
+        void setSize(Size) override {}
+    };
+
     class MockNativeEventListener : public INativeEventListener
     {
     public:
@@ -35,9 +60,9 @@ namespace
         }
     };
 
-    SDL3Window& getDummyWindow()
+    MockWindow& getDummyWindow()
     {
-        static SDL3Window dummy{};
+        static MockWindow dummy{};
         return dummy;
     }
 } // namespace

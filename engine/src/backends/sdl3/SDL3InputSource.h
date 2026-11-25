@@ -1,9 +1,9 @@
 #pragma once
 
-#include "SDL3Window.h"
 #include "platform/Events.h"
 #include "platform/IInputSource.h"
 #include "platform/INativeEventListener.h"
+#include "platform/IWindow.h"
 
 #include <SDL3/SDL.h>
 #include <optional>
@@ -15,7 +15,7 @@ namespace engine::backends
     class SDL3InputSource : public platform::IInputSource
     {
     public:
-        SDL3InputSource(SDL3Window& window)
+        SDL3InputSource(platform::IWindow& window)
             : window_(window)
         {
         }
@@ -27,7 +27,7 @@ namespace engine::backends
         // Veranderd SDL3 events naar PlatformEvent's
         std::optional<platform::PlatformEvent> translateEvent(const SDL_Event& event) const;
 
-        SDL3Window& window_;
+        platform::IWindow& window_;
         std::vector<platform::INativeEventListener*> listeners_{};
     };
 } // namespace engine::backends
