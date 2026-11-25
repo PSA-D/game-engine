@@ -28,6 +28,9 @@ add_library(engine STATIC
         src/utils/MouseButton.h
         src/platform/IWindow.h
         src/platform/WindowConfig.h
+        src/core/facades/InputFacade.cpp
+        include/facades/InputFacade.h
+        include/EngineImpl.h
 )
 
 target_include_directories(engine PUBLIC

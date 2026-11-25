@@ -20,6 +20,11 @@ namespace engine::subsystems
             : source_(source)
         {
         }
+        ~InputSubsystem() = default;
+        InputSubsystem(const InputSubsystem&) = delete;
+        InputSubsystem& operator=(const InputSubsystem&) = delete;
+        InputSubsystem(InputSubsystem&&) = delete;
+        InputSubsystem& operator=(InputSubsystem&&) = delete;
 
         void update();
         void processEvent(const platform::PlatformEvent& event);
