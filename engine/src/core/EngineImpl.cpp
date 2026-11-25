@@ -9,6 +9,8 @@ namespace engine
     EngineImpl::EngineImpl(const EngineConfig& config)
         : factory(core::createPlatformFactory(config.platformBackend))
         , window(factory->createWindow(core::makeWindowConfig(config)))
+        , gameLoop(sceneManager, input, physics, animation, audio, render, ai, ui, debug,
+            editor, config.targetFrameRate)
     {
         const Size size = window->getSize();
         std::cout << "[Engine] Venster aangemaakt: '" << window->getTitle() << "' " << size.width << "x" << size.height
@@ -22,8 +24,7 @@ namespace engine
 
     void EngineImpl::run()
     {
-        // Tijdelijk: er is nog geen input source en geen gameloop, dus run() stopt meteen.
-        // Stap 8 vervangt dit door een lus die doorloopt tot er een QuitEvent komt (kruisje).
-        std::cout << "[Engine] '" << window->getTitle() << "' gestart; nog geen gameloop, run() stopt direct\n";
+        std::cout << "[Engine] '" << window->getTitle() << "' gestart\n";
+        gameLoop.run();
     }
 } // namespace engine

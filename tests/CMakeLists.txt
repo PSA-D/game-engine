@@ -1,11 +1,14 @@
 cmake_minimum_required(VERSION 3.25)
 
 find_package(Catch2 3 CONFIG REQUIRED)
+find_package(SDL3 CONFIG REQUIRED)
 
 add_executable(EngineTests
     test_engine.cpp
     test_game_object.cpp
     core/CompositionRootTest.cpp
+    core/GameLoopTest.cpp
+    core/TimeTest.cpp
     platform/HeadlessPlatformTest.cpp
     persistence/JsonSaveStrategyTest.cpp
     persistence/PersistenceTestData.h
@@ -48,6 +51,7 @@ add_executable(BackendTests
 
 target_link_libraries(BackendTests PRIVATE
     engine
+    SDL3::SDL3
     project_sanitizers
     project_warnings
     Catch2::Catch2WithMain

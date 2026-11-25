@@ -10,6 +10,9 @@ add_library(engine STATIC
     include/GameObject.h
     include/Region.h
     include/Transform.h
+    include/Scene.h
+    include/SceneManager.h
+    include/facades/Time.h
     include/utils/AssetHandle.h
     include/utils/BodyType.h
     include/utils/Color.h
@@ -36,6 +39,17 @@ add_library(engine STATIC
     src/platform/Events.h
     src/platform/IInputSource.h
     src/platform/INativeEventListener.h
+    src/core/GameLoop.cpp
+    src/core/GameLoop.h
+    src/subsystems/ai/AISubsystem.h
+    src/subsystems/animation/AnimationSubsystem.h
+    src/subsystems/audio/AudioSubsystem.h
+    src/subsystems/debug/DebugSubsystem.h
+    src/subsystems/editor/LevelEditor.h
+    src/subsystems/input/InputSubsystem.h
+    src/subsystems/physics/PhysicsSubsystem.h
+    src/subsystems/render/RenderSubsystem.h
+    src/subsystems/ui/UISubsystem.h
     src/platform/IPlatformFactory.h
     src/platform/IWindow.h
     src/platform/WindowConfig.h
@@ -83,8 +97,8 @@ target_link_libraries(engine
     PUBLIC
         project_sanitizers
         project_warnings
-        SDL3::SDL3
     PRIVATE
+        SDL3::SDL3
         nlohmann_json::nlohmann_json
 )
 
