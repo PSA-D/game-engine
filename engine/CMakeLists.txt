@@ -5,14 +5,18 @@ add_library(engine STATIC
     include/GameObject.h
     include/Region.h
     include/Transform.h
+    include/EventBus.h
     include/Scene.h
+    include/SceneManager.h
     include/utils/Matrix.h
     include/utils/Vector2.h
     src/core/Component.cpp
     src/core/Engine.cpp
+    src/core/EventBus.cpp
     src/core/GameObject.cpp
     src/core/Region.cpp
     src/core/Scene.cpp
+    src/core/SceneManager.cpp
     src/core/Transform.cpp
 )
 
