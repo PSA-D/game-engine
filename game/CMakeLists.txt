@@ -5,6 +5,10 @@ add_executable(Game
 )
 
 target_link_libraries(Game PRIVATE engine)
+target_link_libraries(Game PRIVATE
+    engine-null-renderer
+    engine-sdl3-renderer
+)
 
 target_link_libraries(Game PRIVATE
         project_sanitizers

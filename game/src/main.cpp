@@ -1,31 +1,98 @@
 #include "Engine.h"
 #include "EngineConfig.h"
+#include "backends/null/NullRenderer.h"
+#include "backends/sdl3/SDL3Renderer.h"
+#include "backends/sdl3/SDL3Window.h"
+#include "components/SpriteRenderer.h"
+#include "core/GameObject.h"
+#include "systems/RenderSystem.h"
 
+#include <chrono>
+#include <cstddef>
 #include <cstdlib>
 #include <exception>
 #include <iostream>
+#include <memory>
+#include <string_view>
+#include <thread>
+#include <vector>
 
 namespace
 {
-    constexpr engine::Size windowSize{1280, 720};
+auto createTestSprite() -> engine::ImageData
+{
+    constexpr int spriteSize = 96;
+    engine::ImageData image;
+    image.width = spriteSize;
+    image.height = spriteSize;
+    image.pixels.resize(static_cast<std::size_t>(spriteSize * spriteSize * 4));
+
+    for (int y = 0; y < spriteSize; ++y)
+    {
+        for (int x = 0; x < spriteSize; ++x)
+        {
+            const bool border = x < 8 || y < 8 || x >= spriteSize - 8 || y >= spriteSize - 8;
+            const std::size_t pixel = static_cast<std::size_t>((y * spriteSize + x) * 4);
+            image.pixels[pixel] = border ? 255 : 40;
+            image.pixels[pixel + 1] = border ? 220 : 130;
+            image.pixels[pixel + 2] = border ? 30 : 240;
+            image.pixels[pixel + 3] = 255;
+        }
+    }
+
+    return image;
+}
+
+template <typename ShouldContinue>
+void runValidation(engine::Engine& gameEngine, engine::platform::IRenderer& renderer, ShouldContinue shouldContinue)
+{
+    std::unique_ptr<engine::platform::ITexture> texture = renderer.createTexture(createTestSprite());
+    engine::GameObject sprite;
+    sprite.addComponent<engine::SpriteRenderer>(*texture, engine::DrawParams{{352.0F, 252.0F}, {96.0F, 96.0F}, 0.0F});
+    engine::RenderSystem renderSystem(renderer);
+    const std::vector<engine::GameObject*> gameObjects{&sprite};
+
+    gameEngine.init();
+    while (shouldContinue())
+    {
+        renderSystem.render(gameObjects, engine::Color{24, 28, 38, 255});
+        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+    }
+    gameEngine.shutdown();
+}
 } // namespace
 
-auto main() -> int
+auto main(int argc, char* argv[]) -> int
 {
     try
     {
-        engine::EngineConfig config;
-        config.appName = "Dungeon Crawler";
-        config.windowSize = windowSize;
+        engine::Engine gameEngine;
+        if (argc > 1 && std::string_view(argv[1]) == "--null")
+        {
+            engine::backends::NullRenderer renderer;
+            bool rendered = false;
+            runValidation(gameEngine,
+                          renderer,
+                          [&rendered]
+                          {
+                              if (rendered)
+                              {
+                                  return false;
+                              }
+                              rendered = true;
+                              return true;
+                          });
+            return EXIT_SUCCESS;
+        }
 
-        engine::Engine game{config};
-        game.run();
+        engine::backends::SDL3Window window("Validation Game", 800, 600);
+        engine::backends::SDL3Renderer renderer(window);
+        runValidation(gameEngine, renderer, [&window] { return window.pollEvents(); });
+        return EXIT_SUCCESS;
     }
-    catch (const std::exception& e)
+    catch (const std::exception& error)
     {
-        std::cerr << "Fatal: " << e.what() << '\n';
+        std::cerr << "Validation game failed: " << error.what() << '\n';
         return EXIT_FAILURE;
     }
-
-    return EXIT_SUCCESS;
 }

@@ -109,3 +109,15 @@ target_link_libraries(IntegrationTests PRIVATE
 target_include_directories(IntegrationTests PRIVATE ${PROJECT_SOURCE_DIR}/engine/src)
 
 add_test(NAME IntegrationTests COMMAND IntegrationTests)
+add_executable(RenderTests
+    test_render_system.cpp
+)
+
+target_link_libraries(RenderTests PRIVATE
+    engine
+    engine-null-renderer
+    project_sanitizers
+    project_warnings
+)
+
+add_test(NAME RenderTests COMMAND RenderTests)

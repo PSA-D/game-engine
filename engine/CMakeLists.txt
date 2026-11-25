@@ -86,6 +86,12 @@ add_library(engine STATIC
     src/runtime/Scene.h
     src/utils/Interpolator.cpp
     src/utils/Rect.cpp
+    include/core/Component.h
+    include/core/GameObject.h
+    include/components/SpriteRenderer.h
+    include/systems/RenderSystem.h
+    src/components/SpriteRenderer.cpp
+    src/systems/RenderSystem.cpp
 )
 
 target_include_directories(engine
@@ -97,9 +103,14 @@ target_link_libraries(engine
     PUBLIC
         project_sanitizers
         project_warnings
+        engine-platform
     PRIVATE
         SDL3::SDL3
         nlohmann_json::nlohmann_json
 )
+    # Backends zijn een implementatiedetail: de game ziet SDL niet (package-diagram).
+    PRIVATE
+        SDL3::SDL3
+
 
 target_compile_features(engine PUBLIC cxx_std_20)
