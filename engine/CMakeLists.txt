@@ -6,6 +6,7 @@ add_library(engine STATIC
     include/Region.h
     include/Transform.h
     include/EventBus.h
+    include/LoadingScene.h
     include/Scene.h
     include/SceneManager.h
     include/utils/Matrix.h
@@ -14,6 +15,7 @@ add_library(engine STATIC
     src/runtime/Component.cpp
     src/runtime/EventBus.cpp
     src/runtime/GameObject.cpp
+    src/runtime/LoadingScene.cpp
     src/runtime/Region.cpp
     src/runtime/Scene.cpp
     src/runtime/SceneManager.cpp

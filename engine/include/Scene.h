@@ -15,7 +15,7 @@ class Scene
 {
 public:
     Scene(std::uint64_t id, std::string name);
-    ~Scene();
+    virtual ~Scene();
 
     Scene(const Scene&) = delete;
     auto operator=(const Scene&) -> Scene& = delete;

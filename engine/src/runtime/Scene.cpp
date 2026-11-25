@@ -15,7 +15,6 @@ Scene::Scene(std::uint64_t sceneId, std::string sceneName)
 }
 
 Scene::~Scene() = default;
-
 void Scene::init()
 {
     active = true;
