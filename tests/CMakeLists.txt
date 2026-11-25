@@ -7,6 +7,7 @@ add_executable(EngineTests
     test_engine.cpp
     test_scene.cpp
     test_scene_manager.cpp
+    test_scene_lifecycle.cpp
 )
 
 target_link_libraries(EngineTests PRIVATE engine)
