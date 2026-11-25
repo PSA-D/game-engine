@@ -3,15 +3,15 @@ cmake_minimum_required(VERSION 3.25)
 find_package(Catch2 3 CONFIG REQUIRED)
 
 add_executable(EngineTests
-    test_game_object.cpp
-    runtime/LevelTest.cpp
-    runtime/RegionTest.cpp
-    runtime/SceneTest.cpp
-    runtime/DataNodeTest.cpp
-    test_engine.cpp
-    persistence/JsonSaveStrategyTest.cpp
-    persistence/PersistenceTestData.h
-    persistence/JsonSaveStrategyIntegrationTest.cpp
+        test_game_object.cpp
+        runtime/LevelTest.cpp
+        runtime/RegionTest.cpp
+        runtime/SceneTest.cpp
+        runtime/DataNodeTest.cpp
+        test_engine.cpp
+        persistence/JsonSaveStrategyTest.cpp
+        persistence/PersistenceTestData.h
+        persistence/JsonSaveStrategyIntegrationTest.cpp
 )
 
 target_link_libraries(EngineTests PRIVATE
@@ -81,6 +81,7 @@ target_include_directories(RuntimeTests PRIVATE ../engine/src)
 
 add_executable(InputTests
         input/InputHandlerTests.cpp
+        input/InputSubsystemTests.cpp
 )
 
 target_link_libraries(InputTests PRIVATE
