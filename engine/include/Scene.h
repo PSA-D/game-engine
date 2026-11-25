@@ -26,6 +26,10 @@ public:
     void shutdown();
     [[nodiscard]] bool isActive() const noexcept;
 
+    void update();
+    void render();
+    void processPendingDestruction();
+
     [[nodiscard]] std::uint64_t getId() const noexcept;
     [[nodiscard]] const std::string& getName() const noexcept;
 

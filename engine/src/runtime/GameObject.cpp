@@ -197,10 +197,18 @@ bool GameObject::setParent(GameObject* newParent, bool preserveWorldTransform)
 void GameObject::destroy() noexcept
 {
     pendingDestroy = true;
+    if (region != nullptr)
+    {
+        region->requestDestroy(*this);
+    }
 }
 
 bool GameObject::isPendingDestroy() const noexcept
 {
     return pendingDestroy;
 }
+
+void GameObject::update() {}
+
+void GameObject::render() {}
 } // namespace engine

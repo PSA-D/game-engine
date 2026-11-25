@@ -95,4 +95,12 @@ auto SceneManager::findGameObject(std::uint64_t id) -> GameObject*
     }
     return nullptr;
 }
+
+auto SceneManager::processPendingDestruction() -> void
+{
+    for (const auto& scene : scenes_)
+    {
+        scene->processPendingDestruction();
+    }
+}
 } // namespace engine

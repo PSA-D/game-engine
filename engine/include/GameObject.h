@@ -162,6 +162,9 @@ public:
     void destroy() noexcept;
     [[nodiscard]] bool isPendingDestroy() const noexcept;
 
+    void update();
+    void render();
+
 private:
     friend class Region;
 

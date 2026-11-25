@@ -87,4 +87,35 @@ auto Scene::find(std::string_view objectName) const noexcept -> const GameObject
         gameObjects, [&objectName](const GameObject* candidate) { return candidate->getName() == objectName; });
     return found == gameObjects.end() ? nullptr : *found;
 }
+
+void Scene::update()
+{
+    if (!active)
+    {
+        return;
+    }
+    for (auto* gameObject : gameObjects)
+    {
+        gameObject->update();
+    }
+}
+
+void Scene::render()
+{
+    if (!active)
+    {
+        return;
+    }
+    for (auto* gameObject : gameObjects)
+    {
+        gameObject->render();
+    }
+}
+
+void Scene::processPendingDestruction()
+{
+    region.processPendingDestruction();
+    auto current = region.getGameObjects();
+    gameObjects.assign(current.begin(), current.end());
+}
 } // namespace engine

@@ -41,6 +41,7 @@ public:
     [[nodiscard]] const Scene* getActiveScene() const noexcept;
 
     [[nodiscard]] GameObject* findGameObject(std::uint64_t id);
+    void processPendingDestruction();
 
 private:
     EventBus& events_;

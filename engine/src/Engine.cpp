@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+#include "Scene.h"
+
 #include <iostream>
 
 namespace engine
@@ -20,14 +22,33 @@ void Engine::init()
 void Engine::shutdown()
 {
     if (!running)
+    {
         return;
+    }
 
     running = false;
     std::cout << "Engine shut down\n";
 }
 
-bool Engine::isRunning() const
+void Engine::run()
+{
+    while (isRunning())
+    {
+        if (activeScene_ != nullptr)
+        {
+            activeScene_->update();
+            activeScene_->render();
+        }
+    }
+}
+
+auto Engine::isRunning() const noexcept -> bool
 {
     return running;
+}
+
+auto Engine::setActiveScene(Scene& scene) -> void
+{
+    activeScene_ = &scene;
 }
 } // namespace engine

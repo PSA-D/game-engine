@@ -2,6 +2,8 @@
 
 namespace engine
 {
+class Scene;
+
 class Engine
 {
 public:
@@ -15,9 +17,12 @@ public:
 
     void init();
     void shutdown();
-    [[nodiscard]] bool isRunning() const;
+    void run();
+    [[nodiscard]] bool isRunning() const noexcept;
+    void setActiveScene(Scene& scene);
 
 private:
     bool running{false};
+    Scene* activeScene_{nullptr};
 };
 } // namespace engine
