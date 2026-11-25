@@ -5,6 +5,8 @@
 
 namespace engine
 {
+    using namespace subsystems;
+
     // De facade voor de input.
     // De gamedeveloper gebruikt alleen deze facade voor input handelingen.
     class InputFacade
@@ -32,6 +34,12 @@ namespace engine
         static void removeKeyListener(IKeyListener* listener);
         static void addMouseListener(IMouseListener* listener);
         static void removeMouseListener(IMouseListener* listener);
+
+        static void bindKey(KeyCode key, InputTrigger trigger, std::unique_ptr<ICommand> command);
+        static void unbindKey(KeyCode key, InputTrigger trigger);
+        static void bindMouseButton(MouseButton button, InputTrigger trigger, std::unique_ptr<ICommand> command);
+        static void unbindMouseButton(MouseButton button, InputTrigger trigger);
+        static void clear();
 
     private:
         // friend class, zodat deze bij de private methodes kan.

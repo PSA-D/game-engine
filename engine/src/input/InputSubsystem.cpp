@@ -46,7 +46,7 @@ namespace engine::subsystems
             notifyListeners(*e);
         }
 
-        inputHandler_.handleInput(state_);
+        handler_.handleInput(state_);
     }
 
     void InputSubsystem::notifyListeners(const platform::PlatformEvent& e)
@@ -165,7 +165,7 @@ namespace engine::subsystems
 
     InputHandler& InputSubsystem::getHandler()
     {
-        return inputHandler_;
+        return handler_;
     }
     bool InputSubsystem::isQuitRequested() const
     {
@@ -241,5 +241,26 @@ namespace engine::subsystems
                 releaseAllHeld();
             windowEvents_.push_back(*windowEvent);
         }
+    }
+
+    void InputSubsystem::bindKey(KeyCode key, InputTrigger trigger, std::unique_ptr<ICommand> command)
+    {
+        handler_.bindKey(key, trigger, std::move(command));
+    }
+    void InputSubsystem::unbindKey(KeyCode key, InputTrigger trigger)
+    {
+        handler_.unbindKey(key, trigger);
+    }
+    void InputSubsystem::bindMouseButton(MouseButton button, InputTrigger trigger, std::unique_ptr<ICommand> command)
+    {
+        handler_.bindMouseButton(button, trigger, std::move(command));
+    }
+    void InputSubsystem::unbindMouseButton(MouseButton button, InputTrigger trigger)
+    {
+        handler_.unbindMouseButton(button, trigger);
+    }
+    void InputSubsystem::clear()
+    {
+        handler_.clear();
     }
 } // namespace engine::subsystems

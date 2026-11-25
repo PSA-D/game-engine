@@ -49,6 +49,12 @@ namespace engine::subsystems
         bool isQuitRequested() const;
         std::vector<platform::WindowEvent> takeWindowEvents(); // Neemt alle events en leegt de lijst
 
+        void bindKey(KeyCode key, InputTrigger trigger, std::unique_ptr<ICommand> command); // Forward naar InputHandler
+        void unbindKey(KeyCode key, InputTrigger trigger);
+        void bindMouseButton(MouseButton button, InputTrigger trigger, std::unique_ptr<ICommand> command);
+        void unbindMouseButton(MouseButton button, InputTrigger trigger);
+        void clear();
+
     private:
         template <class T>
         static bool contains(const std::vector<T*>& vec, T* item)
@@ -62,7 +68,7 @@ namespace engine::subsystems
 
         platform::IInputSource& source_;
         InputState state_;
-        InputHandler inputHandler_;
+        InputHandler handler_;
 
         bool quitRequested_{false};
         std::vector<platform::WindowEvent> windowEvents_;
