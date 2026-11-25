@@ -2,7 +2,8 @@
     "name": "project-systems-programming",
     "version": "0.1.0",
     "dependencies": [
-        "sdl3",
-        "catch2"
+        "catch2",
+        "nlohmann-json",
+        "sdl3"
     ]
 }

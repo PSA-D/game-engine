@@ -27,9 +27,9 @@ namespace engine::backends
         case SDL_BUTTON_MIDDLE:
             return MouseButton::Middle;
         case SDL_BUTTON_X1:
-            return MouseButton::X1;
+            return MouseButton::Button4;
         case SDL_BUTTON_X2:
-            return MouseButton::X2;
+            return MouseButton::Button5;
         default:
             return MouseButton::Unknown;
         }
@@ -125,13 +125,13 @@ namespace engine::backends
             return KeyCode::Backspace;
 
         case SDL_SCANCODE_UP:
-            return KeyCode::ArrowUp;
+            return KeyCode::Up;
         case SDL_SCANCODE_DOWN:
-            return KeyCode::ArrowDown;
+            return KeyCode::Down;
         case SDL_SCANCODE_LEFT:
-            return KeyCode::ArrowLeft;
+            return KeyCode::Left;
         case SDL_SCANCODE_RIGHT:
-            return KeyCode::ArrowRight;
+            return KeyCode::Right;
 
         case SDL_SCANCODE_PAGEUP:
             return KeyCode::PageUp;
