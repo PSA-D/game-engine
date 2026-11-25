@@ -50,7 +50,7 @@ public:
     template <typename T>
     void publish(T event)
     {
-        pending_.push_back(PendingEvent{typeid(T), std::any{std::move(event)}});
+        pending_.push_back(PendingEvent{.type = typeid(T), .value = std::any{std::move(event)}});
     }
 
     void dispatchPending();
