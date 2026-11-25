@@ -1,12 +1,12 @@
 #include "persistence/LevelSerializer.h"
 
-#include "runtime/Component.h"
-#include "runtime/ComponentRegistry.h"
+#include "core/Component.cpp"
+#include "core/ComponentRegistry.h"
 #include "runtime/DataNode.h"
-#include "runtime/GameObject.h"
+#include "core/GameObject.cpp"
 #include "runtime/Level.h"
 #include "runtime/Region.h"
-#include "runtime/Transform.h"
+#include "core/Transform.cpp"
 #include "utils/Vector2.h"
 
 #include <cstddef>

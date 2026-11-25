@@ -1,10 +1,10 @@
 #pragma once
 
 #include "persistence/LevelSerializer.h"
-#include "runtime/Component.h"
-#include "runtime/ComponentRegistry.h"
+#include "core/Component.cpp"
+#include "core/ComponentRegistry.h"
 #include "runtime/DataNode.h"
-#include "runtime/GameObject.h"
+#include "core/GameObject.cpp"
 #include "runtime/Level.h"
 #include "runtime/Region.h"
 #include "utils/Vector2.h"
@@ -17,7 +17,7 @@
 namespace engine::subsystems
 {
     // Een geregistreerd test-component met twee velden.
-    class TestSprite final : public runtime::Component
+    class TestSprite final : public Component
     {
     public:
         using Component::Component;
@@ -27,16 +27,16 @@ namespace engine::subsystems
     };
 
     // Dit component wordt bewust niet geregistreerd.
-    class TestUnregistered final : public runtime::Component
+    class TestUnregistered final : public Component
     {
     public:
         using Component::Component;
     };
 
     // Pas deze functie aan op de echte signatuur van ComponentRegistry::registerType.
-    inline void registerTestComponents(runtime::ComponentRegistry& registry)
+    inline void registerTestComponents(ComponentRegistry& registry)
     {
-        using runtime::DataNode;
+        using engine::DataNode;
 
         registry.registerType<TestSprite>(
             "TestSprite",
@@ -66,9 +66,9 @@ namespace engine::subsystems
     // Een voorbeeldlevel: twee regions, een hiërarchie, transforms en componenten.
     //   Start: Player (met TestSprite, uitgeschakeld) > Weapon, Camera
     //   Boss:  Boss   (actieve region)
-    inline auto buildSampleLevel() -> std::unique_ptr<runtime::Level>
+    inline auto buildSampleLevel() -> std::unique_ptr<Level>
     {
-        auto level = std::make_unique<runtime::Level>("Level 1");
+        auto level = std::make_unique<Level>("Level 1");
 
         auto& start = level->createRegion("Start");
         auto& player = start.createGameObject("Player");
@@ -96,7 +96,7 @@ namespace engine::subsystems
 
     // Beschrijft een level met alleen de publieke runtime-API, onafhankelijk van de serializer.
     // Twee levels met dezelfde beschrijving zijn voor de game hetzelfde.
-    inline auto snapshot(const runtime::Level& level) -> std::string
+    inline auto snapshot(const Level& level) -> std::string
     {
         std::ostringstream out;
         out << "level " << level.getName() << "\n";

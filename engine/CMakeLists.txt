@@ -23,6 +23,9 @@ add_library(engine STATIC
     src/backends/sdl3/SDL3KeyMap.cpp
     src/utils/Interpolator.cpp
     src/utils/Rect.cpp
+        src/core/ComponentRegistry.cpp
+        src/core/ComponentRegistry.h
+        src/core/Region.cpp
 )
 
 target_link_libraries(engine
