@@ -13,12 +13,15 @@ namespace
     {
         SdlGuard()
         {
+            SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "dummy");
             if (!SDL_Init(SDL_INIT_VIDEO))
                 FAIL("SDL_Init failed: " << SDL_GetError());
         }
 
         ~SdlGuard()
         {
+            SDL_SetEventEnabled(SDL_EVENT_WINDOW_FOCUS_LOST, true);
+            SDL_SetEventEnabled(SDL_EVENT_WINDOW_FOCUS_GAINED, true);
             SDL_QuitSubSystem(SDL_INIT_VIDEO);
         }
 
