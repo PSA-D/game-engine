@@ -47,10 +47,12 @@ add_test(NAME UtilsTests COMMAND UtilsTests)
 add_executable(BackendTests
     backends/sdl3/SDL3KeyMapTest.cpp
     backends/sdl3/SDL3InputSourceTest.cpp
+    backends/sdl3/SDL3WindowTest.cpp
 )
 
 target_link_libraries(BackendTests PRIVATE
     engine
+    engine-sdl3-renderer
     SDL3::SDL3
     project_sanitizers
     project_warnings
@@ -124,5 +126,5 @@ target_link_libraries(RenderTests PRIVATE
 add_test(NAME RenderTests COMMAND RenderTests)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set_tests_properties(RenderTests PROPERTIES ENVIRONMENT "SDL_VIDEODRIVER=offscreen")
+    set_tests_properties(BackendTests RenderTests PROPERTIES ENVIRONMENT "SDL_VIDEODRIVER=offscreen")
 endif()
