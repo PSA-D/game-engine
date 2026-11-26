@@ -1,6 +1,6 @@
-#include "Transform.h"
+#include "runtime/Transform.h"
 
-#include "GameObject.h"
+#include "runtime/GameObject.h"
 
 #include <cmath>
 

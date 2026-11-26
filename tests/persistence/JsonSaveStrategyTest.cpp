@@ -1,8 +1,8 @@
 // Laag: UNIT. Alles in het geheugen, geen bestanden, snel en geïsoleerd.
-#include "persistence/JsonSaveStrategy.h"
+#include "subsystems/persistence/JsonSaveStrategy.h"
 
 #include "PersistenceTestData.h"
-#include "persistence/ISaveStrategy.h"
+#include "subsystems/persistence/ISaveStrategy.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <cstdint>

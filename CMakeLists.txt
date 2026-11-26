@@ -29,6 +29,11 @@ if(MSVC)
     target_compile_options(project_warnings INTERFACE /W4 /WX)
 else()
     target_compile_options(project_warnings INTERFACE -Wall -Wextra -Wpedantic -Werror)
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        # GCC 13 gives false 'may be used uninitialized' errors on std::variant
+        # (DataNode) in optimized builds. Keep them as warnings, not errors.
+        target_compile_options(project_warnings INTERFACE -Wno-error=maybe-uninitialized)
+    endif()
 endif()
 
 add_library(project_sanitizers INTERFACE)

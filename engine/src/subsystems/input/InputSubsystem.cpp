@@ -16,45 +16,57 @@ namespace engine::subsystems
     {
         beginFrame();
 
-        auto e = source_.pollEvent();
-
-        if (e.has_value())
-        {
-            if (const auto* event = std::get_if<platform::KeyEvent>(&*e))
-            {
-                keyListeners_.dispatch(
-                    [&](IKeyListener& l)
-                    {
-                        l.onKeyUp(*event);
-                        l.onKeyDown(*event);
-                    });
-            }
-            if (const auto* event = std::get_if<platform::MouseButtonEvent>(&*e))
-            {
-                mouseListeners_.dispatch(
-                    [&](IMouseListener& l)
-                    {
-                        l.onMouseButtonDown(*event);
-                        l.onMouseButtonUp(*event);
-                    });
-            }
-            if (const auto* event = std::get_if<platform::MouseMoveEvent>(&*e))
-            {
-                mouseListeners_.dispatch([&](IMouseListener& l) { l.onMouseMove(*event); });
-            }
-            if (const auto* event = std::get_if<platform::MouseWheelEvent>(&*e))
-            {
-                mouseListeners_.dispatch([&](IMouseListener& l) { l.onMouseWheel(*event); });
-            }
-        }
-
+        // Elk event werkt eerst de toestand bij (isKeyDown e.d.) en gaat daarna naar de listeners.
         while (const auto event = source_.pollEvent())
         {
-            if (event.has_value())
-                processEvent(*event);
+            processEvent(*event);
+            dispatchToListeners(*event);
         }
 
         inputHandler_.handleInput(state_);
+    }
+
+    void InputSubsystem::dispatchToListeners(const platform::PlatformEvent& event)
+    {
+        if (const auto* keyEvent = std::get_if<platform::KeyEvent>(&event))
+        {
+            if (keyEvent->repeat)
+                return; // onKeyDown één keer per indrukken, niet bij vasthouden
+
+            const KeyCode key = keyEvent->key;
+            const bool pressed = keyEvent->pressed;
+            keyListeners_.dispatch(
+                [key, pressed](IKeyListener& listener)
+                {
+                    if (pressed)
+                        listener.onKeyDown(key);
+                    else
+                        listener.onKeyUp(key);
+                });
+        }
+        else if (const auto* buttonEvent = std::get_if<platform::MouseButtonEvent>(&event))
+        {
+            const MouseButton button = buttonEvent->button;
+            const bool pressed = buttonEvent->pressed;
+            mouseListeners_.dispatch(
+                [button, pressed](IMouseListener& listener)
+                {
+                    if (pressed)
+                        listener.onMouseButtonDown(button);
+                    else
+                        listener.onMouseButtonUp(button);
+                });
+        }
+        else if (const auto* moveEvent = std::get_if<platform::MouseMoveEvent>(&event))
+        {
+            const Vector2 position = moveEvent->position;
+            mouseListeners_.dispatch([&position](IMouseListener& listener) { listener.onMouseMove(position); });
+        }
+        else if (const auto* wheelEvent = std::get_if<platform::MouseWheelEvent>(&event))
+        {
+            const float scrollDelta = wheelEvent->scroll.y;
+            mouseListeners_.dispatch([scrollDelta](IMouseListener& listener) { listener.onMouseWheel(scrollDelta); });
+        }
     }
 
     void InputSubsystem::processEvent(const platform::PlatformEvent& event)
