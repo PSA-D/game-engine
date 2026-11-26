@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <utility>
 
-namespace  engine::subsystems
+namespace engine::subsystems
 {
     namespace
     {

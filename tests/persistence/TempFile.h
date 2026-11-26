@@ -8,7 +8,7 @@
 #include <string>
 #include <system_error>
 
-namespace  engine::subsystems
+namespace engine::subsystems
 {
     // Een tijdelijk bestand dat zichzelf opruimt, zodat de tests niets achterlaten.
     class TempFile

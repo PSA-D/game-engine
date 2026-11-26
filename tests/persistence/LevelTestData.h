@@ -6,8 +6,8 @@
 #include "core/ComponentRegistry.h"
 #include "runtime/DataNode.h"
 #include "runtime/Level.h"
-#include <Region.h>
 
+#include <Region.h>
 #include <cstdint>
 #include <memory>
 #include <sstream>
@@ -38,35 +38,35 @@ namespace engine::subsystems
         using engine::DataNode;
 
         registry.registerType<TestSprite>(
-           "TestSprite",
-           [](const TestSprite& component)
-           {
-               auto node = DataNode::makeObject();
-               node.set("sprite", DataNode(component.sprite));
-               node.set("layer", DataNode(component.layer));
-               return node;
-           },
-           [](GameObject& owner, const DataNode& node) -> TestSprite*
-           {
-               const auto* sprite = node.get("sprite");
-               const auto* layer = node.get("layer");
+            "TestSprite",
+            [](const TestSprite& component)
+            {
+                auto node = DataNode::makeObject();
+                node.set("sprite", DataNode(component.sprite));
+                node.set("layer", DataNode(component.layer));
+                return node;
+            },
+            [](GameObject& owner, const DataNode& node) -> TestSprite*
+            {
+                const auto* sprite = node.get("sprite");
+                const auto* layer = node.get("layer");
 
-               if (sprite == nullptr || layer == nullptr)
-                   return nullptr;
+                if (sprite == nullptr || layer == nullptr)
+                    return nullptr;
 
-               const auto spriteValue = sprite->tryString();
-               const auto layerValue = layer->tryInt();
+                const auto spriteValue = sprite->tryString();
+                const auto layerValue = layer->tryInt();
 
-               if (!spriteValue || !layerValue)
-                   return nullptr;
+                if (!spriteValue || !layerValue)
+                    return nullptr;
 
-               auto& component = owner.addComponent<TestSprite>();
+                auto& component = owner.addComponent<TestSprite>();
 
-               component.sprite = *spriteValue;
-               component.layer = static_cast<int>(*layerValue);
+                component.sprite = *spriteValue;
+                component.layer = static_cast<int>(*layerValue);
 
-               return &component;
-           });
+                return &component;
+            });
     }
 
     // Een voorbeeldlevel: twee regions, een hiërarchie, transforms en componenten.
@@ -89,7 +89,7 @@ namespace engine::subsystems
 
         auto& weapon = start.createGameObject("Weapon");
         static_cast<void>(weapon.setParent(&player, false));
-        weapon.getTransform().setLocalPosition({.x=0.5F, .y=0.0F});
+        weapon.getTransform().setLocalPosition({.x = 0.5F, .y = 0.0F});
 
         start.createGameObject("Camera");
 
