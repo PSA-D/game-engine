@@ -1,6 +1,6 @@
 #include "backends/sdl3/SDL3PlatformFactory.h"
 
-#include "backends/sdl3/SDL3Window.h"
+#include "backends/sdl3/EngineSDL3Window.h"
 
 #include <SDL3/SDL.h>
 #include <stdexcept>
@@ -21,6 +21,6 @@ namespace engine::backends
 
     std::unique_ptr<platform::IWindow> SDL3PlatformFactory::createWindow(const platform::WindowConfig& config)
     {
-        return std::make_unique<SDL3Window>(config);
+        return std::make_unique<EngineSDL3Window>(config);
     }
 } // namespace engine::backends

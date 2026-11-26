@@ -116,8 +116,13 @@ add_executable(RenderTests
 target_link_libraries(RenderTests PRIVATE
     engine
     engine-null-renderer
+    engine-sdl3-renderer
     project_sanitizers
     project_warnings
 )
 
 add_test(NAME RenderTests COMMAND RenderTests)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set_tests_properties(RenderTests PROPERTIES ENVIRONMENT "SDL_VIDEODRIVER=offscreen")
+endif()

@@ -9,10 +9,10 @@ struct SDL_Window;
 
 namespace engine::backends
 {
-    class SDL3Window final : public platform::IWindow
+    class EngineSDL3Window final : public platform::IWindow
     {
     public:
-        explicit SDL3Window(const platform::WindowConfig& config);
+        explicit EngineSDL3Window(const platform::WindowConfig& config);
 
         [[nodiscard]] std::string getTitle() const override;
         [[nodiscard]] Size getSize() const override;

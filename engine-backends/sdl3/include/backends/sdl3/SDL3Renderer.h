@@ -6,6 +6,7 @@
 
 namespace engine::backends
 {
+    struct SDL3RendererState;
     class SDL3Window;
 
     class SDL3Renderer final : public platform::IRenderer
@@ -21,6 +22,7 @@ namespace engine::backends
 
         void clear(const Color& color) override;
         void drawTexture(const platform::ITexture& texture, const DrawParams& params) override;
+        void drawRect(const Rect& rect, const Color& color, bool filled) override;
         void present() override;
         std::unique_ptr<platform::ITexture> createTexture(const ImageData& data) override;
         [[nodiscard]] Vector2 getOutputSize() const override;
@@ -28,6 +30,6 @@ namespace engine::backends
 
     private:
         void* window{nullptr};
-        void* renderer{nullptr};
+        std::shared_ptr<SDL3RendererState> rendererState;
     };
 } // namespace engine::backends

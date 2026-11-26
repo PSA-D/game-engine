@@ -42,6 +42,13 @@ namespace engine::backends
         static_cast<void>(params);
     }
 
+    void NullRenderer::drawRect(const Rect& rect, const Color& color, bool filled)
+    {
+        static_cast<void>(rect);
+        static_cast<void>(color);
+        static_cast<void>(filled);
+    }
+
     void NullRenderer::present() {}
 
     std::unique_ptr<platform::ITexture> NullRenderer::createTexture(const ImageData& data)

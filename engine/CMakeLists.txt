@@ -21,8 +21,6 @@ add_library(engine STATIC
     include/utils/KeyCode.h
     include/utils/Matrix.h
     include/utils/MouseButton.h
-    include/utils/Rect.h
-    include/utils/Size.h
     include/utils/Vector2.h
     src/core/Component.cpp
     src/core/CompositionRoot.cpp
@@ -51,16 +49,14 @@ add_library(engine STATIC
     src/subsystems/render/RenderSubsystem.h
     src/subsystems/ui/UISubsystem.h
     src/platform/IPlatformFactory.h
-    src/platform/IWindow.h
-    src/platform/WindowConfig.h
     src/backends/sdl3/SDL3InputSource.cpp
     src/backends/sdl3/SDL3InputSource.h
     src/backends/sdl3/SDL3KeyMap.cpp
     src/backends/sdl3/SDL3KeyMap.h
     src/backends/sdl3/SDL3PlatformFactory.cpp
     src/backends/sdl3/SDL3PlatformFactory.h
-    src/backends/sdl3/SDL3Window.cpp
-    src/backends/sdl3/SDL3Window.h
+    src/backends/sdl3/EngineSDL3Window.cpp
+    src/backends/sdl3/EngineSDL3Window.h
     src/platform/headless/HeadlessPlatformFactory.cpp
     src/platform/headless/HeadlessPlatformFactory.h
     src/platform/headless/HeadlessWindow.cpp

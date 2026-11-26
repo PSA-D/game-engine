@@ -1,9 +1,14 @@
 #include "Region.h"
 #include "backends/null/NullRenderer.h"
+#include "backends/sdl3/SDL3Renderer.h"
+#include "backends/sdl3/SDL3Window.h"
 #include "components/SpriteRenderer.h"
 #include "core/GameObject.h"
+#include "platform/WindowConfig.h"
 #include "systems/RenderSystem.h"
+#include "utils/Size.h"
 
+#include <SDL3/SDL.h>
 #include <cstddef>
 #include <cstdlib>
 #include <iostream>
@@ -41,6 +46,14 @@ namespace
             static_cast<void>(texture);
             static_cast<void>(params);
             calls.push_back("draw");
+        }
+
+        void drawRect(const engine::Rect& rect, const engine::Color& color, bool filled) override
+        {
+            static_cast<void>(rect);
+            static_cast<void>(color);
+            static_cast<void>(filled);
+            calls.push_back("rect");
         }
 
         void present() override
@@ -114,6 +127,8 @@ auto main() -> int
 
         renderer.clear(engine::Color{0, 0, 0, 255});
         renderer.drawTexture(*texture, engine::DrawParams{});
+        renderer.drawRect(engine::Rect{{8.0F, 8.0F}, {24.0F, 24.0F}}, engine::Color{255, 0, 0, 255}, true);
+        renderer.drawRect(engine::Rect{{40.0F, 8.0F}, {24.0F, 24.0F}}, engine::Color{0, 255, 0, 255}, false);
         renderer.present();
 
         const std::unique_ptr<engine::platform::ITexture> emptyTexture = renderer.createTexture(engine::ImageData{});
@@ -125,6 +140,49 @@ auto main() -> int
         object.addComponent<engine::SpriteRenderer>(*texture);
         engine::RenderSystem renderSystem(renderer);
         renderSystem.render({&object}, engine::Color{0, 0, 0, 255});
+    }
+
+    try
+    {
+        engine::platform::WindowConfig config;
+        config.title = "SDL3 renderer test";
+        config.size = {64, 48};
+        config.vsync = false;
+
+        engine::backends::SDL3Window window(config);
+        const engine::Size windowPixelSize = window.getPixelSize();
+        std::unique_ptr<engine::platform::ITexture> texture;
+        {
+            engine::backends::SDL3Renderer renderer(window);
+            const engine::Vector2 outputSize = renderer.getOutputSize();
+            const engine::platform::NativeHandles handles = renderer.getNativeHandles();
+            check(outputSize.x == static_cast<float>(windowPixelSize.width) &&
+                      outputSize.y == static_cast<float>(windowPixelSize.height),
+                  "SDL3Renderer output size matches the window pixel size");
+            check(handles.window != nullptr && handles.renderer != nullptr,
+                  "SDL3Renderer exposes its native window and renderer");
+            int vsync = -1;
+            check(SDL_GetRenderVSync(static_cast<SDL_Renderer*>(handles.renderer), &vsync) && vsync == 0,
+                  "SDL3Renderer applies the vsync setting from WindowConfig");
+
+            renderer.clear(engine::Color{0, 0, 0, 255});
+            renderer.drawRect(engine::Rect{{4.0F, 4.0F}, {16.0F, 16.0F}}, engine::Color{255, 0, 0, 255}, true);
+            renderer.drawRect(engine::Rect{{24.0F, 4.0F}, {16.0F, 16.0F}}, engine::Color{0, 255, 0, 255}, false);
+
+            engine::ImageData image;
+            image.width = 1;
+            image.height = 1;
+            image.pixels = {255, 255, 255, 255};
+            texture = renderer.createTexture(image);
+            check(texture->getWidth() == 1 && texture->getHeight() == 1, "SDL3Texture retains image dimensions");
+            renderer.drawTexture(*texture, engine::DrawParams{{4.0F, 24.0F}, {16.0F, 16.0F}, 0.0F});
+            renderer.present();
+        }
+        texture.reset();
+    }
+    catch (const std::exception& error)
+    {
+        check(false, error.what());
     }
 
     if (failures > 0)

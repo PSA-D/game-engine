@@ -3,30 +3,56 @@
 #include "backends/sdl3/SDL3Window.h"
 
 #include <SDL3/SDL.h>
-#include <cmath>
 #include <limits>
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 namespace engine::backends
 {
+    struct SDL3RendererState
+    {
+        explicit SDL3RendererState(SDL_Renderer* renderer) noexcept
+            : renderer(renderer)
+        {
+        }
+
+        ~SDL3RendererState()
+        {
+            SDL_DestroyRenderer(renderer);
+        }
+
+        SDL_Renderer* renderer;
+    };
+
     namespace
     {
+        struct SDLTextureDeleter
+        {
+            void operator()(SDL_Texture* texture) const noexcept
+            {
+                SDL_DestroyTexture(texture);
+            }
+        };
+
+        using SDLTextureHandle = std::unique_ptr<SDL_Texture, SDLTextureDeleter>;
+
         class SDL3Texture final : public platform::ITexture
         {
         public:
-            SDL3Texture(SDL_Texture* nativeTexture, int textureWidth, int textureHeight) noexcept
-                : texture(nativeTexture)
+            SDL3Texture(std::shared_ptr<SDL3RendererState> rendererState,
+                        SDLTextureHandle texture,
+                        int textureWidth,
+                        int textureHeight) noexcept
+                : rendererState(std::move(rendererState))
+                , texture(std::move(texture))
                 , width(textureWidth)
                 , height(textureHeight)
             {
             }
 
-            ~SDL3Texture() override
-            {
-                SDL_DestroyTexture(texture);
-            }
+            ~SDL3Texture() override = default;
 
             [[nodiscard]] int getWidth() const noexcept override
             {
@@ -40,13 +66,14 @@ namespace engine::backends
 
             [[nodiscard]] SDL_Texture* getNativeTexture() const noexcept
             {
-                return texture;
+                return texture.get();
             }
 
         private:
-            SDL_Texture* texture;
-            int width;
-            int height;
+            [[maybe_unused]] std::shared_ptr<SDL3RendererState> rendererState;
+            SDLTextureHandle texture;
+            const int width;
+            const int height;
         };
 
         auto toSDLRenderer(void* renderer) noexcept -> SDL_Renderer*
@@ -56,24 +83,36 @@ namespace engine::backends
     } // namespace
 
     SDL3Renderer::SDL3Renderer(SDL3Window& windowRef)
+        : window(windowRef.getNativeHandle())
     {
-        window = windowRef.getNativeHandle();
-        renderer = SDL_CreateRenderer(static_cast<SDL_Window*>(window), nullptr);
-        if (renderer == nullptr)
+        const auto destroyRenderer = [](SDL_Renderer* renderer)
+        {
+            if (renderer != nullptr)
+            {
+                SDL_DestroyRenderer(renderer);
+            }
+        };
+        std::unique_ptr<SDL_Renderer, decltype(destroyRenderer)> nativeRenderer{
+            SDL_CreateRenderer(static_cast<SDL_Window*>(window), nullptr), destroyRenderer};
+        if (nativeRenderer == nullptr)
+        {
+            throw std::runtime_error(SDL_GetError());
+        }
+
+        rendererState = std::make_shared<SDL3RendererState>(nativeRenderer.get());
+        nativeRenderer.release();
+        if (!SDL_SetRenderVSync(rendererState->renderer, windowRef.getConfig().vsync ? 1 : 0))
         {
             throw std::runtime_error(SDL_GetError());
         }
     }
 
-    SDL3Renderer::~SDL3Renderer()
-    {
-        SDL_DestroyRenderer(toSDLRenderer(renderer));
-    }
+    SDL3Renderer::~SDL3Renderer() = default;
 
     void SDL3Renderer::clear(const Color& color)
     {
-        SDL_Renderer* sdlRenderer = toSDLRenderer(renderer);
-        if (!SDL_SetRenderDrawColor(sdlRenderer, color.r, color.g, color.b, color.a) || !SDL_RenderClear(sdlRenderer))
+        if (!SDL_SetRenderDrawColor(rendererState->renderer, color.r, color.g, color.b, color.a) ||
+            !SDL_RenderClear(rendererState->renderer))
         {
             throw std::runtime_error(SDL_GetError());
         }
@@ -90,7 +129,7 @@ namespace engine::backends
         const SDL_FRect destination{params.position.x, params.position.y, params.size.x, params.size.y};
         constexpr double radiansToDegrees = 180.0 / 3.14159265358979323846;
         const double rotation = static_cast<double>(params.rotation) * radiansToDegrees;
-        if (!SDL_RenderTextureRotated(toSDLRenderer(renderer),
+        if (!SDL_RenderTextureRotated(rendererState->renderer,
                                       sdlTexture->getNativeTexture(),
                                       nullptr,
                                       &destination,
@@ -102,9 +141,25 @@ namespace engine::backends
         }
     }
 
+    void SDL3Renderer::drawRect(const Rect& rect, const Color& color, bool filled)
+    {
+        if (!SDL_SetRenderDrawColor(rendererState->renderer, color.r, color.g, color.b, color.a))
+        {
+            throw std::runtime_error(SDL_GetError());
+        }
+
+        const SDL_FRect destination{rect.position.x, rect.position.y, rect.size.x, rect.size.y};
+        const bool success = filled ? SDL_RenderFillRect(rendererState->renderer, &destination)
+                                    : SDL_RenderRect(rendererState->renderer, &destination);
+        if (!success)
+        {
+            throw std::runtime_error(SDL_GetError());
+        }
+    }
+
     void SDL3Renderer::present()
     {
-        if (!SDL_RenderPresent(toSDLRenderer(renderer)))
+        if (!SDL_RenderPresent(rendererState->renderer))
         {
             throw std::runtime_error(SDL_GetError());
         }
@@ -129,28 +184,25 @@ namespace engine::backends
             throw std::invalid_argument("Texture pixel data must contain RGBA pixels for every image pixel");
         }
 
-        SDL_Renderer* sdlRenderer = toSDLRenderer(renderer);
-        SDL_Texture* nativeTexture =
-            SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STATIC, data.width, data.height);
+        SDLTextureHandle nativeTexture{SDL_CreateTexture(
+            rendererState->renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STATIC, data.width, data.height)};
         if (nativeTexture == nullptr)
         {
             throw std::runtime_error(SDL_GetError());
         }
-        if (!SDL_UpdateTexture(nativeTexture, nullptr, data.pixels.data(), data.width * 4) ||
-            !SDL_SetTextureBlendMode(nativeTexture, SDL_BLENDMODE_BLEND))
+        if (!SDL_UpdateTexture(nativeTexture.get(), nullptr, data.pixels.data(), data.width * 4) ||
+            !SDL_SetTextureBlendMode(nativeTexture.get(), SDL_BLENDMODE_BLEND))
         {
-            const std::string error = SDL_GetError();
-            SDL_DestroyTexture(nativeTexture);
-            throw std::runtime_error(error);
+            throw std::runtime_error(SDL_GetError());
         }
-        return std::make_unique<SDL3Texture>(nativeTexture, data.width, data.height);
+        return std::make_unique<SDL3Texture>(rendererState, std::move(nativeTexture), data.width, data.height);
     }
 
     Vector2 SDL3Renderer::getOutputSize() const
     {
         int width = 0;
         int height = 0;
-        if (!SDL_GetCurrentRenderOutputSize(toSDLRenderer(renderer), &width, &height))
+        if (!SDL_GetCurrentRenderOutputSize(rendererState->renderer, &width, &height))
         {
             throw std::runtime_error(SDL_GetError());
         }
@@ -160,6 +212,6 @@ namespace engine::backends
 
     platform::NativeHandles SDL3Renderer::getNativeHandles() const noexcept
     {
-        return {window, renderer};
+        return {window, rendererState->renderer};
     }
 } // namespace engine::backends
