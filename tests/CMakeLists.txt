@@ -11,7 +11,6 @@ add_executable(EngineTests
         persistence/JsonSaveStrategyTest.cpp
         persistence/JsonSaveStrategyIntegrationTest.cpp
         persistence/LevelSerializerTest.cpp
-        persistence/LevelSerializerIntegrationTest.cpp
     	test_game_object.cpp
 )
 

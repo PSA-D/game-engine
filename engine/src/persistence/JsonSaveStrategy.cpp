@@ -13,7 +13,7 @@ namespace engine::subsystems
         using Json = nlohmann::json;
 
         // Zet een DataNode om naar JSON.
-        auto toJson(const runtime::DataNode& node) -> Json
+        auto toJson(const DataNode& node) -> Json
         {
             return std::visit(
                 [](const auto& value) -> Json
@@ -23,14 +23,14 @@ namespace engine::subsystems
                     {
                         return nullptr;
                     }
-                    else if constexpr (std::is_same_v<T, runtime::DataNode::Array>)
+                    else if constexpr (std::is_same_v<T, DataNode::Array>)
                     {
                         Json array = Json::array();
                         for (const auto& element : value)
                             array.push_back(toJson(element));
                         return array;
                     }
-                    else if constexpr (std::is_same_v<T, runtime::DataNode::Object>)
+                    else if constexpr (std::is_same_v<T, DataNode::Object>)
                     {
                         Json object = Json::object();
                         for (const auto& [key, element] : value)
@@ -47,9 +47,9 @@ namespace engine::subsystems
         }
 
         // Zet JSON om naar een DataNode.
-        auto fromJson(const Json& json) -> runtime::DataNode
+        auto fromJson(const Json& json) -> DataNode
         {
-            using runtime::DataNode;
+            using engine::DataNode;
 
             switch (json.type())
             {

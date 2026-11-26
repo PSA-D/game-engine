@@ -60,6 +60,7 @@ public:
                 auto node = DataNode::makeObject();
                 node.set("type", DataNode(typeName));
                 node.set("data", std::move(*componentData));
+                node.set("enabled", DataNode(component.isEnabled()));
 
                 return node;
             }};

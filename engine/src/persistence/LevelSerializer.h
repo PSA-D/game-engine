@@ -1,17 +1,16 @@
 #pragma once
 
 #include "GameData.h"
-#include "persistence/GameData.h"
 #include "runtime/Level.h"
 
 #include <cstdint>
 #include <memory>
 
-namespace engine::runtime
+namespace engine
 {
     class ComponentRegistry;
     class Level;
-} // namespace engine::runtime
+} // namespace engine
 
 namespace engine::subsystems
 {
@@ -48,13 +47,13 @@ namespace engine::subsystems
     class LevelSerializer
     {
     public:
-        explicit LevelSerializer(runtime::ComponentRegistry& componentRegistry);
+        explicit LevelSerializer(ComponentRegistry& componentRegistry);
 
-        [[nodiscard]] GameData toGameData(const runtime::Level& level) const;
-        [[nodiscard]] std::unique_ptr<runtime::Level> fromGameData(const GameData& data) const;
+        [[nodiscard]] GameData toGameData(const Level& level) const;
+        [[nodiscard]] std::unique_ptr<Level> fromGameData(const GameData& data) const;
 
     private:
-        runtime::ComponentRegistry& registry;
+        ComponentRegistry& registry;
 
         static constexpr std::uint32_t CURRENT_VERSION = 1;
     };

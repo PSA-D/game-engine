@@ -15,8 +15,7 @@ add_library(engine STATIC
     src/core/GameObject.cpp
     src/core/Transform.cpp
     src/runtime/Level.cpp
-    src/runtime/Region.cpp
-    src/runtime/Scene.cpp
+        src/runtime/Scene.cpp
     src/persistence/JsonSaveStrategy.cpp
     src/persistence/LevelSerializer.cpp
     src/backends/sdl3/SDL3InputSource.cpp

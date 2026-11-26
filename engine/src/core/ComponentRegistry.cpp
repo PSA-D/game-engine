@@ -42,6 +42,22 @@ namespace engine
             return nullptr;
         }
 
-        return found->second.load(owner, *dataNode);
+        Component* component =
+            found->second.load(owner, *dataNode);
+
+        if (component == nullptr)
+            return nullptr;
+
+        if (const auto* enabledNode = data.get("enabled"))
+        {
+            const auto enabled = enabledNode->tryBool();
+
+            if (!enabled)
+                return nullptr;
+
+            component->setEnabled(*enabled);
+        }
+
+        return component;
     }
 } // namespace engine

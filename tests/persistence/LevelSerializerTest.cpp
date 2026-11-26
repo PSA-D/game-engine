@@ -1,6 +1,5 @@
 // Laag: UNIT. Alles in het geheugen. De serializer wordt getest met echte runtime-klassen
 // (Level, Region, GameObject zijn gewone gegevensbezitters) en een test-registry.
-// JSON en bestanden komen aan bod in LevelSerializerIntegrationTest.cpp.
 
 #include "persistence/LevelSerializer.h"
 
@@ -33,15 +32,15 @@ namespace  engine::subsystems
         // Een test-opstelling: een registry met de testcomponenten en een serializer daarop.
         struct Fixture
         {
-            runtime::ComponentRegistry registry;
+            ComponentRegistry registry;
             LevelSerializer serializer{registry};
-            std::unique_ptr<runtime::Level> level;
+            std::unique_ptr<Level> level;
             GameData data;
 
             Fixture()
             {
-                test::registerTestComponents(registry);
-                level = test::buildSampleLevel();
+                registerTestComponents(registry);
+                level = buildSampleLevel();
                 data = serializer.toGameData(*level);
             }
         };
@@ -97,7 +96,7 @@ namespace  engine::subsystems
     TEST_CASE("toGameData slaat een niet-geregistreerd component over", "[unit][persistence]")
     {
         Fixture f;
-        f.level->getRegions().front()->getGameObjects().front()->addComponent<test::TestUnregistered>();
+        f.level->getRegions().front()->getGameObjects().front()->addComponent<TestUnregistered>();
 
         const auto data = f.serializer.toGameData(*f.level);
 
@@ -116,7 +115,7 @@ namespace  engine::subsystems
     TEST_CASE("Een leeg level kan bewaard en teruggelezen worden", "[unit][persistence]")
     {
         Fixture f;
-        const runtime::Level empty("Leeg");
+        const Level empty("Leeg");
 
         const auto data = f.serializer.toGameData(empty);
         const auto loaded = f.serializer.fromGameData(data);
@@ -134,7 +133,7 @@ namespace  engine::subsystems
         const auto loaded = f.serializer.fromGameData(f.data);
 
         REQUIRE(loaded != nullptr);
-        CHECK(test::snapshot(*loaded) == test::snapshot(*f.level));
+        CHECK(snapshot(*loaded) == snapshot(*f.level));
     }
 
     TEST_CASE("Een ingelezen level gebruikt eigen ids, niet die uit het bestand", "[unit][persistence]")
@@ -147,7 +146,7 @@ namespace  engine::subsystems
         const auto loaded = f.serializer.fromGameData(f.data);
 
         REQUIRE(loaded != nullptr);
-        CHECK(test::snapshot(*loaded) == test::snapshot(*f.level)); // hiërarchie intact
+        CHECK(snapshot(*loaded) == snapshot(*f.level)); // hiërarchie intact
     }
 
     TEST_CASE("De volgorde van objecten in het bestand maakt niet uit", "[unit][persistence]")
@@ -163,7 +162,7 @@ namespace  engine::subsystems
         REQUIRE(weapon->getName() == "Weapon");
         REQUIRE(weapon->getParent() != nullptr);
         CHECK(weapon->getParent()->getName() == "Player");
-        CHECK(weapon->getTransform().getLocalPosition() == utils::Vector2{0.5F, 0.0F}); // lokaal behouden
+        CHECK(weapon->getTransform().getLocalPosition() == Vector2{0.5F, 0.0F}); // lokaal behouden
     }
 
     TEST_CASE("Componentdata en de enabled-vlag worden hersteld", "[unit][persistence]")
@@ -174,7 +173,7 @@ namespace  engine::subsystems
 
         REQUIRE(loaded != nullptr);
         const auto player = loaded->getRegions().front()->getGameObjects().front();
-        const auto sprites = player->getComponents<test::TestSprite>();
+        const auto sprites = player->getComponents<TestSprite>();
         REQUIRE(sprites.size() == 1);
         CHECK(sprites[0]->sprite == "hero.png");
         CHECK(sprites[0]->layer == 2);
@@ -198,8 +197,8 @@ namespace  engine::subsystems
         REQUIRE(loaded != nullptr);
         const auto player = loaded->getRegions().front()->getGameObjects().front();
         CHECK(player->getTag().empty());
-        CHECK(player->getTransform().getLocalPosition() == utils::Vector2{});
-        CHECK(player->getComponents<test::TestSprite>().empty());
+        CHECK(player->getTransform().getLocalPosition() == Vector2{});
+        CHECK(player->getComponents<TestSprite>().empty());
         CHECK(loaded->getActiveRegion() == nullptr);
     }
 

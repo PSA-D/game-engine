@@ -9,12 +9,24 @@ namespace engine
 {
     Region::~Region() = default;
 
-    GameObject& Region::createGameObject(std::string name)
+    GameObject& Region::createGameObject(std::string_view objectName)
     {
-        auto gameObject = std::unique_ptr<GameObject>(new GameObject(*this, std::move(name)));
+        auto gameObject =
+            std::unique_ptr<GameObject>(
+                new GameObject(*this, std::string{objectName}));
         GameObject& result = *gameObject;
         gameObjects.push_back(std::move(gameObject));
         return result;
+    }
+
+    Region::Region(std::string regionName)
+        : name(std::move(regionName))
+    {
+    }
+
+    const std::string& Region::getName() const
+    {
+        return name;
     }
 
     void Region::processPendingDestruction()
@@ -22,9 +34,7 @@ namespace engine
         // Een lus, want vernietigen kan nieuwe verzoeken veroorzaken.
         while (!pendingDestruction.empty())
         {
-            const auto batch = std::move(pendingDestruction);
-            pendingDestruction.clear();
-
+            auto batch = std::exchange(pendingDestruction, {});
             for (const auto id : batch)
             {
                 const auto found =

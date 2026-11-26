@@ -1,12 +1,12 @@
 #include "persistence/LevelSerializer.h"
 
-#include "core/Component.cpp"
+#include "Component.h"
 #include "core/ComponentRegistry.h"
 #include "runtime/DataNode.h"
-#include "core/GameObject.cpp"
+#include "GameObject.h"
 #include "runtime/Level.h"
-#include "runtime/Region.h"
-#include "core/Transform.cpp"
+#include "Region.h"
+#include "Transform.h"
 #include "utils/Vector2.h"
 
 #include <cstddef>
@@ -27,10 +27,8 @@ namespace engine::subsystems
     {
         using engine::DataNode;
 
-        GameData LevelSerializer::toGameData(const Level& level) const
-
-            // Id in het bestand -> het aangemaakte GameObject, per Region.
-            using ObjectsById = std::map<std::uint64_t, GameObject*>;
+        // Id in het bestand -> het aangemaakte GameObject, per Region.
+        using ObjectsById = std::map<std::uint64_t, GameObject*>;
         // (kind, id van de ouder in het bestand). De ouders worden pas in de tweede ronde gelegd.
         using ParentLinks = std::vector<std::pair<GameObject*, std::uint64_t>>;
 
@@ -49,7 +47,7 @@ namespace engine::subsystems
             return static_cast<std::uint64_t>(*value);
         }
 
-        auto vectorToNode(const utils::Vector2& vector) -> DataNode
+        auto vectorToNode(const Vector2& vector) -> DataNode
         {
             auto node = DataNode::makeArray();
             node.pushToArray(DataNode(static_cast<double>(vector.x)));
@@ -58,7 +56,7 @@ namespace engine::subsystems
         }
 
         // Verwacht precies twee getallen: [x, y].
-        auto nodeToVector(const DataNode& node) -> std::optional<utils::Vector2>
+        auto nodeToVector(const DataNode& node) -> std::optional<Vector2>
         {
             const auto* list = node.tryArray();
             if (list == nullptr || list->size() != 2)
@@ -69,7 +67,7 @@ namespace engine::subsystems
             if (!x || !y)
                 return std::nullopt;
 
-            return utils::Vector2{static_cast<float>(*x), static_cast<float>(*y)};
+            return Vector2{static_cast<float>(*x), static_cast<float>(*y)};
         }
 
         auto readString(const DataNode& object, const std::string& key) -> std::optional<std::string>
@@ -179,7 +177,7 @@ namespace engine::subsystems
         // De ouder wordt pas in de tweede ronde gelegd, want die staat misschien verderop in de lijst.
         auto loadGameObject(Region& region,
                             const DataNode& node,
-                            runtime::ComponentRegistry& registry,
+                            ComponentRegistry& registry,
                             ObjectsById& objectsById,
                             ParentLinks& parentLinks) -> bool
         {
