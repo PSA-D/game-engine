@@ -24,11 +24,9 @@ jobs:
           - name: Windows MSVC
             os: windows-2025
             compiler: msvc
-            triplet: x64-windows
           - name: Windows MinGW
             os: windows-2025
             compiler: mingw
-            triplet: x64-mingw-dynamic
 
     steps:
       - name: Check out repository
@@ -44,10 +42,10 @@ jobs:
         if: matrix.os == 'ubuntu-24.04'
         run: |
           sudo apt-get update
-          sudo apt-get install --yes libudev-dev
-      - name: Set up GCC
-        if: matrix.compiler == 'gcc'
-        run: sudo apt-get update && sudo apt-get install --yes ninja-build autoconf autoconf-archive automake libtool libltdl-dev
+          sudo apt-get install -y \
+            libudev-dev \
+            libwayland-dev libwayland-bin libxkbcommon-dev \
+            libegl1-mesa-dev libgl1-mesa-dev
 
       - name: Set up MSVC
         if: matrix.compiler == 'msvc'
@@ -63,7 +61,7 @@ jobs:
 
       - name: Configure MinGW
         if: matrix.compiler == 'mingw'
-        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DVCPKG_TARGET_TRIPLET=x64-mingw-dynamic -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$env:VCPKG_ROOT"
+        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
 
       - name: Build engine and game
         run: cmake --build build/ci --parallel
@@ -100,9 +98,10 @@ jobs:
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install --yes libudev-dev
-      - name: Set up build tools
-        run: sudo apt-get update && sudo apt-get install --yes ninja-build autoconf autoconf-archive automake libtool libltdl-dev
+          sudo apt-get install -y \
+            libudev-dev \
+            libwayland-dev libwayland-bin libxkbcommon-dev \
+            libegl1-mesa-dev libgl1-mesa-dev
 
       - name: Configure sanitizer build
         run: cmake -S . -B build/sanitizers -G Ninja -DCMAKE_BUILD_TYPE=Debug -DENGINE_BUILD_TESTS=ON -DENGINE_ENABLE_SANITIZERS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
@@ -132,12 +131,15 @@ jobs:
           "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
 
       - name: Set up build tools
-        run: sudo apt-get update && sudo apt-get install --yes clang-tidy ninja-build autoconf autoconf-archive automake libtool libltdl-dev
+        run: sudo apt-get update && sudo apt-get install --yes clang-tidy ninja-build
 
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install --yes libudev-dev
+          sudo apt-get install -y \
+            libudev-dev \
+            libwayland-dev libwayland-bin libxkbcommon-dev \
+            libegl1-mesa-dev libgl1-mesa-dev
 
       - name: Configure analysis build
         run: cmake -S . -B build/tidy -G Ninja -DCMAKE_BUILD_TYPE=Debug -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
