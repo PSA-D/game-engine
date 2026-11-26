@@ -59,9 +59,9 @@ jobs:
         run: |
           command -v ninja && ninja --version
           command -v g++ && g++ --version | head -n 1
-          command -v autoreconf && autoreconf --version | head -n 1
-          command -v autopoint && autopoint --version | head -n 1
-          command -v libtoolize && libtoolize --version | head -n 1
+          command -v autoreconf
+          command -v autopoint
+          command -v libtoolize
 
       - name: Set up MSVC
         if: matrix.compiler == 'msvc'
@@ -139,9 +139,9 @@ jobs:
         run: |
           command -v ninja && ninja --version
           command -v g++ && g++ --version | head -n 1
-          command -v autoreconf && autoreconf --version | head -n 1
-          command -v autopoint && autopoint --version | head -n 1
-          command -v libtoolize && libtoolize --version | head -n 1
+          command -v autoreconf
+          command -v autopoint
+          command -v libtoolize
 
       - name: Configure sanitizer build
         run: cmake -S . -B build/sanitizers -G Ninja -DCMAKE_BUILD_TYPE=Debug -DENGINE_BUILD_TESTS=ON -DENGINE_ENABLE_SANITIZERS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
@@ -198,8 +198,8 @@ jobs:
           command -v ninja && ninja --version
           command -v clang++ && clang++ --version | head -n 1
           command -v clang-tidy && clang-tidy --version | head -n 1
-          command -v autoreconf && autoreconf --version | head -n 1
-          command -v autopoint && autopoint --version | head -n 1
+          command -v autoreconf
+          command -v autopoint
 
       - name: Configure analysis build
         run: cmake -S . -B build/tidy -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
