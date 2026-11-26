@@ -1,7 +1,7 @@
+#include "Region.h"
 #include "backends/null/NullRenderer.h"
 #include "components/SpriteRenderer.h"
 #include "core/GameObject.h"
-#include "Region.h"
 #include "systems/RenderSystem.h"
 
 #include <cstddef>
@@ -13,49 +13,59 @@
 
 namespace
 {
-class TestTexture final : public engine::platform::ITexture
-{
-public:
-    int getWidth() const noexcept override
+    class TestTexture final : public engine::platform::ITexture
     {
-        return 16;
-    }
+    public:
+        int getWidth() const noexcept override
+        {
+            return 16;
+        }
 
-    int getHeight() const noexcept override
+        int getHeight() const noexcept override
+        {
+            return 16;
+        }
+    };
+
+    class RecordingRenderer final : public engine::platform::IRenderer
     {
-        return 16;
-    }
-};
+    public:
+        void clear(const engine::Color& color) override
+        {
+            static_cast<void>(color);
+            calls.push_back("clear");
+        }
 
-class RecordingRenderer final : public engine::platform::IRenderer
-{
-public:
-    void clear(const engine::Color& color) override
-    {
-        static_cast<void>(color);
-        calls.push_back("clear");
-    }
+        void drawTexture(const engine::platform::ITexture& texture, const engine::DrawParams& params) override
+        {
+            static_cast<void>(texture);
+            static_cast<void>(params);
+            calls.push_back("draw");
+        }
 
-    void drawTexture(const engine::platform::ITexture& texture, const engine::DrawParams& params) override
-    {
-        static_cast<void>(texture);
-        static_cast<void>(params);
-        calls.push_back("draw");
-    }
+        void present() override
+        {
+            calls.push_back("present");
+        }
 
-    void present() override
-    {
-        calls.push_back("present");
-    }
+        std::unique_ptr<engine::platform::ITexture> createTexture(const engine::ImageData& data) override
+        {
+            static_cast<void>(data);
+            return std::make_unique<TestTexture>();
+        }
 
-    std::unique_ptr<engine::platform::ITexture> createTexture(const engine::ImageData& data) override
-    {
-        static_cast<void>(data);
-        return std::make_unique<TestTexture>();
-    }
+        [[nodiscard]] engine::Vector2 getOutputSize() const override
+        {
+            return {800.0F, 600.0F};
+        }
 
-    std::vector<std::string> calls;
-};
+        [[nodiscard]] engine::platform::NativeHandles getNativeHandles() const noexcept override
+        {
+            return {};
+        }
+
+        std::vector<std::string> calls;
+    };
 } // namespace
 
 auto main() -> int
@@ -90,17 +100,31 @@ auto main() -> int
 
     {
         engine::backends::NullRenderer renderer;
+        const engine::Vector2 outputSize = renderer.getOutputSize();
+        const engine::platform::NativeHandles nativeHandles = renderer.getNativeHandles();
+        check(outputSize.x == 800.0F && outputSize.y == 600.0F, "NullRenderer reports its fixed output size");
+        check(nativeHandles.window == nullptr && nativeHandles.renderer == nullptr,
+              "NullRenderer exposes empty native handles");
+
         engine::ImageData image;
         image.width = 16;
         image.height = 16;
         std::unique_ptr<engine::platform::ITexture> texture = renderer.createTexture(image);
+        check(texture->getWidth() == 16 && texture->getHeight() == 16, "NullTexture retains image dimensions");
+
+        renderer.clear(engine::Color{0, 0, 0, 255});
+        renderer.drawTexture(*texture, engine::DrawParams{});
+        renderer.present();
+
+        const std::unique_ptr<engine::platform::ITexture> emptyTexture = renderer.createTexture(engine::ImageData{});
+        check(emptyTexture->getWidth() == 0 && emptyTexture->getHeight() == 0, "NullRenderer accepts empty image data");
+        renderer.drawTexture(*emptyTexture, engine::DrawParams{});
+
         engine::Region region;
         engine::GameObject& object = region.createGameObject("null renderer");
         object.addComponent<engine::SpriteRenderer>(*texture);
         engine::RenderSystem renderSystem(renderer);
         renderSystem.render({&object}, engine::Color{0, 0, 0, 255});
-        check(texture->getWidth() == 16 && texture->getHeight() == 16,
-              "the same render system works with the Null renderer");
     }
 
     if (failures > 0)

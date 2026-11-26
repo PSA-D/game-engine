@@ -4,48 +4,58 @@
 
 namespace engine::backends
 {
-namespace
-{
-class NullTexture final : public platform::ITexture
-{
-public:
-    NullTexture(int textureWidth, int textureHeight) noexcept
-        : width(textureWidth)
-        , height(textureHeight)
+    namespace
     {
+        class NullTexture final : public platform::ITexture
+        {
+        public:
+            NullTexture(int textureWidth, int textureHeight) noexcept
+                : width(textureWidth)
+                , height(textureHeight)
+            {
+            }
+
+            int getWidth() const noexcept override
+            {
+                return width;
+            }
+
+            int getHeight() const noexcept override
+            {
+                return height;
+            }
+
+        private:
+            const int width;
+            const int height;
+        };
+    } // namespace
+
+    void NullRenderer::clear(const Color& color)
+    {
+        static_cast<void>(color);
     }
 
-    int getWidth() const noexcept override
+    void NullRenderer::drawTexture(const platform::ITexture& texture, const DrawParams& params)
     {
-        return width;
+        static_cast<void>(texture);
+        static_cast<void>(params);
     }
 
-    int getHeight() const noexcept override
+    void NullRenderer::present() {}
+
+    std::unique_ptr<platform::ITexture> NullRenderer::createTexture(const ImageData& data)
     {
-        return height;
+        return std::make_unique<NullTexture>(data.width, data.height);
     }
 
-private:
-    int width;
-    int height;
-};
-} // namespace
+    Vector2 NullRenderer::getOutputSize() const
+    {
+        return {800.0F, 600.0F};
+    }
 
-void NullRenderer::clear(const Color& color)
-{
-    static_cast<void>(color);
-}
-
-void NullRenderer::drawTexture(const platform::ITexture& texture, const DrawParams& params)
-{
-    static_cast<void>(texture);
-    static_cast<void>(params);
-}
-
-void NullRenderer::present() {}
-
-std::unique_ptr<platform::ITexture> NullRenderer::createTexture(const ImageData& data)
-{
-    return std::make_unique<NullTexture>(data.width, data.height);
-}
+    platform::NativeHandles NullRenderer::getNativeHandles() const noexcept
+    {
+        return {};
+    }
 } // namespace engine::backends
