@@ -46,7 +46,6 @@ add_library(engine STATIC
     src/subsystems/editor/LevelEditor.h
     src/subsystems/input/InputSubsystem.h
     src/subsystems/physics/PhysicsSubsystem.h
-    src/subsystems/render/RenderSubsystem.h
     src/subsystems/ui/UISubsystem.h
     src/platform/IPlatformFactory.h
     src/backends/sdl3/SDL3InputSource.cpp
@@ -85,6 +84,7 @@ add_library(engine STATIC
     include/core/Component.h
     include/core/GameObject.h
     include/components/SpriteRenderer.h
+    include/subsystems/render/RenderSubsystem.h
     include/systems/render/Camera.h
     include/systems/render/CameraView.h
     include/systems/render/Culler.h
@@ -92,6 +92,7 @@ add_library(engine STATIC
     include/systems/render/RenderQueue.h
     include/systems/RenderSystem.h
     src/components/SpriteRenderer.cpp
+    src/subsystems/render/RenderSubsystem.cpp
     src/systems/render/Culler.cpp
     src/systems/render/RenderQueue.cpp
     src/systems/RenderSystem.cpp

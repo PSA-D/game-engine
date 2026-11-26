@@ -99,8 +99,7 @@ namespace engine
 
         // 7. Render
         render.beginFrame();
-        if (scene != nullptr)
-            render.render(*scene);
+        render.render();
         debug.render();
         ui.render();
         render.endFrame();
