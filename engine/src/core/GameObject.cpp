@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-#include "Region.h"
+#include "runtime/Region.h"
 
 #include <algorithm>
 #include <cmath>
@@ -179,7 +179,7 @@ namespace engine
         if (parent != nullptr)
         {
             auto& siblings = parent->children;
-            siblings.erase(std::remove(siblings.begin(), siblings.end(), this), siblings.end());
+            std::erase(siblings, this);
         }
         parent = newParent;
         if (parent != nullptr)
@@ -198,6 +198,7 @@ namespace engine
     void GameObject::destroy() noexcept
     {
         pendingDestroy = true;
+        region->requestDestroy(*this);
     }
 
     bool GameObject::isPendingDestroy() const noexcept

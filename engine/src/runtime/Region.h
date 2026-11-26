@@ -28,11 +28,11 @@ namespace engine
         std::unique_ptr<GameObject> detach(uint64_t id);
         void adopt(std::unique_ptr<GameObject> gameObject);
 
-    private:
         void requestDestroy(GameObject& gameObject);
         void destroyRecursive(GameObject& gameObject);
         void processPendingDestruction();
 
+    private:
         std::string name;
         std::vector<std::unique_ptr<GameObject>> gameObjects;
         std::vector<std::uint64_t> pendingDestruction;
