@@ -7,6 +7,8 @@
 
 namespace engine::platform
 {
+    // De bron van de PlatformEvent's. Met `pollEvent()` kan je een event ophalen.
+    // Er kunnen INativeEventListeners worden toegevoegd voor de rauwe events.
     class IInputSource
     {
     public:
