@@ -53,6 +53,7 @@ namespace engine
         Enter,
         Escape,
         Tab,
+        Backspace,
 
         // Pijltjestoetsen
         Up,
@@ -64,6 +65,7 @@ namespace engine
         PageUp,
         PageDown,
         Home,
+        End,
 
         // Functietoetsen
         F1,
@@ -78,5 +80,7 @@ namespace engine
         F10,
         F11,
         F12,
+
+        Count,
     };
 } // namespace engine
