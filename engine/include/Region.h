@@ -23,8 +23,16 @@ namespace engine
 
         [[nodiscard]] const std::string& getName() const;
         GameObject& createGameObject(std::string_view objectName = {});
+        [[nodiscard]] std::vector<GameObject*> getGameObjects();
+        [[nodiscard]] std::vector<const GameObject*> getGameObjects() const;
+        std::unique_ptr<GameObject> detach(uint64_t id);
+        void adopt(std::unique_ptr<GameObject> gameObject);
 
     private:
+        void requestDestroy(GameObject& gameObject);
+        void destroyRecursive(GameObject& gameObject);
+        void processPendingDestruction();
+
         std::string name;
         std::vector<std::unique_ptr<GameObject>> gameObjects;
         std::vector<std::uint64_t> pendingDestruction;
