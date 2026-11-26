@@ -9,6 +9,7 @@ permissions:
 env:
   VCPKG_ROOT: ${{ github.workspace }}/vcpkg
   CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+  VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/.vcpkg-cache
 
 jobs:
   build:
@@ -37,6 +38,18 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/microsoft/vcpkg "$VCPKG_ROOT"
           "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
+
+      - name: Restore vcpkg binary cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+          key: vcpkg-${{ runner.os }}-${{ matrix.compiler }}-${{ hashFiles('vcpkg.json') }}
+          restore-keys: |
+            vcpkg-${{ runner.os }}-${{ matrix.compiler }}-
+
+      - name: Create vcpkg binary cache directory
+        shell: bash
+        run: mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
 
       - name: Install Linux dependencies
         if: matrix.os == 'ubuntu-24.04'
@@ -71,7 +84,13 @@ jobs:
 
       - name: Configure GCC
         if: matrix.compiler == 'gcc'
-        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
+        run: |
+          for attempt in 1 2 3; do
+            cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT" && exit 0
+            echo "Configure attempt $attempt failed"
+            sleep 10
+          done
+          exit 1
 
       - name: Configure MSVC
         if: matrix.compiler == 'msvc'
@@ -126,6 +145,18 @@ jobs:
           git clone --depth 1 https://github.com/microsoft/vcpkg "$VCPKG_ROOT"
           "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
 
+      - name: Restore vcpkg binary cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+          key: vcpkg-Linux-gcc-${{ hashFiles('vcpkg.json') }}
+          restore-keys: |
+            vcpkg-Linux-gcc-
+
+      - name: Create vcpkg binary cache directory
+        shell: bash
+        run: mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
+
       - name: Install Linux dependencies
         run: |
           sudo sh -c 'grep -l packages.microsoft.com /etc/apt/sources.list.d/* 2>/dev/null | xargs -r rm -f' || true
@@ -151,7 +182,13 @@ jobs:
           command -v libtoolize
 
       - name: Configure sanitizer build
-        run: cmake -S . -B build/sanitizers -G Ninja -DCMAKE_BUILD_TYPE=Debug -DENGINE_BUILD_TESTS=ON -DENGINE_ENABLE_SANITIZERS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
+        run: |
+          for attempt in 1 2 3; do
+            cmake -S . -B build/sanitizers -G Ninja -DCMAKE_BUILD_TYPE=Debug -DENGINE_BUILD_TESTS=ON -DENGINE_ENABLE_SANITIZERS=ON -DVCPKG_ROOT="$VCPKG_ROOT" && exit 0
+            echo "Configure attempt $attempt failed"
+            sleep 10
+          done
+          exit 1
 
       - name: Build sanitizer targets
         run: cmake --build build/sanitizers --parallel
@@ -186,6 +223,18 @@ jobs:
           git clone --depth 1 https://github.com/microsoft/vcpkg "$VCPKG_ROOT"
           "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
 
+      - name: Restore vcpkg binary cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+          key: vcpkg-Linux-gcc-${{ hashFiles('vcpkg.json') }}
+          restore-keys: |
+            vcpkg-Linux-gcc-
+
+      - name: Create vcpkg binary cache directory
+        shell: bash
+        run: mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
+
       - name: Install Linux dependencies
         run: |
           sudo sh -c 'grep -l packages.microsoft.com /etc/apt/sources.list.d/* 2>/dev/null | xargs -r rm -f' || true
@@ -211,7 +260,13 @@ jobs:
           command -v autopoint
 
       - name: Configure analysis build
-        run: cmake -S . -B build/tidy -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
+        run: |
+          for attempt in 1 2 3; do
+            cmake -S . -B build/tidy -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT" && exit 0
+            echo "Configure attempt $attempt failed"
+            sleep 10
+          done
+          exit 1
 
       - name: Run clang-tidy
         run: git ls-files -z '*.cpp' | xargs -0 clang-tidy -p build/tidy
