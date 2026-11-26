@@ -43,9 +43,18 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
+            libpthread-stubs0-dev \
             libudev-dev \
             libwayland-dev libwayland-bin libxkbcommon-dev \
-            libegl1-mesa-dev libgl1-mesa-dev
+            libegl1-mesa-dev libgl1-mesa-dev \
+            ninja-build
+
+      - name: Verify build tools (Linux)
+        if: matrix.os == 'ubuntu-24.04'
+        shell: bash
+        run: |
+          command -v ninja && ninja --version
+          command -v g++ && g++ --version | head -n 1
 
       - name: Set up MSVC
         if: matrix.compiler == 'msvc'
@@ -99,9 +108,16 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
+            libpthread-stubs0-dev \
             libudev-dev \
             libwayland-dev libwayland-bin libxkbcommon-dev \
-            libegl1-mesa-dev libgl1-mesa-dev
+            libegl1-mesa-dev libgl1-mesa-dev \
+            ninja-build
+
+      - name: Verify build tools
+        run: |
+          command -v ninja && ninja --version
+          command -v g++ && g++ --version | head -n 1
 
       - name: Configure sanitizer build
         run: cmake -S . -B build/sanitizers -G Ninja -DCMAKE_BUILD_TYPE=Debug -DENGINE_BUILD_TESTS=ON -DENGINE_ENABLE_SANITIZERS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
@@ -137,9 +153,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
+            libpthread-stubs0-dev \
             libudev-dev \
             libwayland-dev libwayland-bin libxkbcommon-dev \
             libegl1-mesa-dev libgl1-mesa-dev
+
+      - name: Verify build tools
+        run: |
+          command -v ninja && ninja --version
+          command -v clang++ && clang++ --version | head -n 1
 
       - name: Configure analysis build
         run: cmake -S . -B build/tidy -G Ninja -DCMAKE_BUILD_TYPE=Debug -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
