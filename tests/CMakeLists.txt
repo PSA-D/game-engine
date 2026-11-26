@@ -9,6 +9,7 @@ add_executable(EngineTests
     core/CompositionRootTest.cpp
     core/GameLoopTest.cpp
     core/TimeTest.cpp
+    render/RenderQueueTest.cpp
     platform/HeadlessPlatformTest.cpp
     persistence/JsonSaveStrategyTest.cpp
     persistence/PersistenceTestData.h

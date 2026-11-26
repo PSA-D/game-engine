@@ -85,8 +85,15 @@ add_library(engine STATIC
     include/core/Component.h
     include/core/GameObject.h
     include/components/SpriteRenderer.h
+    include/systems/render/Camera.h
+    include/systems/render/CameraView.h
+    include/systems/render/Culler.h
+    include/systems/render/RenderItem.h
+    include/systems/render/RenderQueue.h
     include/systems/RenderSystem.h
     src/components/SpriteRenderer.cpp
+    src/systems/render/Culler.cpp
+    src/systems/render/RenderQueue.cpp
     src/systems/RenderSystem.cpp
 )
 
