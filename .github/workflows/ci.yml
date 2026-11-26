@@ -43,6 +43,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
+            autoconf automake libtool pkg-config make \
             libpthread-stubs0-dev \
             libudev-dev \
             libwayland-dev libwayland-bin libxkbcommon-dev \
@@ -108,6 +109,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
+            autoconf automake libtool pkg-config make \
             libpthread-stubs0-dev \
             libudev-dev \
             libwayland-dev libwayland-bin libxkbcommon-dev \
@@ -135,7 +137,6 @@ jobs:
     name: clang-tidy report
     runs-on: ubuntu-24.04
     continue-on-error: true
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -153,10 +154,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
+            autoconf automake libtool pkg-config make \
             libpthread-stubs0-dev \
             libudev-dev \
             libwayland-dev libwayland-bin libxkbcommon-dev \
-            libegl1-mesa-dev libgl1-mesa-dev
+            libegl1-mesa-dev libgl1-mesa-dev \
+            ninja-build
 
       - name: Verify build tools
         run: |
