@@ -1,4 +1,4 @@
-#include "Component.h"
+#include "runtime/Component.h"
 
 namespace engine
 {

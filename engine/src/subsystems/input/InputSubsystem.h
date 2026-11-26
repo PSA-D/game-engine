@@ -86,6 +86,7 @@ namespace engine::subsystems
         }
 
         void beginFrame();
+        void dispatchToListeners(const platform::PlatformEvent& event);
 
         platform::IInputSource& source_;
         InputState state_;

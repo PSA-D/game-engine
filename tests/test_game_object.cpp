@@ -1,10 +1,11 @@
-#include "GameObject.h"
-#include "Region.h"
+#include "runtime/GameObject.h"
+#include "runtime/Region.h"
 
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <iostream>
 
 namespace
 {
@@ -51,32 +52,23 @@ namespace
     }
 } // namespace
 
-auto runGameObjectTests() -> int
+TEST_CASE("GameObject vindt componenten op type en index", "[unit][game-object]")
 {
-    int failures = 0;
-    std::cout << "Running GameObject tests\n";
-    const auto check = [&failures](bool condition, const char* message)
-    {
-        if (!condition)
-        {
-            std::cerr << "FAIL: " << message << '\n';
-            ++failures;
-        }
-    };
+    engine::Region region;
+    engine::GameObject& object = region.createGameObject();
+    auto& first = object.addComponent<TestComponent>(1);
+    auto& second = object.addComponent<TestComponent>(2);
 
-    {
-        const int groupFailures = failures;
-        engine::Region region;
-        engine::GameObject& object = region.createGameObject();
-        auto& first = object.addComponent<TestComponent>(1);
-        auto& second = object.addComponent<TestComponent>(2);
-        check(object.getComponent<TestComponent>() == &first, "first component is found");
-        check(object.getComponent<TestComponent>(1) == &second, "second component is found by index");
-        check(object.hasComponent<TestComponent>(), "component type is present");
-        check(object.getTransform().getOwner().getId() == object.getId(), "GameObject owns a Transform");
-        check(object.getComponents<TestComponent>().size() == 2, "getComponents returns all matching components");
+    CHECK(object.getComponent<TestComponent>() == &first);
+    CHECK(object.getComponent<TestComponent>(1) == &second);
+    CHECK(object.hasComponent<TestComponent>());
+    CHECK(object.getTransform().getOwner().getId() == object.getId()); // GameObject bezit een Transform
+    CHECK(object.getComponents<TestComponent>().size() == 2);
 
+    SECTION("uitgeschakelde componenten kun je overslaan")
+    {
         second.setEnabled(false);
+
         std::size_t enabledCount = 0;
         for (std::size_t index = 0;; ++index)
         {
@@ -90,99 +82,78 @@ auto runGameObjectTests() -> int
                 ++enabledCount;
             }
         }
-        check(enabledCount == 1, "component consumer skips disabled components");
-        if (failures == groupFailures)
-        {
-            std::cout << "GameObject component lookup tests passed\n";
-        }
-    }
 
+        CHECK(enabledCount == 1);
+    }
+}
+
+TEST_CASE("GameObject verwijdert componenten", "[unit][game-object]")
+{
+    engine::Region region;
+    engine::GameObject& object = region.createGameObject();
+    bool destroyed = false;
+    auto& first = object.addComponent<TestComponent>(1, &destroyed);
+    object.addComponent<TestComponent>(2);
+    object.addComponent<TestComponent>(3);
+
+    CHECK(object.removeComponent<TestComponent>(1));          // op type en index
+    CHECK(object.getComponent<TestComponent>(1)->value == 3); // de rest blijft staan
+    CHECK(object.removeComponent(first));                     // op referentie
+    CHECK(destroyed);                                         // destructor is aangeroepen
+    CHECK(object.getComponent<TestComponent>()->value == 3);
+    CHECK(object.removeComponents<TestComponent>() == 1); // alle overgebleven
+    CHECK_FALSE(object.hasComponent<TestComponent>());
+}
+
+TEST_CASE("GameObject transform en hiërarchie", "[unit][game-object]")
+{
+    engine::Region region;
+    engine::GameObject& parent = region.createGameObject();
+    engine::GameObject& child = region.createGameObject();
+    parent.getTransform().setLocalPosition({10.0F, 20.0F});
+    parent.getTransform().setLocalRotation(0.4F);
+    parent.getTransform().setLocalScale({2.0F, 2.0F});
+    child.getTransform().setLocalPosition({4.0F, 5.0F});
+    child.getTransform().setLocalRotation(-0.3F);
+    child.getTransform().setLocalScale({1.5F, 0.75F});
+
+    CHECK(child.getTransform().getLocalPosition() == engine::Vector2{4.0F, 5.0F});
+    CHECK(child.getTransform().getLocalRotation() == Catch::Approx(-0.3F).margin(1.0e-4F));
+    CHECK(child.getTransform().getLocalScale() == engine::Vector2{1.5F, 0.75F});
+    CHECK(&child.getRegion() == &region);
+
+    const engine::Matrix3 worldTransform = child.getTransform().getWorldTransform();
+
+    REQUIRE(child.setParent(&parent));
+    CHECK(nearlyEqual(worldTransform, child.getTransform().getWorldTransform())); // wereldtransform blijft gelijk
+    CHECK(child.getTransform().getWorldRotation() == Catch::Approx(-0.3F).margin(1.0e-4F));
+    CHECK(parent.getChildren().size() == 1);
+    CHECK(child.getParent() == &parent);
+
+    SECTION("loskoppelen haalt de ouder-kindrelatie weg")
     {
-        const int groupFailures = failures;
-        engine::Region region;
-        engine::GameObject& object = region.createGameObject();
-        bool destroyed = false;
-        auto& first = object.addComponent<TestComponent>(1, &destroyed);
-        object.addComponent<TestComponent>(2);
-        object.addComponent<TestComponent>(3);
-        check(object.removeComponent<TestComponent>(1), "component is removed by type and index");
-        check(object.getComponent<TestComponent>(1)->value == 3, "indexed removal keeps other components");
-        check(object.removeComponent(first), "component is removed by reference");
-        check(destroyed, "removed component destructor is called");
-        check(object.getComponent<TestComponent>()->value == 3, "remaining component can still be found");
-        check(object.removeComponents<TestComponent>() == 1, "removeComponents removes all remaining matches");
-        check(!object.hasComponent<TestComponent>(), "no matching components remain");
-        if (failures == groupFailures)
-        {
-            std::cout << "GameObject component removal tests passed\n";
-        }
+        CHECK(child.setParent(nullptr));
+        CHECK(parent.getChildren().empty());
     }
+}
 
-    {
-        const int groupFailures = failures;
-        engine::Region region;
-        engine::GameObject& parent = region.createGameObject();
-        engine::GameObject& child = region.createGameObject();
-        parent.getTransform().setLocalPosition({10.0F, 20.0F});
-        parent.getTransform().setLocalRotation(0.4F);
-        parent.getTransform().setLocalScale({2.0F, 2.0F});
-        child.getTransform().setLocalPosition({4.0F, 5.0F});
-        child.getTransform().setLocalRotation(-0.3F);
-        child.getTransform().setLocalScale({1.5F, 0.75F});
-        check(child.getTransform().getLocalPosition() == engine::Vector2{4.0F, 5.0F}, "local position has a getter");
-        check(nearlyEqual(child.getTransform().getLocalRotation(), -0.3F), "local rotation has a getter");
-        check(child.getTransform().getLocalScale() == engine::Vector2{1.5F, 0.75F}, "local scale has a getter");
-        const engine::Matrix3 worldTransform = child.getTransform().getWorldTransform();
-        check(&child.getRegion() == &region, "GameObject refers to its Region");
-        check(child.setParent(&parent), "setParent accepts a valid parent");
-        check(nearlyEqual(worldTransform, child.getTransform().getWorldTransform()),
-              "parenting preserves the representable world transform");
-        check(nearlyEqual(child.getTransform().getWorldRotation(), -0.3F),
-              "world rotation is computed from the parent and local transforms");
-        check(parent.getChildren().size() == 1 && child.getParent() == &parent, "hierarchy links are updated");
+TEST_CASE("GameObject::destroy markeert alleen voor uitgesteld opruimen", "[unit][game-object]")
+{
+    engine::Region region;
+    engine::GameObject& object = region.createGameObject();
 
-        check(child.setParent(nullptr), "setParent can detach an object");
-        check(parent.getChildren().empty(), "detaching removes the child link");
-        if (failures == groupFailures)
-        {
-            std::cout << "GameObject transform and hierarchy tests passed\n";
-        }
-    }
+    object.destroy();
 
-    {
-        const int groupFailures = failures;
-        engine::Region region;
-        engine::GameObject& object = region.createGameObject();
-        object.destroy();
-        check(object.isPendingDestroy(), "destroy only marks the object for deferred removal");
-        if (failures == groupFailures)
-        {
-            std::cout << "GameObject deferred-destruction tests passed\n";
-        }
-    }
+    CHECK(object.isPendingDestroy());
+}
 
-    {
-        const int groupFailures = failures;
-        engine::Region region;
-        engine::GameObject& parent = region.createGameObject();
-        engine::GameObject& child = region.createGameObject();
-        check(child.setParent(&parent, false), "setParent changes hierarchy without preserving transforms");
-        check(!parent.setParent(&child, false), "setParent rejects a hierarchy cycle");
-        check(parent.getChildren().size() == 1, "failed reparenting leaves existing hierarchy unchanged");
-        if (failures == groupFailures)
-        {
-            std::cout << "GameObject hierarchy validation tests passed\n";
-        }
-    }
+TEST_CASE("GameObject weigert een cyclus in de hiërarchie", "[unit][game-object]")
+{
+    engine::Region region;
+    engine::GameObject& parent = region.createGameObject();
+    engine::GameObject& child = region.createGameObject();
 
-    if (failures == 0)
-    {
-        std::cout << "All GameObject tests passed\n";
-    }
-    else
-    {
-        std::cerr << failures << " GameObject test(s) failed\n";
-    }
-
-    return failures;
+    CHECK(child.setParent(&parent, false));
+    CHECK_FALSE(parent.setParent(&child, false));
+    CHECK(parent.getChildren().size() == 1); // bestaande hiërarchie blijft ongewijzigd
 }
