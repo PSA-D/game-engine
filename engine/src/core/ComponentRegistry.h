@@ -12,90 +12,73 @@
 
 namespace engine
 {
-class GameObject;
+    class GameObject;
 
-class ComponentRegistry
-{
-public:
-    using SaveFunction =
-        std::function<std::optional<DataNode>(const Component&)>;
-
-    using LoadFunction =
-        std::function<Component*(GameObject&, const DataNode&)>;
-
-    template<typename T>
-    using SaveFn =
-        std::function<std::optional<DataNode>(const T&)>;
-
-    template<typename T>
-    using LoadFn =
-        std::function<T*(GameObject&, const DataNode&)>;
-
-    template<typename T>
-    void registerType(
-        const std::string& typeName,
-        SaveFn<T> save,
-        LoadFn<T> load)
+    class ComponentRegistry
     {
-        saveEntries[typeid(T)] = {
-            typeName,
-            [typeName, save](const Component& component)
-            -> std::optional<DataNode>
-            {
-                const auto* typed =
-                    dynamic_cast<const T*>(&component);
+    public:
+        using SaveFunction = std::function<std::optional<DataNode>(const Component&)>;
 
-                if (typed == nullptr)
-                {
-                    return std::nullopt;
-                }
+        using LoadFunction = std::function<Component*(GameObject&, const DataNode&)>;
 
-                auto componentData = save(*typed);
+        template <typename T>
+        using SaveFn = std::function<std::optional<DataNode>(const T&)>;
 
-                if (!componentData)
-                {
-                    return std::nullopt;
-                }
+        template <typename T>
+        using LoadFn = std::function<T*(GameObject&, const DataNode&)>;
 
-                auto node = DataNode::makeObject();
-                node.set("type", DataNode(typeName));
-                node.set("data", std::move(*componentData));
-                node.set("enabled", DataNode(component.isEnabled()));
+        template <typename T>
+        void registerType(const std::string& typeName, SaveFn<T> save, LoadFn<T> load)
+        {
+            saveEntries[typeid(T)] = {typeName,
+                                      [typeName, save](const Component& component) -> std::optional<DataNode>
+                                      {
+                                          const auto* typed = dynamic_cast<const T*>(&component);
 
-                return node;
-            }};
+                                          if (typed == nullptr)
+                                          {
+                                              return std::nullopt;
+                                          }
 
-        loadEntries[typeName] = {
-            [load](GameObject& owner, const DataNode& data)
-            -> Component*
-            {
-                return load(owner, data);
-            }};
-    }
+                                          auto componentData = save(*typed);
 
-    [[nodiscard]]
-    std::optional<DataNode> toData(
-        const Component& component) const;
+                                          if (!componentData)
+                                          {
+                                              return std::nullopt;
+                                          }
 
-    [[nodiscard]]
-    Component* addFromData(
-        GameObject& owner,
-        const DataNode& data) const;
+                                          auto node = DataNode::makeObject();
+                                          node.set("type", DataNode(typeName));
+                                          node.set("data", std::move(*componentData));
+                                          node.set("enabled", DataNode(component.isEnabled()));
 
-private:
-    struct SaveEntry
-    {
-        std::string typeName;
-        SaveFunction save;
+                                          return node;
+                                      }};
+
+            loadEntries[typeName] = {[load](GameObject& owner, const DataNode& data) -> Component*
+                                     { return load(owner, data); }};
+        }
+
+        [[nodiscard]]
+        std::optional<DataNode> toData(const Component& component) const;
+
+        [[nodiscard]]
+        Component* addFromData(GameObject& owner, const DataNode& data) const;
+
+    private:
+        struct SaveEntry
+        {
+            std::string typeName;
+            SaveFunction save;
+        };
+
+        struct LoadEntry
+        {
+            LoadFunction load;
+        };
+
+        std::unordered_map<std::type_index, SaveEntry> saveEntries;
+        std::unordered_map<std::string, LoadEntry> loadEntries;
     };
-
-    struct LoadEntry
-    {
-        LoadFunction load;
-    };
-
-    std::unordered_map<std::type_index, SaveEntry> saveEntries;
-    std::unordered_map<std::string, LoadEntry> loadEntries;
-};
 
 } // namespace engine

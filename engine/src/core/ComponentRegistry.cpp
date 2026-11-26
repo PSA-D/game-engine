@@ -1,10 +1,10 @@
 #include "ComponentRegistry.h"
+
 #include "runtime/DataNode.h"
 
 namespace engine
 {
-    std::optional<DataNode> ComponentRegistry::toData(
-        const Component& component) const
+    std::optional<DataNode> ComponentRegistry::toData(const Component& component) const
     {
         const auto found = saveEntries.find(typeid(component));
 
@@ -16,9 +16,7 @@ namespace engine
         return found->second.save(component);
     }
 
-    Component* ComponentRegistry::addFromData(
-        GameObject& owner,
-        const DataNode& data) const
+    Component* ComponentRegistry::addFromData(GameObject& owner, const DataNode& data) const
     {
         const auto* typeNode = data.get("type");
         const auto* dataNode = data.get("data");
@@ -42,8 +40,7 @@ namespace engine
             return nullptr;
         }
 
-        Component* component =
-            found->second.load(owner, *dataNode);
+        Component* component = found->second.load(owner, *dataNode);
 
         if (component == nullptr)
             return nullptr;

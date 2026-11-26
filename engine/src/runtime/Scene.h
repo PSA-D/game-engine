@@ -68,7 +68,8 @@ namespace engine
         [[nodiscard]] std::vector<GameObject*> findWithTag(std::string_view tag);
 
         // Alle componenten van type T op de objecten in de actieve Region.
-        template <class T> [[nodiscard]] std::vector<T*> findComponents()
+        template <class T>
+        [[nodiscard]] std::vector<T*> findComponents()
         {
             std::vector<T*> result;
             for (auto* gameObject : collectActiveGameObjects())
@@ -83,7 +84,6 @@ namespace engine
         // Aan te roepen aan het eind van een frame.
         void processPendingDestruction();
         // updateBehaviours() volgt in een aparte taak, samen met BehaviourScript.
-
 
     private:
         [[nodiscard]] Region* getActiveRegion() const;

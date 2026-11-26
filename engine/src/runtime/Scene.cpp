@@ -1,8 +1,8 @@
 #include "Scene.h"
 
 #include "Level.h"
-#include <Region.h>
 
+#include <Region.h>
 #include <algorithm>
 #include <stdexcept>
 #include <utility>
@@ -95,8 +95,7 @@ namespace engine
         auto* region = getActiveRegion();
         if (region == nullptr)
         {
-            throw std::logic_error(
-                "Scene::createGameObject: er is geen actief level met een actieve region.");
+            throw std::logic_error("Scene::createGameObject: er is geen actief level met een actieve region.");
         }
         return region->createGameObject(objectName);
     }
@@ -134,11 +133,11 @@ namespace engine
 
     void Scene::processPendingDestruction()
     {
-    for (auto& level : levels)
-    {
-        for (auto* region : level->getRegions())
-            region->processPendingDestruction();
-    }
+        for (auto& level : levels)
+        {
+            for (auto* region : level->getRegions())
+                region->processPendingDestruction();
+        }
     }
 
     Region* Scene::getActiveRegion() const

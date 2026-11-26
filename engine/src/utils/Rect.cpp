@@ -1,3 +1,5 @@
+#include "Rect.h"
+
 #include "utils/Rect.h"
 
 namespace engine

@@ -11,9 +11,7 @@ namespace engine
 
     GameObject& Region::createGameObject(std::string_view objectName)
     {
-        auto gameObject =
-            std::unique_ptr<GameObject>(
-                new GameObject(*this, std::string{objectName}));
+        auto gameObject = std::unique_ptr<GameObject>(new GameObject(*this, std::string{objectName}));
         GameObject& result = *gameObject;
         gameObjects.push_back(std::move(gameObject));
         return result;
@@ -37,9 +35,8 @@ namespace engine
             auto batch = std::exchange(pendingDestruction, {});
             for (const auto id : batch)
             {
-                const auto found =
-                    std::find_if(gameObjects.begin(), gameObjects.end(),
-                                 [id](const auto& owned) { return owned->getId() == id; });
+                const auto found = std::find_if(
+                    gameObjects.begin(), gameObjects.end(), [id](const auto& owned) { return owned->getId() == id; });
                 // Niet gevonden betekent dat het al weg is, bijvoorbeeld als kind van een ouder.
                 if (found != gameObjects.end())
                     destroyRecursive(**found);
@@ -76,9 +73,9 @@ namespace engine
         static_cast<void>(gameObject.setParent(nullptr, false));
 
         // erase behoudt de volgorde van de overige objecten.
-        const auto found = std::find_if(gameObjects.begin(), gameObjects.end(),
-                                        [&gameObject](const auto& owned)
-                                        { return owned.get() == &gameObject; });
+        const auto found = std::find_if(gameObjects.begin(),
+                                        gameObjects.end(),
+                                        [&gameObject](const auto& owned) { return owned.get() == &gameObject; });
         if (found != gameObjects.end())
             gameObjects.erase(found);
     }
