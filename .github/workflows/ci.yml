@@ -35,6 +35,7 @@ jobs:
       - name: Set up vcpkg
         shell: bash
         run: |
+          # TODO: pin to a known-good commit/tag once the build is green
           git clone --depth 1 https://github.com/microsoft/vcpkg "$VCPKG_ROOT"
           "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
 
@@ -43,11 +44,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            autoconf automake libtool pkg-config make \
-            libpthread-stubs0-dev \
+            autoconf autoconf-archive automake libtool libtool-bin m4 \
+            autopoint gettext pkg-config make \
+            bison flex \
             libudev-dev \
             libwayland-dev libwayland-bin libxkbcommon-dev \
             libegl1-mesa-dev libgl1-mesa-dev \
+            libx11-dev libxext-dev libxrandr-dev libxi-dev libxcursor-dev libxinerama-dev \
             ninja-build
 
       - name: Verify build tools (Linux)
@@ -56,6 +59,9 @@ jobs:
         run: |
           command -v ninja && ninja --version
           command -v g++ && g++ --version | head -n 1
+          command -v autoreconf && autoreconf --version | head -n 1
+          command -v autopoint && autopoint --version | head -n 1
+          command -v libtoolize && libtoolize --version | head -n 1
 
       - name: Set up MSVC
         if: matrix.compiler == 'msvc'
@@ -71,13 +77,23 @@ jobs:
 
       - name: Configure MinGW
         if: matrix.compiler == 'mingw'
-        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
+        run: cmake -S . -B build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$env:VCPKG_ROOT" -DVCPKG_TARGET_TRIPLET=x64-mingw-dynamic -DVCPKG_HOST_TRIPLET=x64-mingw-dynamic
 
       - name: Build engine and game
         run: cmake --build build/ci --parallel
 
       - name: Run unit tests
         run: ctest --test-dir build/ci --output-on-failure
+
+      - name: Upload vcpkg logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vcpkg-logs-${{ matrix.name }}
+          path: |
+            build/ci/vcpkg-manifest-install.log
+            vcpkg/buildtrees/**/*.log
+          if-no-files-found: ignore
 
   format:
     name: clang-format
@@ -102,6 +118,7 @@ jobs:
       - name: Set up vcpkg
         shell: bash
         run: |
+          # TODO: pin to a known-good commit/tag once the build is green
           git clone --depth 1 https://github.com/microsoft/vcpkg "$VCPKG_ROOT"
           "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
 
@@ -109,17 +126,22 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            autoconf automake libtool pkg-config make \
-            libpthread-stubs0-dev \
+            autoconf autoconf-archive automake libtool libtool-bin m4 \
+            autopoint gettext pkg-config make \
+            bison flex \
             libudev-dev \
             libwayland-dev libwayland-bin libxkbcommon-dev \
             libegl1-mesa-dev libgl1-mesa-dev \
+            libx11-dev libxext-dev libxrandr-dev libxi-dev libxcursor-dev libxinerama-dev \
             ninja-build
 
       - name: Verify build tools
         run: |
           command -v ninja && ninja --version
           command -v g++ && g++ --version | head -n 1
+          command -v autoreconf && autoreconf --version | head -n 1
+          command -v autopoint && autopoint --version | head -n 1
+          command -v libtoolize && libtoolize --version | head -n 1
 
       - name: Configure sanitizer build
         run: cmake -S . -B build/sanitizers -G Ninja -DCMAKE_BUILD_TYPE=Debug -DENGINE_BUILD_TESTS=ON -DENGINE_ENABLE_SANITIZERS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
@@ -133,6 +155,16 @@ jobs:
           UBSAN_OPTIONS: print_stacktrace=1:halt_on_error=1
         run: ctest --test-dir build/sanitizers --output-on-failure
 
+      - name: Upload vcpkg logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vcpkg-logs-sanitizers
+          path: |
+            build/sanitizers/vcpkg-manifest-install.log
+            vcpkg/buildtrees/**/*.log
+          if-no-files-found: ignore
+
   clang-tidy:
     name: clang-tidy report
     runs-on: ubuntu-24.04
@@ -144,27 +176,43 @@ jobs:
       - name: Set up vcpkg
         shell: bash
         run: |
+          # TODO: pin to a known-good commit/tag once the build is green
           git clone --depth 1 https://github.com/microsoft/vcpkg "$VCPKG_ROOT"
           "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
-
-      - name: Set up build tools
-        run: sudo apt-get update && sudo apt-get install --yes clang-tidy ninja-build
 
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            autoconf automake libtool pkg-config make \
-            libpthread-stubs0-dev \
+            autoconf autoconf-archive automake libtool libtool-bin m4 \
+            autopoint gettext pkg-config make \
+            bison flex \
             libudev-dev \
             libwayland-dev libwayland-bin libxkbcommon-dev \
             libegl1-mesa-dev libgl1-mesa-dev \
-            ninja-build
+            libx11-dev libxext-dev libxrandr-dev libxi-dev libxcursor-dev libxinerama-dev \
+            clang clang-tidy ninja-build
 
       - name: Verify build tools
         run: |
           command -v ninja && ninja --version
           command -v clang++ && clang++ --version | head -n 1
+          command -v clang-tidy && clang-tidy --version | head -n 1
+          command -v autoreconf && autoreconf --version | head -n 1
+          command -v autopoint && autopoint --version | head -n 1
 
       - name: Configure analysis build
-        run: cmake -S . -B build/tidy -G Ninja -DCMAKE_BUILD_TYPE=Debug -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
+        run: cmake -S . -B build/tidy -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENGINE_BUILD_TESTS=ON -DVCPKG_ROOT="$VCPKG_ROOT"
+
+      - name: Run clang-tidy
+        run: clang-tidy -p build/tidy $(git ls-files '*.cpp')
+
+      - name: Upload vcpkg logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vcpkg-logs-clang-tidy
+          path: |
+            build/tidy/vcpkg-manifest-install.log
+            vcpkg/buildtrees/**/*.log
+          if-no-files-found: ignore
