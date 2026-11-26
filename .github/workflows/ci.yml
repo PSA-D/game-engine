@@ -44,13 +44,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            autoconf autoconf-archive automake libtool libtool-bin m4 \
+            autoconf autoconf-archive automake libtool libtool-bin libltdl-dev m4 \
             autopoint gettext pkg-config make \
             bison flex \
             libudev-dev \
             libwayland-dev libwayland-bin libxkbcommon-dev \
             libegl1-mesa-dev libgl1-mesa-dev \
             libx11-dev libxext-dev libxrandr-dev libxi-dev libxcursor-dev libxinerama-dev \
+            libxmu-dev libxfixes-dev libxss-dev libxtst-dev libxrender-dev libgl-dev \
+            libdbus-1-dev libasound2-dev libpulse-dev \
             ninja-build
 
       - name: Verify build tools (Linux)
@@ -126,13 +128,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            autoconf autoconf-archive automake libtool libtool-bin m4 \
+            autoconf autoconf-archive automake libtool libtool-bin libltdl-dev m4 \
             autopoint gettext pkg-config make \
             bison flex \
             libudev-dev \
             libwayland-dev libwayland-bin libxkbcommon-dev \
             libegl1-mesa-dev libgl1-mesa-dev \
             libx11-dev libxext-dev libxrandr-dev libxi-dev libxcursor-dev libxinerama-dev \
+            libxmu-dev libxfixes-dev libxss-dev libxtst-dev libxrender-dev libgl-dev \
+            libdbus-1-dev libasound2-dev libpulse-dev \
             ninja-build
 
       - name: Verify build tools
@@ -184,13 +188,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            autoconf autoconf-archive automake libtool libtool-bin m4 \
+            autoconf autoconf-archive automake libtool libtool-bin libltdl-dev m4 \
             autopoint gettext pkg-config make \
             bison flex \
             libudev-dev \
             libwayland-dev libwayland-bin libxkbcommon-dev \
             libegl1-mesa-dev libgl1-mesa-dev \
             libx11-dev libxext-dev libxrandr-dev libxi-dev libxcursor-dev libxinerama-dev \
+            libxmu-dev libxfixes-dev libxss-dev libxtst-dev libxrender-dev libgl-dev \
+            libdbus-1-dev libasound2-dev libpulse-dev \
             clang clang-tidy ninja-build
 
       - name: Verify build tools
