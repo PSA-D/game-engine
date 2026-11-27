@@ -1,7 +1,7 @@
 // Laag: UNIT. Alles in het geheugen. De serializer wordt getest met echte runtime-klassen
 // (Level, Region, GameObject zijn gewone gegevensbezitters) en een test-registry.
 
-#include "persistence/LevelSerializer.h"
+#include "subsystems/persistence/LevelSerializer.h"
 
 #include "LevelTestData.h"
 
