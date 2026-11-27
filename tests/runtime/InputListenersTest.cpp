@@ -8,7 +8,6 @@
 #include <functional>
 #include <optional>
 #include <queue>
-#include <vector>
 
 namespace
 {
