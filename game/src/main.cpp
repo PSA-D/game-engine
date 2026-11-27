@@ -1,6 +1,8 @@
+#include "../../engine/src/core/GameLoop.h"
 #include "core/Engine.h"
 #include "core/EngineConfig.h"
 #include "facades/InputFacade.h"
+#include "runtime/GameObject.h"
 
 #include <cstdlib>
 #include <exception>
@@ -12,12 +14,15 @@ namespace
 
     class KeyListener : public engine::IKeyListener
     {
-        void onKeyDown(engine::KeyCode key)
+    public:
+        void onKeyDown(engine::KeyCode key) override
         {
             if (key == engine::KeyCode::Space)
                 std::cout << "Jump started" << "\n";
+            if (engine::InputFacade::getKey(engine::KeyCode::Left))
+                std::cout << "Left" << "\n";
         }
-        void onKeyUp(engine::KeyCode key)
+        void onKeyUp(engine::KeyCode key) override
         {
             if (key == engine::KeyCode::Space)
                 std::cout << "Jump ended" << "\n";
