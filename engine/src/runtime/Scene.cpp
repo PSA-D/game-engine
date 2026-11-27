@@ -148,7 +148,7 @@ namespace engine
         return activeLevel == nullptr ? nullptr : activeLevel->getActiveRegion();
     }
 
-    std::vector<GameObject*> Scene::collectActiveGameObjects()
+    std::vector<GameObject*> Scene::collectActiveGameObjects() const
     {
         auto* region = getActiveRegion();
         return region == nullptr ? std::vector<GameObject*>{} : region->getGameObjects();

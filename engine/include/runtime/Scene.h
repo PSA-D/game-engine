@@ -86,11 +86,10 @@ namespace engine
         // Ruimt de aangevraagde vernietigingen op, in alle Regions van alle Levels.
         // Aan te roepen aan het eind van een frame.
         void processPendingDestruction();
-        // TODO: updateBehaviours() volgt in een aparte taak, samen met BehaviourScript.
 
     private:
         [[nodiscard]] Region* getActiveRegion() const;
-        [[nodiscard]] std::vector<GameObject*> collectActiveGameObjects();
+        [[nodiscard]] std::vector<GameObject*> collectActiveGameObjects() const;
 
         std::uint64_t id;
         std::string name;
