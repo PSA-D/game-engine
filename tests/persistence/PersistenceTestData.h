@@ -11,7 +11,7 @@ namespace engine::subsystems
     // Bouwt een voorbeeld met elk datatype, ook genest.
     inline auto makeSampleData() -> GameData
     {
-        using runtime::DataNode;
+        using engine::DataNode;
 
         auto player = DataNode::makeObject();
         player.asObject().emplace("name", DataNode("Hero"));
