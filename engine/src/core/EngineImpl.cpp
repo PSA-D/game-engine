@@ -1,40 +1,32 @@
 #include "core/EngineImpl.h"
 
-#include "backends/sdl3/SDL3InputSource.h"
-#include "facades/InputFacade.h"
+#include "CompositionRoot.h"
 
 #include <iostream>
 
 namespace engine
 {
     EngineImpl::EngineImpl(const EngineConfig& config)
+        : factory(core::createPlatformFactory(config.platformBackend))
+        , window(factory->createWindow(core::makeWindowConfig(config)))
+        , inputSource(factory->createInputSource(*window))
+        , input(*inputSource)
+        , gameLoop(
+              sceneManager, input, physics, animation, audio, render, ai, ui, debug, editor, config.targetFrameRate)
     {
-        if (config.platformBackend == PlatformBackend::SDL3)
-        {
-            platform::WindowConfig windowConfig;
-            std::unique_ptr<backends::SDL3Window> sdlWindow = std::make_unique<backends::SDL3Window>(windowConfig);
-            inputSource_ = std::make_unique<backends::SDL3InputSource>(sdlWindow.get());
-            window = std::move(sdlWindow);
-            input_ = std::make_unique<subsystems::InputSubsystem>(*inputSource_);
-            InputFacade::init(input_.get());
-        }
+        const Size size = window->getSize();
+        std::cout << "[Engine] Venster aangemaakt: '" << window->getTitle() << "' " << size.width << "x" << size.height
+                  << '\n';
     }
 
     EngineImpl::~EngineImpl()
     {
-        InputFacade::shutdown();
         std::cout << "[Engine] Afsluiten\n";
     }
 
     void EngineImpl::run()
     {
-        // Tijdelijk: er is nog geen input source en geen gameloop, dus run() stopt meteen.
-        // Stap 8 vervangt dit door een lus die doorloopt tot er een QuitEvent komt (kruisje).
-        std::cout << "[Engine] gestart; nog geen gameloop, run() stopt direct\n";
-
-        while (!input_->isQuitRequested())
-        {
-            input_->update();
-        }
+        std::cout << "[Engine] '" << window->getTitle() << "' gestart\n";
+        gameLoop.run();
     }
 } // namespace engine

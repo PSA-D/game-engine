@@ -4,6 +4,20 @@
     "dependencies": [
         "catch2",
         "nlohmann-json",
-        "sdl3"
-    ]
+        {
+            "name": "sdl3",
+            "default-features": false
+        }
+    ],
+    "default-features": [
+        "platform-backends"
+    ],
+    "features": {
+        "platform-backends": {
+            "description": "SDL3 with its default platform backends (on Linux: X11, Wayland, ALSA, PulseAudio, PipeWire, D-Bus, udev). CI turns this off with -DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON because headless tests don't need it.",
+            "dependencies": [
+                "sdl3"
+            ]
+        }
+    }
 }

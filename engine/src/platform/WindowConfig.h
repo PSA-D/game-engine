@@ -1,10 +1,19 @@
 #pragma once
-#include "utils/Vector2.h"
+
+#include "utils/Size.h"
+
+#include <string>
 
 namespace engine::platform
 {
     struct WindowConfig
     {
-        Size size{1280, 720};
+        static constexpr Size defaultSize{1280, 720};
+
+        std::string title{"Game"};
+        Size size{defaultSize};
+        bool fullscreen{false};
+        bool resizable{true};
+        bool vsync{true};
     };
 } // namespace engine::platform

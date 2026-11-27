@@ -1,10 +1,20 @@
 #pragma once
 
-#include "EngineConfig.h"
-#include "input/InputSubsystem.h"
-#include "input/commands/FunctionCommand.h"
+#include "core/EngineConfig.h"
+#include "core/GameLoop.h"
 #include "platform/IInputSource.h"
+#include "platform/IPlatformFactory.h"
 #include "platform/IWindow.h"
+#include "runtime/SceneManager.h"
+#include "subsystems/ai/AISubsystem.h"
+#include "subsystems/animation/AnimationSubsystem.h"
+#include "subsystems/audio/AudioSubsystem.h"
+#include "subsystems/debug/DebugSubsystem.h"
+#include "subsystems/editor/LevelEditor.h"
+#include "subsystems/input/InputSubsystem.h"
+#include "subsystems/physics/PhysicsSubsystem.h"
+#include "subsystems/render/RenderSubsystem.h"
+#include "subsystems/ui/UISubsystem.h"
 
 #include <memory>
 
@@ -34,16 +44,27 @@ namespace engine
         // └──────────────────────────────────────────────────────────────────────┘
 
         // 1. Platform
+        std::unique_ptr<platform::IPlatformFactory> factory;
         std::unique_ptr<platform::IWindow> window;
         // renderer komt HIER (na window, voor inputSource)
-        // inputSource komt HIER (stap 8, na merge van feat/input-source)
+        std::unique_ptr<platform::IInputSource> inputSource;
         // audioBackend, paths komen hier
-        std::unique_ptr<platform::IInputSource> inputSource_;
-        std::unique_ptr<subsystems::InputSubsystem> input_;
 
-        // 2. Subsystemen
-        // assets, input, physics, render, audio, animation, ui, ai, persistence, editor, debug
+        // 2. Subsystemen, in de volgorde van het KD
+        // assets komt hier
+        subsystems::InputSubsystem input;
+        subsystems::PhysicsSubsystem physics;
+        subsystems::RenderSubsystem render;
+        subsystems::AudioSubsystem audio;
+        subsystems::AnimationSubsystem animation;
+        subsystems::UISubsystem ui;
+        subsystems::AISubsystem ai;
+        // persistence komt hier
+        subsystems::LevelEditor editor;
+        subsystems::DebugSubsystem debug;
 
         // 3. SceneManager + GameLoop
+        SceneManager sceneManager; // na merge Dirk: eerst EventBus eventBus; dan sceneManager{eventBus}
+        GameLoop gameLoop;
     };
 } // namespace engine

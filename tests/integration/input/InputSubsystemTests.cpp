@@ -1,7 +1,7 @@
-#include "input/InputHandler.h"
-#include "input/InputState.h"
-#include "input/commands/FunctionCommand.h"
 #include "platform/Events.h"
+#include "subsystems/input/InputHandler.h"
+#include "subsystems/input/InputState.h"
+#include "subsystems/input/commands/FunctionCommand.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <memory>

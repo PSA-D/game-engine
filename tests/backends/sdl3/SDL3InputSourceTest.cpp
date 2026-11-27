@@ -1,8 +1,10 @@
 #include "backends/sdl3/SDL3InputSource.h"
 
-#include "backends/sdl3/SDL3Window.h"
 #include "platform/Events.h"
 #include "platform/INativeEventListener.h"
+#include "platform/WindowConfig.h"
+#include "platform/headless/HeadlessWindow.h"
+#include "utils/Size.h"
 #include "utils/Vector2.h"
 
 #include <SDL3/SDL.h>
@@ -35,11 +37,11 @@ namespace
         }
     };
 
-    std::unique_ptr<SDL3Window> getDummyWindow()
+    // Het venster wordt alleen gebruikt voor getSize(); een HeadlessWindow is genoeg en opent niets.
+    HeadlessWindow& getDummyWindow()
     {
-        WindowConfig windowConfig;
-        static std::unique_ptr<SDL3Window> dummy = std::make_unique<SDL3Window>(windowConfig);
-        return std::move(dummy);
+        static HeadlessWindow dummy{WindowConfig{}};
+        return dummy;
     }
 } // namespace
 
@@ -52,7 +54,7 @@ TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]")
     {
     }
 
-    SDL3InputSource inputSource(getDummyWindow().get());
+    SDL3InputSource inputSource(getDummyWindow());
 
     SECTION("Returns std::nullopt when event queue is empty")
     {
@@ -163,8 +165,7 @@ TEST_CASE("SDL3InputSource polls and translates SDL events", "[input][sdl3]")
 
         const auto& winEvent = std::get<WindowEvent>(*event);
         REQUIRE(winEvent.kind == WindowEventKind::Resized);
-        REQUIRE_THAT(winEvent.size.width, WithinRel(1920.0f));
-        REQUIRE_THAT(winEvent.size.height, WithinRel(1080.0f));
+        REQUIRE(winEvent.size == Size{1920, 1080});
     }
 
     SECTION("Skips unhandled SDL events and returns next valid event")

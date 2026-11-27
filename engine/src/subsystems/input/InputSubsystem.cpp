@@ -1,5 +1,7 @@
 #include "InputSubsystem.h"
 
+#include <variant>
+
 namespace
 {
     template <typename Down, typename Pressed, typename Released>
@@ -33,6 +35,10 @@ namespace engine::subsystems
         state_.mouseButtonsReleased.fill(false);
         state_.mouseDelta = {};
         state_.mouseWheel = {};
+
+        // Venster-events zijn één frame beschikbaar via takeWindowEvents(); haalt niemand
+        // ze op, dan worden ze hier weggegooid zodat de lijst niet blijft groeien.
+        windowEvents_.clear();
     }
 
     void InputSubsystem::update()
@@ -46,40 +52,49 @@ namespace engine::subsystems
             notifyListeners(*e);
         }
 
-        handler_.handleInput(state_);
+        inputHandler_.handleInput(state_);
     }
 
     void InputSubsystem::notifyListeners(const platform::PlatformEvent& e)
     {
         if (const auto* keyEvent = std::get_if<platform::KeyEvent>(&e))
         {
+            if (keyEvent->repeat)
+                return; // onKeyDown één keer per indrukken, niet bij vasthouden
+
+            const KeyCode key = keyEvent->key;
+            const bool pressed = keyEvent->pressed;
             keyListeners_.dispatch(
-                [&](IKeyListener& l)
+                [key, pressed](IKeyListener& l)
                 {
-                    if (keyEvent->pressed)
-                        l.onKeyDown(*keyEvent);
+                    if (pressed)
+                        l.onKeyDown(key);
                     else
-                        l.onKeyUp(*keyEvent);
+                        l.onKeyUp(key);
                 });
         }
         else if (const auto* mouseEvent = std::get_if<platform::MouseButtonEvent>(&e))
         {
+            const MouseButton button = mouseEvent->button;
+            const bool pressed = mouseEvent->pressed;
             mouseListeners_.dispatch(
-                [&](IMouseListener& l)
+                [button, pressed](IMouseListener& l)
                 {
-                    if (mouseEvent->pressed)
-                        l.onMouseButtonDown(*mouseEvent);
+                    if (pressed)
+                        l.onMouseButtonDown(button);
                     else
-                        l.onMouseButtonUp(*mouseEvent);
+                        l.onMouseButtonUp(button);
                 });
         }
         else if (const auto* mouseMoveEvent = std::get_if<platform::MouseMoveEvent>(&e))
         {
-            mouseListeners_.dispatch([&](IMouseListener& l) { l.onMouseMove(*mouseMoveEvent); });
+            const Vector2 position = mouseMoveEvent->position;
+            mouseListeners_.dispatch([&position](IMouseListener& l) { l.onMouseMove(position); });
         }
         else if (const auto* mouseWheelEvent = std::get_if<platform::MouseWheelEvent>(&e))
         {
-            mouseListeners_.dispatch([&](IMouseListener& l) { l.onMouseWheel(*mouseWheelEvent); });
+            const float scrollDelta = mouseWheelEvent->scroll.y; // verticaal, zoals IMouseListener verwacht
+            mouseListeners_.dispatch([scrollDelta](IMouseListener& l) { l.onMouseWheel(scrollDelta); });
         }
     }
 
@@ -165,7 +180,7 @@ namespace engine::subsystems
 
     InputHandler& InputSubsystem::getHandler()
     {
-        return handler_;
+        return inputHandler_;
     }
     bool InputSubsystem::isQuitRequested() const
     {
@@ -241,26 +256,5 @@ namespace engine::subsystems
                 releaseAllHeld();
             windowEvents_.push_back(*windowEvent);
         }
-    }
-
-    void InputSubsystem::bindKey(KeyCode key, InputTrigger trigger, std::unique_ptr<ICommand> command)
-    {
-        handler_.bindKey(key, trigger, std::move(command));
-    }
-    void InputSubsystem::unbindKey(KeyCode key, InputTrigger trigger)
-    {
-        handler_.unbindKey(key, trigger);
-    }
-    void InputSubsystem::bindMouseButton(MouseButton button, InputTrigger trigger, std::unique_ptr<ICommand> command)
-    {
-        handler_.bindMouseButton(button, trigger, std::move(command));
-    }
-    void InputSubsystem::unbindMouseButton(MouseButton button, InputTrigger trigger)
-    {
-        handler_.unbindMouseButton(button, trigger);
-    }
-    void InputSubsystem::clear()
-    {
-        handler_.clear();
     }
 } // namespace engine::subsystems

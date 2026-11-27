@@ -1,33 +1,23 @@
-#include "Engine.h"
+#include "core/Engine.h"
+#include "core/EngineConfig.h"
 
 #include <catch2/catch_test_macros.hpp>
 
-auto runGameObjectTests() -> int;
-
-TEST_CASE("GameObject behavior tests pass", "[game-object]")
+namespace engine
 {
-    REQUIRE(runGameObjectTests() == 0);
-}
-
-TEST_CASE("Engine lifecycle manages running state", "[engine]")
-{
-    engine::Engine engine;
-
-    SECTION("Engine is not running before init")
+    TEST_CASE("Engine met Headless-backend wordt aangemaakt en weer opgeruimd", "[unit][engine]")
     {
-        REQUIRE_FALSE(engine.isRunning());
+        EngineConfig config;
+        config.appName = "Test";
+        config.platformBackend = PlatformBackend::Headless;
+
+        CHECK_NOTHROW(Engine{config});
     }
 
-    SECTION("Engine is running after init")
+    TEST_CASE("EngineConfig heeft standaard een framerate-limiet van 60", "[unit][engine]")
     {
-        engine.init();
-        REQUIRE(engine.isRunning());
-    }
+        const EngineConfig config;
 
-    SECTION("Engine is not running after shutdown")
-    {
-        engine.init();
-        engine.shutdown();
-        REQUIRE_FALSE(engine.isRunning());
+        CHECK(config.targetFrameRate == 60);
     }
-}
+} // namespace engine

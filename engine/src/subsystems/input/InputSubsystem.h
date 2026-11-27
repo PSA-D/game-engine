@@ -1,30 +1,23 @@
 #pragma once
 
-#include "IKeyListener.h"
-#include "IMouseListener.h"
 #include "InputHandler.h"
 #include "InputState.h"
 #include "ListenersList.h"
 #include "platform/IInputSource.h"
+#include "runtime/IKeyListener.h"
+#include "runtime/IMouseListener.h"
 
 #include <vector>
 
 namespace engine::subsystems
 {
-    // Het subsyteem voor de inputs.
-    // Hier wordt alles wat met input te maken heeft afgehandeld.
     class InputSubsystem
     {
     public:
-        InputSubsystem(platform::IInputSource& source)
+        explicit InputSubsystem(platform::IInputSource& source)
             : source_(source)
         {
         }
-        ~InputSubsystem() = default;
-        InputSubsystem(const InputSubsystem&) = delete;
-        InputSubsystem& operator=(const InputSubsystem&) = delete;
-        InputSubsystem(InputSubsystem&&) = delete;
-        InputSubsystem& operator=(InputSubsystem&&) = delete;
 
         void update();
         void processEvent(const platform::PlatformEvent& event);
@@ -49,26 +42,14 @@ namespace engine::subsystems
         bool isQuitRequested() const;
         std::vector<platform::WindowEvent> takeWindowEvents(); // Neemt alle events en leegt de lijst
 
-        void bindKey(KeyCode key, InputTrigger trigger, std::unique_ptr<ICommand> command); // Forward naar InputHandler
-        void unbindKey(KeyCode key, InputTrigger trigger);
-        void bindMouseButton(MouseButton button, InputTrigger trigger, std::unique_ptr<ICommand> command);
-        void unbindMouseButton(MouseButton button, InputTrigger trigger);
-        void clear();
-
     private:
-        template <class T>
-        static bool contains(const std::vector<T*>& vec, T* item)
-        {
-            return std::find(vec.begin(), vec.end(), item) != vec.end();
-        }
-
         void beginFrame();
         void notifyListeners(const platform::PlatformEvent& e);
         void releaseAllHeld();
 
         platform::IInputSource& source_;
         InputState state_;
-        InputHandler handler_;
+        InputHandler inputHandler_;
 
         bool quitRequested_{false};
         std::vector<platform::WindowEvent> windowEvents_;
