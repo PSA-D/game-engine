@@ -1,6 +1,6 @@
 #include "core/CompositionRoot.h"
 
-#include "EngineConfig.h"
+#include "core/EngineConfig.h"
 #include "platform/IWindow.h"
 #include "utils/Size.h"
 

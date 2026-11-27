@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EngineConfig.h"
+#include "core/EngineConfig.h"
 #include "platform/IPlatformFactory.h"
 #include "platform/WindowConfig.h"
 

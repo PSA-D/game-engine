@@ -16,5 +16,6 @@ namespace engine::backends
         auto operator=(SDL3PlatformFactory&&) -> SDL3PlatformFactory& = delete;
 
         [[nodiscard]] std::unique_ptr<platform::IWindow> createWindow(const platform::WindowConfig& config) override;
+        [[nodiscard]] std::unique_ptr<platform::IInputSource> createInputSource(platform::IWindow& window) override;
     };
 } // namespace engine::backends

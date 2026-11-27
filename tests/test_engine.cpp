@@ -1,5 +1,5 @@
-#include "Engine.h"
-#include "EngineConfig.h"
+#include "core/Engine.h"
+#include "core/EngineConfig.h"
 
 #include <catch2/catch_test_macros.hpp>
 

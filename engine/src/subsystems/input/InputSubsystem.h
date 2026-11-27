@@ -7,23 +7,23 @@
 #include "runtime/IKeyListener.h"
 #include "runtime/IMouseListener.h"
 
+#include <algorithm>
 #include <vector>
 
 namespace engine::subsystems
 {
-    // temp class
     class InputSubsystem
     {
     public:
-        InputSubsystem(platform::IInputSource& source)
+        explicit InputSubsystem(platform::IInputSource& source)
             : source_(source)
         {
         }
 
-        void update() {}
+        void update();
         [[nodiscard]] bool isQuitRequested() const
         {
-            return false;
+            return quitRequested_;
         }
         void processEvent(const platform::PlatformEvent& event);
 

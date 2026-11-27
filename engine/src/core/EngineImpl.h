@@ -1,10 +1,11 @@
 #pragma once
 
-#include "EngineConfig.h"
-#include "SceneManager.h"
+#include "core/EngineConfig.h"
 #include "core/GameLoop.h"
+#include "platform/IInputSource.h"
 #include "platform/IPlatformFactory.h"
 #include "platform/IWindow.h"
+#include "runtime/SceneManager.h"
 #include "subsystems/ai/AISubsystem.h"
 #include "subsystems/animation/AnimationSubsystem.h"
 #include "subsystems/audio/AudioSubsystem.h"
@@ -46,7 +47,7 @@ namespace engine
         std::unique_ptr<platform::IPlatformFactory> factory;
         std::unique_ptr<platform::IWindow> window;
         // renderer komt HIER (na window, voor inputSource)
-        // inputSource komt HIER
+        std::unique_ptr<platform::IInputSource> inputSource;
         // audioBackend, paths komen hier
 
         // 2. Subsystemen, in de volgorde van het KD

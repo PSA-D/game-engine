@@ -1,5 +1,6 @@
 #pragma once
 
+#include "platform/IInputSource.h"
 #include "platform/IWindow.h"
 #include "platform/WindowConfig.h"
 
@@ -31,5 +32,8 @@ namespace engine::platform
         auto operator=(IPlatformFactory&&) -> IPlatformFactory& = delete;
 
         [[nodiscard]] virtual std::unique_ptr<IWindow> createWindow(const WindowConfig& config) = 0;
+
+        // Maakt de bron van input-events voor dit venster. Het window moet langer leven dan de input source.
+        [[nodiscard]] virtual std::unique_ptr<IInputSource> createInputSource(IWindow& window) = 0;
     };
 } // namespace engine::platform

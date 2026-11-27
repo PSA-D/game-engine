@@ -1,6 +1,6 @@
 #include "core/EngineImpl.h"
 
-#include "core/CompositionRoot.h"
+#include "CompositionRoot.h"
 
 #include <iostream>
 
@@ -9,8 +9,10 @@ namespace engine
     EngineImpl::EngineImpl(const EngineConfig& config)
         : factory(core::createPlatformFactory(config.platformBackend))
         , window(factory->createWindow(core::makeWindowConfig(config)))
-        , gameLoop(sceneManager, input, physics, animation, audio, render, ai, ui, debug,
-            editor, config.targetFrameRate)
+        , inputSource(factory->createInputSource(*window))
+        , input(*inputSource)
+        , gameLoop(
+              sceneManager, input, physics, animation, audio, render, ai, ui, debug, editor, config.targetFrameRate)
     {
         const Size size = window->getSize();
         std::cout << "[Engine] Venster aangemaakt: '" << window->getTitle() << "' " << size.width << "x" << size.height

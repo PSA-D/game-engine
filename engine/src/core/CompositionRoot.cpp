@@ -1,6 +1,7 @@
-#include "core/CompositionRoot.h"
+#include "CompositionRoot.h"
 
 #include "backends/sdl3/SDL3PlatformFactory.h"
+#include "core/EngineConfig.h"
 #include "platform/headless/HeadlessPlatformFactory.h"
 
 #include <stdexcept>

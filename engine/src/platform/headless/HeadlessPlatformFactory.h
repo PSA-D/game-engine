@@ -9,5 +9,6 @@ namespace engine::platform
     {
     public:
         [[nodiscard]] std::unique_ptr<IWindow> createWindow(const WindowConfig& config) override;
+        [[nodiscard]] std::unique_ptr<IInputSource> createInputSource(IWindow& window) override;
     };
 } // namespace engine::platform

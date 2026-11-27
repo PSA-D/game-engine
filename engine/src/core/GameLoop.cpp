@@ -1,8 +1,8 @@
 #include "core/GameLoop.h"
 
-#include "Scene.h"
-#include "SceneManager.h"
 #include "facades/Time.h"
+#include "runtime/Scene.h"
+#include "runtime/SceneManager.h"
 #include "subsystems/ai/AISubsystem.h"
 #include "subsystems/animation/AnimationSubsystem.h"
 #include "subsystems/audio/AudioSubsystem.h"

@@ -1,5 +1,6 @@
 #include "backends/sdl3/SDL3PlatformFactory.h"
 
+#include "backends/sdl3/SDL3InputSource.h"
 #include "backends/sdl3/SDL3Window.h"
 
 #include <SDL3/SDL.h>
@@ -22,5 +23,10 @@ namespace engine::backends
     std::unique_ptr<platform::IWindow> SDL3PlatformFactory::createWindow(const platform::WindowConfig& config)
     {
         return std::make_unique<SDL3Window>(config);
+    }
+
+    std::unique_ptr<platform::IInputSource> SDL3PlatformFactory::createInputSource(platform::IWindow& window)
+    {
+        return std::make_unique<SDL3InputSource>(window);
     }
 } // namespace engine::backends

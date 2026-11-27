@@ -1,6 +1,7 @@
 #include "core/GameLoop.h"
 
-#include "SceneManager.h"
+#include "platform/headless/HeadlessInputSource.h"
+#include "runtime/SceneManager.h"
 #include "subsystems/ai/AISubsystem.h"
 #include "subsystems/animation/AnimationSubsystem.h"
 #include "subsystems/audio/AudioSubsystem.h"
@@ -18,7 +19,8 @@ namespace engine
     TEST_CASE("GameLoop::run() stopt na requestQuit()", "[unit][core]")
     {
         SceneManager sceneManager;
-        subsystems::InputSubsystem input;
+        platform::HeadlessInputSource inputSource;
+        subsystems::InputSubsystem input{inputSource};
         subsystems::PhysicsSubsystem physics;
         subsystems::AnimationSubsystem animation;
         subsystems::AudioSubsystem audio;

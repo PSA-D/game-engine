@@ -1,5 +1,5 @@
 #include "core/Engine.h"
-#include "EngineConfig.h"
+#include "core/EngineConfig.h"
 
 #include <cstdlib>
 #include <exception>
