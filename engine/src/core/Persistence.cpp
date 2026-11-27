@@ -1,8 +1,8 @@
 #include "Persistence.h"
 
 #include "core/Persistence.h"
-#include "persistence/GameData.h"
-#include "persistence/PersistenceSubsystem.h"
+#include "subsystems/persistence/GameData.h"
+#include "subsystems/persistence/PersistenceSubsystem.h"
 
 #include <utility>
 

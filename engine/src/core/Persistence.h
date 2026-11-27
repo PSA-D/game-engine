@@ -2,7 +2,7 @@
 
 #include "runtime/DataNode.h"
 #include "runtime/Level.h"
-#include "persistence/PersistenceError.h"
+#include "subsystems/persistence/PersistenceError.h"
 
 #include <memory>
 #include <optional>

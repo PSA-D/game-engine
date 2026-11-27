@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Component.h"
+#include "runtime/Component.h"
 #include "runtime/DataNode.h"
 
 #include <functional>
