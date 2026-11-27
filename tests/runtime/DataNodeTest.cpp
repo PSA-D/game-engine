@@ -83,8 +83,7 @@ namespace engine::runtime
 
         second.asObject().at("a") = DataNode(2);
         CHECK_FALSE(first == second);
-        CHECK_FALSE(DataNode(1) == DataNode(1.0));
-        // verschillende typen zijn niet gelijk
+        CHECK_FALSE(DataNode(1) == DataNode(1.0)); // verschillende typen zijn niet gelijk
     }
 
     TEST_CASE("Een kopie is onafhankelijk van het origineel", "[unit][runtime]")
@@ -97,5 +96,69 @@ namespace engine::runtime
 
         CHECK(original.asArray().size() == 1);
         CHECK(copy.asArray().size() == 2);
+    }
+    TEST_CASE("get geeft een kind van een object, of nullptr", "[unit][runtime]")
+    {
+        auto object = DataNode::makeObject();
+        object.set("a", DataNode(1));
+
+        REQUIRE(object.get("a") != nullptr);
+        CHECK(object.get("a")->asInt() == 1);
+        CHECK(object.get("ontbreekt") == nullptr);
+        CHECK(DataNode(5).get("a") == nullptr); // geen object
+        CHECK(DataNode().get("a") == nullptr);
+    }
+
+    TEST_CASE("set vervangt een bestaande waarde", "[unit][runtime]")
+    {
+        auto object = DataNode::makeObject();
+        object.set("a", DataNode(1));
+        object.set("a", DataNode("nieuw"));
+
+        CHECK(object.get("a")->asString() == "nieuw");
+        CHECK(object.asObject().size() == 1);
+    }
+
+    TEST_CASE("set en pushToArray gooien als het type niet klopt", "[unit][runtime]")
+    {
+        DataNode number(5);
+        auto list = DataNode::makeArray();
+        auto object = DataNode::makeObject();
+
+        CHECK_THROWS_AS(number.set("a", DataNode()), std::bad_variant_access);
+        CHECK_THROWS_AS(list.set("a", DataNode()), std::bad_variant_access);
+        CHECK_THROWS_AS(object.pushToArray(DataNode()), std::bad_variant_access);
+    }
+
+    TEST_CASE("pushToArray voegt achteraan toe", "[unit][runtime]")
+    {
+        auto list = DataNode::makeArray();
+        list.pushToArray(DataNode(1));
+        list.pushToArray(DataNode("twee"));
+
+        REQUIRE(list.asArray().size() == 2);
+        CHECK(list.asArray()[1].asString() == "twee");
+    }
+
+    TEST_CASE("try-getters geven nullopt of nullptr bij een verkeerd type", "[unit][runtime]")
+    {
+        CHECK(DataNode(true).tryBool() == true);
+        CHECK_FALSE(DataNode(1).tryBool().has_value());
+        CHECK(DataNode(7).tryInt() == 7);
+        CHECK_FALSE(DataNode(7.5).tryInt().has_value()); // een kommagetal is geen geheel getal
+        CHECK(DataNode("x").tryString() == "x");
+        CHECK_FALSE(DataNode(1).tryString().has_value());
+        CHECK(DataNode::makeArray().tryArray() != nullptr);
+        CHECK(DataNode::makeArray().tryObject() == nullptr);
+        CHECK(DataNode::makeObject().tryObject() != nullptr);
+        CHECK(DataNode().tryArray() == nullptr);
+    }
+
+    TEST_CASE("tryDouble accepteert ook een geheel getal", "[unit][runtime]")
+    {
+        CHECK(DataNode(2.5).tryDouble() == 2.5);
+        CHECK(DataNode(3).tryDouble() == 3.0);
+        CHECK_FALSE(DataNode("3").tryDouble().has_value());
+        CHECK_FALSE(DataNode().tryDouble().has_value());
     }
 } // namespace engine::runtime

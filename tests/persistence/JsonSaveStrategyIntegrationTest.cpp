@@ -3,6 +3,7 @@
 // Hier controleren we alleen wat er met een echt bestand kan misgaan.
 
 #include "PersistenceTestData.h"
+#include "runtime/DataNode.h"
 #include "subsystems/persistence/ISaveStrategy.h"
 #include "subsystems/persistence/JsonSaveStrategy.h"
 
@@ -18,7 +19,7 @@ namespace engine::subsystems
 {
     namespace
     {
-        using runtime::DataNode;
+        using engine::DataNode;
 
         // Een tijdelijk bestand dat zichzelf opruimt, zodat de tests niets achterlaten.
         class TempFile

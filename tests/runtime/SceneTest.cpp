@@ -3,7 +3,6 @@
 #include "runtime/Scene.h"
 
 #include "runtime/Level.h"
-#include "runtime/Region.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <memory>
