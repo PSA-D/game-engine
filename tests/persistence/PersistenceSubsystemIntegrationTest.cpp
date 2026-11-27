@@ -210,7 +210,7 @@ namespace engine::subsystems
         REQUIRE(subsystem.saveGame("slot1", data));
 
         const auto saves = paths.getUserDataPath() / "saves";
-        REQUIRE(std::filesystem::exists(saves / "slot1.fake"));        // extensie van de strategie
+        REQUIRE(std::filesystem::exists(saves / "slot1.fake"));  // extensie van de strategie
         CHECK(readFile(saves / "slot1.fake") == "FAKE:1:hallo"); // inhoud van de strategie
         CHECK_FALSE(std::filesystem::exists(saves / "slot1.json"));
         const auto loaded = subsystem.loadGame("slot1");
