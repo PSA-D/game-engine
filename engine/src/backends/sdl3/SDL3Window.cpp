@@ -1,5 +1,8 @@
 #include "backends/sdl3/SDL3Window.h"
 
+#include "platform/WindowConfig.h"
+#include "utils/Size.h"
+
 #include <SDL3/SDL.h>
 #include <stdexcept>
 #include <string>
