@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Component.h"
+#include "runtime/Component.h"
 #include "runtime/DataNode.h"
 
 #include <functional>
@@ -22,13 +22,13 @@ namespace engine
         using LoadFunction = std::function<Component*(GameObject&, const DataNode&)>;
 
         template <typename T>
-        using SaveFn = std::function<std::optional<DataNode>(const T&)>;
+        using SaveComponentFunction = std::function<std::optional<DataNode>(const T&)>;
 
         template <typename T>
-        using LoadFn = std::function<T*(GameObject&, const DataNode&)>;
+        using LoadComponentFunction = std::function<T*(GameObject&, const DataNode&)>;
 
         template <typename T>
-        void registerType(const std::string& typeName, SaveFn<T> save, LoadFn<T> load)
+        void registerType(const std::string& typeName, SaveComponentFunction<T> save, LoadComponentFunction<T> load)
         {
             saveEntries[typeid(T)] = {typeName,
                                       [typeName, save](const Component& component) -> std::optional<DataNode>

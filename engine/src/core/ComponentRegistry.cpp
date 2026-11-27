@@ -43,7 +43,9 @@ namespace engine
         Component* component = found->second.load(owner, *dataNode);
 
         if (component == nullptr)
+        {
             return nullptr;
+        }
 
         if (const auto* enabledNode = data.get("enabled"))
         {
