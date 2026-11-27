@@ -38,6 +38,10 @@ add_library(engine STATIC
     src/core/EngineImpl.h
     src/core/GameLoop.cpp
     src/core/GameLoop.h
+    src/core/ComponentRegistry.cpp
+    src/core/ComponentRegistry.h
+    src/core/Persistence.cpp
+    src/core/Persistence.h
 
     # Runtime
     src/runtime/Component.cpp
@@ -73,12 +77,16 @@ add_library(engine STATIC
     src/subsystems/input/ListenersList.h
     src/subsystems/input/commands/FunctionCommand.h
     src/subsystems/input/commands/ICommand.h
+    src/subsystems/persistence/PersistenceError.h
+    src/subsystems/persistence/PersistenceSubsystem.cpp
+    src/subsystems/persistence/PersistenceSubsystem.h
 
     # Subsystems: persistence
     src/subsystems/persistence/GameData.h
     src/subsystems/persistence/ISaveStrategy.h
     src/subsystems/persistence/JsonSaveStrategy.cpp
     src/subsystems/persistence/JsonSaveStrategy.h
+    src/subsystems/persistence/LevelSerializer.cpp
 
     # Overige subsystems
     src/subsystems/ai/AISubsystem.h
@@ -95,6 +103,7 @@ add_library(engine STATIC
     src/platform/IPlatformFactory.h
     src/platform/IWindow.h
     src/platform/WindowConfig.h
+    src/platform/IPlatformPaths.h
     src/platform/headless/HeadlessInputSource.cpp
     src/platform/headless/HeadlessInputSource.h
     src/platform/headless/HeadlessPlatformFactory.cpp
@@ -107,19 +116,19 @@ add_library(engine STATIC
     src/utils/Rect.cpp
 )
 
+target_link_libraries(engine
+        PUBLIC
+        project_sanitizers
+        project_warnings
+        # Backends en 3rd party zijn een implementatiedetail: de game ziet ze niet (package-diagram).
+        PRIVATE
+        SDL3::SDL3
+        nlohmann_json::nlohmann_json
+)
+
 target_include_directories(engine
     PUBLIC include
     PRIVATE src
-)
-
-target_link_libraries(engine
-    PUBLIC
-        project_sanitizers
-        project_warnings
-    # Backends en 3rd party zijn een implementatiedetail: de game ziet ze niet (package-diagram).
-    PRIVATE
-        SDL3::SDL3
-        nlohmann_json::nlohmann_json
 )
 
 target_compile_features(engine PUBLIC cxx_std_20)
