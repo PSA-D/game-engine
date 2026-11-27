@@ -94,4 +94,22 @@ namespace engine
         if (found != gameObjects.end())
             gameObjects.erase(found);
     }
+
+    void Region::adopt(std::unique_ptr<GameObject> gameObject)
+    {
+        gameObjects.push_back(std::move(gameObject));
+    }
+
+    std::unique_ptr<GameObject> Region::detach(uint64_t id)
+    {
+        const auto found =
+            std::find_if(gameObjects.begin(), gameObjects.end(), [id](const auto& go) { return go->getId() == id; });
+
+        if (found == gameObjects.end())
+            return nullptr;
+
+        std::unique_ptr<GameObject> gameObject = std::move(*found);
+        gameObjects.erase(found);
+        return gameObject;
+    }
 } // namespace engine
