@@ -3,9 +3,9 @@
 // Hier controleren we alleen wat er met een echt bestand kan misgaan.
 
 #include "PersistenceTestData.h"
+#include "runtime/DataNode.h"
 #include "subsystems/persistence/ISaveStrategy.h"
 #include "subsystems/persistence/JsonSaveStrategy.h"
-#include "runtime/DataNode.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <filesystem>
