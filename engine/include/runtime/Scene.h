@@ -35,6 +35,8 @@ namespace engine
         [[nodiscard]] std::uint64_t getId() const;
         [[nodiscard]] const std::string& getName() const;
 
+        void update();
+
         // ---- Levels ----
 
         Level& createLevel(std::string_view levelName);

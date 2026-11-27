@@ -6,6 +6,8 @@ find_package(nlohmann_json CONFIG REQUIRED)
 add_library(engine STATIC
     # Publieke headers (voor de game)
     include/core/Engine.h
+    include/core/EngineConfig.h
+    include/facades/Time.h
     include/runtime/Component.h
     include/runtime/DataNode.h
     include/runtime/GameObject.h
@@ -15,6 +17,7 @@ add_library(engine STATIC
     include/runtime/Region.h
     include/runtime/Scene.h
     include/runtime/Transform.h
+    include/runtime/SceneManager.h
     include/utils/AssetHandle.h
     include/utils/BodyType.h
     include/utils/Color.h
@@ -24,10 +27,17 @@ add_library(engine STATIC
     include/utils/Matrix.h
     include/utils/MouseButton.h
     include/utils/Rect.h
+    include/utils/Size.h
     include/utils/Vector2.h
 
     # Core
+    src/core/CompositionRoot.cpp
+    src/core/CompositionRoot.h
     src/core/Engine.cpp
+    src/core/EngineImpl.cpp
+    src/core/EngineImpl.h
+    src/core/GameLoop.cpp
+    src/core/GameLoop.h
 
     # Runtime
     src/runtime/Component.cpp
@@ -48,6 +58,9 @@ add_library(engine STATIC
     src/backends/sdl3/SDL3KeyMap.cpp
     src/backends/sdl3/SDL3KeyMap.h
     src/backends/sdl3/SDL3Window.h
+    src/backends/sdl3/SDL3PlatformFactory.cpp
+    src/backends/sdl3/SDL3PlatformFactory.h
+    src/backends/sdl3/SDL3Window.cpp
 
     # Subsystems: input
     src/subsystems/input/Bindings.h
@@ -66,6 +79,28 @@ add_library(engine STATIC
     src/subsystems/persistence/ISaveStrategy.h
     src/subsystems/persistence/JsonSaveStrategy.cpp
     src/subsystems/persistence/JsonSaveStrategy.h
+
+    # Overige subsystems
+    src/subsystems/ai/AISubsystem.h
+    src/subsystems/animation/AnimationSubsystem.h
+    src/subsystems/audio/AudioSubsystem.h
+    src/subsystems/debug/DebugSubsystem.h
+    src/subsystems/editor/LevelEditor.h
+    src/subsystems/input/InputSubsystem.h
+    src/subsystems/physics/PhysicsSubsystem.h
+    src/subsystems/render/RenderSubsystem.h
+    src/subsystems/ui/UISubsystem.h
+
+    # Platform
+    src/platform/IPlatformFactory.h
+    src/platform/IWindow.h
+    src/platform/WindowConfig.h
+    src/platform/headless/HeadlessInputSource.cpp
+    src/platform/headless/HeadlessInputSource.h
+    src/platform/headless/HeadlessPlatformFactory.cpp
+    src/platform/headless/HeadlessPlatformFactory.h
+    src/platform/headless/HeadlessWindow.cpp
+    src/platform/headless/HeadlessWindow.h
 
     # Utils
     src/utils/Interpolator.cpp

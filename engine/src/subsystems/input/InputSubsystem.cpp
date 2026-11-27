@@ -1,5 +1,15 @@
 #include "InputSubsystem.h"
 
+#include <variant>
+
+namespace engine::platform
+{
+    struct QuitEvent;
+    struct MouseWheelEvent;
+    struct MouseMoveEvent;
+    struct MouseButtonEvent;
+    struct KeyEvent;
+} // namespace engine::platform
 namespace engine::subsystems
 {
     void InputSubsystem::beginFrame()
@@ -71,7 +81,11 @@ namespace engine::subsystems
 
     void InputSubsystem::processEvent(const platform::PlatformEvent& event)
     {
-        if (const auto* keyEvent = std::get_if<platform::KeyEvent>(&event))
+        if (std::holds_alternative<platform::QuitEvent>(event))
+        {
+            quitRequested_ = true;
+        }
+        else if (const auto* keyEvent = std::get_if<platform::KeyEvent>(&event))
         {
             const auto i = static_cast<std::size_t>(keyEvent->key);
             if (i < state_.keysDown.size())

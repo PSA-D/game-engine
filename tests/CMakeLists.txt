@@ -8,6 +8,10 @@ set(ENGINE_INTERNAL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/engine/src)
 
 add_executable(EngineTests
     test_engine.cpp
+    core/CompositionRootTest.cpp
+    core/GameLoopTest.cpp
+    core/TimeTest.cpp
+    platform/HeadlessPlatformTest.cpp
     test_game_object.cpp
     persistence/JsonSaveStrategyIntegrationTest.cpp
     persistence/JsonSaveStrategyTest.cpp

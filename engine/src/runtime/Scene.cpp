@@ -1,5 +1,6 @@
 #include "runtime/Scene.h"
 
+#include "runtime/GameObject.h"
 #include "runtime/Level.h"
 #include "runtime/Region.h"
 
@@ -130,6 +131,8 @@ namespace engine
         }
         return result;
     }
+
+    void Scene::update() {}
 
     void Scene::processPendingDestruction()
     {
