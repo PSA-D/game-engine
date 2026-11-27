@@ -98,5 +98,5 @@ namespace engine::subsystems
             // geen restanten van de eerste, langere inhoud
             CHECK(*result == small);
         }
-    }
+    } // namespace
 } // namespace engine::subsystems

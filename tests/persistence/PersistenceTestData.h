@@ -1,11 +1,10 @@
 #pragma once
 
 #include "TempFile.h"
-#include "subsystems/persistence/GameData.h"
-#include "subsystems/persistence/ISaveStrategy.h"
 #include "platform/IPlatformPaths.h"
 #include "runtime/DataNode.h"
 #include "subsystems/persistence/GameData.h"
+#include "subsystems/persistence/ISaveStrategy.h"
 
 #include <cstdint>
 #include <filesystem>
@@ -49,8 +48,14 @@ namespace engine::subsystems
     class NoDiskPaths final : public platform::IPlatformPaths
     {
     public:
-        [[nodiscard]] std::filesystem::path getAssetRoot() const override { return "assets"; }
-        [[nodiscard]] std::filesystem::path getUserDataPath() const override { return "user"; }
+        [[nodiscard]] std::filesystem::path getAssetRoot() const override
+        {
+            return "assets";
+        }
+        [[nodiscard]] std::filesystem::path getUserDataPath() const override
+        {
+            return "user";
+        }
     };
 
     // Een eigen tijdelijke map per test, met een assetmap en een gebruikersmap erin.
@@ -72,9 +77,18 @@ namespace engine::subsystems
         TestPaths(TestPaths&&) = delete;
         auto operator=(TestPaths&&) -> TestPaths& = delete;
 
-        [[nodiscard]] std::filesystem::path getAssetRoot() const override { return root / "assets"; }
-        [[nodiscard]] std::filesystem::path getUserDataPath() const override { return root / "user"; }
-        [[nodiscard]] const std::filesystem::path& getRoot() const { return root; }
+        [[nodiscard]] std::filesystem::path getAssetRoot() const override
+        {
+            return root / "assets";
+        }
+        [[nodiscard]] std::filesystem::path getUserDataPath() const override
+        {
+            return root / "user";
+        }
+        [[nodiscard]] const std::filesystem::path& getRoot() const
+        {
+            return root;
+        }
 
     private:
         // Uniek per test, ook als tests tegelijk in aparte processen draaien.
@@ -108,13 +122,16 @@ namespace engine::subsystems
                 return std::nullopt;
 
             GameData data;
-            data.version = static_cast<std::uint32_t>(
-                std::stoul(text.substr(prefix.size(), separator - prefix.size())));
+            data.version =
+                static_cast<std::uint32_t>(std::stoul(text.substr(prefix.size(), separator - prefix.size())));
             data.root = DataNode(text.substr(separator + 1));
             return data;
         }
 
-        [[nodiscard]] std::string fileExtension() const override { return ".fake"; }
+        [[nodiscard]] std::string fileExtension() const override
+        {
+            return ".fake";
+        }
     };
 
     // Schrijft een bestand en maakt de mappen erboven aan.
