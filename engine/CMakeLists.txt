@@ -49,6 +49,7 @@ add_library(engine STATIC
         src/persistence/PersistenceError.h
         src/persistence/PersistenceSubsystem.cpp
         src/persistence/PersistenceSubsystem.h
+        src/platform/IPlatformPaths.h
 )
 
 target_link_libraries(engine
