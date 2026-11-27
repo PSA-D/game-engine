@@ -1,115 +1,91 @@
 #include "facades/InputFacade.h"
 
+#include "subsystems/input/InputSubsystem.h"
+
 #include <cassert>
 
 namespace engine
 {
-    InputSubsystem* InputFacade::subsystem_ = nullptr;
+    subsystems::InputSubsystem* InputFacade::subsystem = nullptr;
 
-    void InputFacade::init(InputSubsystem* subsystem)
+    void InputFacade::init(subsystems::InputSubsystem* input)
     {
-        // Assert is eigenlijk een throw, maar dan beter
-        assert(subsystem != nullptr && "InputFacade::init called with nullptr");
-        assert(subsystem_ == nullptr && "InputFacade is already initialized");
-        subsystem_ = subsystem;
+        // Assert is eigenlijk een throw, maar dan beterl
+        assert(input != nullptr && "InputFacade::init called with nullptr");
+        assert(subsystem == nullptr && "InputFacade is already initialized");
+        subsystem = input;
     }
     void InputFacade::shutdown()
     {
-        subsystem_ = nullptr;
+        subsystem = nullptr;
     }
 
     bool InputFacade::getKey(KeyCode key)
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        return subsystem_->getKey(key);
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        return subsystem->getKey(key);
     }
     bool InputFacade::getKeyDown(KeyCode key)
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        return subsystem_->getKeyDown(key);
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        return subsystem->getKeyDown(key);
     }
     bool InputFacade::getKeyUp(KeyCode key)
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        return subsystem_->getKeyUp(key);
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        return subsystem->getKeyUp(key);
     }
 
     bool InputFacade::getMouseButton(MouseButton button)
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        return subsystem_->getMouseButton(button);
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        return subsystem->getMouseButton(button);
     }
     bool InputFacade::getMouseButtonDown(MouseButton button)
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        return subsystem_->getMouseButtonDown(button);
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        return subsystem->getMouseButtonDown(button);
     }
     bool InputFacade::getMouseButtonUp(MouseButton button)
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        return subsystem_->getMouseButtonUp(button);
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        return subsystem->getMouseButtonUp(button);
     }
 
     Vector2 InputFacade::getMousePosition()
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        return subsystem_->getMousePosition();
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        return subsystem->getMousePosition();
     }
     Vector2 InputFacade::getMouseDelta()
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        return subsystem_->getMouseDelta();
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        return subsystem->getMouseDelta();
     }
     Vector2 InputFacade::getMouseWheel()
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        return subsystem_->getMouseWheel();
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        return subsystem->getMouseWheel();
     }
 
     void InputFacade::addKeyListener(IKeyListener* listener)
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        subsystem_->addKeyListener(listener);
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        subsystem->addKeyListener(listener);
     }
     void InputFacade::removeKeyListener(IKeyListener* listener)
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        subsystem_->removeKeyListener(listener);
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        subsystem->removeKeyListener(listener);
     }
     void InputFacade::addMouseListener(IMouseListener* listener)
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        subsystem_->addMouseListener(listener);
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        subsystem->addMouseListener(listener);
     }
     void InputFacade::removeMouseListener(IMouseListener* listener)
     {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        subsystem_->removeMouseListener(listener);
-    }
-
-    void InputFacade::bindKey(KeyCode key, InputTrigger trigger, std::unique_ptr<ICommand> command)
-    {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        subsystem_->bindKey(key, trigger, std::move(command));
-    }
-    void InputFacade::unbindKey(KeyCode key, InputTrigger trigger)
-    {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        subsystem_->unbindKey(key, trigger);
-    }
-    void InputFacade::bindMouseButton(MouseButton button, InputTrigger trigger, std::unique_ptr<ICommand> command)
-    {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        subsystem_->bindMouseButton(button, trigger, std::move(command));
-    }
-    void InputFacade::unbindMouseButton(MouseButton button, InputTrigger trigger)
-    {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        subsystem_->unbindMouseButton(button, trigger);
-    }
-    void InputFacade::clear()
-    {
-        assert(subsystem_ != nullptr && "InputFacade used before init() or after shutdown()");
-        subsystem_->clear();
+        assert(subsystem != nullptr && "InputFacade used before init() or after shutdown()");
+        subsystem->removeMouseListener(listener);
     }
 } // namespace engine

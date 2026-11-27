@@ -40,6 +40,9 @@ add_library(engine STATIC
         src/core/GameLoop.cpp
         src/core/GameLoop.h
 
+        # Facades
+        src/core/facades/InputFacade.cpp
+
         # Runtime
         src/runtime/Component.cpp
         src/runtime/GameObject.cpp

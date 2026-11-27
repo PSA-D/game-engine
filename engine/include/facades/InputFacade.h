@@ -1,11 +1,19 @@
 #pragma once
 
-#include "input/InputSubsystem.h"
+#include "runtime/IKeyListener.h"
+#include "runtime/IMouseListener.h"
+#include "utils/KeyCode.h"
+#include "utils/MouseButton.h"
 #include "utils/Vector2.h"
 
 namespace engine
 {
-    using namespace subsystems;
+    // forward declarations
+    namespace subsystems
+    {
+        class InputSubsystem;
+    }
+    class EngineImpl;
 
     // De facade voor de input.
     // De gamedeveloper gebruikt alleen deze facade voor input handelingen.
@@ -35,21 +43,14 @@ namespace engine
         static void addMouseListener(IMouseListener* listener);
         static void removeMouseListener(IMouseListener* listener);
 
-        static void bindKey(KeyCode key, InputTrigger trigger, std::unique_ptr<ICommand> command);
-        static void unbindKey(KeyCode key, InputTrigger trigger);
-        static void bindMouseButton(MouseButton button, InputTrigger trigger, std::unique_ptr<ICommand> command);
-        static void unbindMouseButton(MouseButton button, InputTrigger trigger);
-        static void clear();
-
     private:
-        // friend class, zodat deze bij de private methodes kan.
-        friend class EngineImpl;
+        friend class EngineImpl; // Dan kan het init() en shutdown() aanroepen
 
         static void init(subsystems::InputSubsystem* subsystem);
         static void shutdown();
         // init() en shutdown() zijn nodig
         // om het static InputSubsystem te initializeren
 
-        static subsystems::InputSubsystem* subsystem_;
+        static subsystems::InputSubsystem* subsystem;
     };
 } // namespace engine
