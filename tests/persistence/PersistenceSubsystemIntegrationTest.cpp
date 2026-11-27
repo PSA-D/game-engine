@@ -1,8 +1,8 @@
 // Laag: INTEGRATIE. PersistenceSubsystem met een echte JsonSaveStrategy en echte bestanden in
 // een tijdelijke map. De regels voor namen en foutteksten staan in PersistenceSubsystemTest.cpp.
 
-#include "persistence/JsonSaveStrategy.h"
-#include "persistence/PersistenceSubsystem.h"
+#include "subsystems/persistence/JsonSaveStrategy.h"
+#include "subsystems/persistence/PersistenceSubsystem.h"
 #include "core/ComponentRegistry.h"
 #include "runtime/Level.h"
 #include "LevelTestData.h"

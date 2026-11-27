@@ -1,8 +1,8 @@
 #pragma once
 
 #include "TempFile.h"
-#include "persistence/GameData.h"
-#include "persistence/ISaveStrategy.h"
+#include "subsystems/persistence/GameData.h"
+#include "subsystems/persistence/ISaveStrategy.h"
 #include "platform/IPlatformPaths.h"
 #include "runtime/DataNode.h"
 #include "subsystems/persistence/GameData.h"

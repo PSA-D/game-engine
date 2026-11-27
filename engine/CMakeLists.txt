@@ -86,6 +86,7 @@ add_library(engine STATIC
     src/subsystems/persistence/ISaveStrategy.h
     src/subsystems/persistence/JsonSaveStrategy.cpp
     src/subsystems/persistence/JsonSaveStrategy.h
+    src/subsystems/persistence/LevelSerializer.cpp
 
     # Overige subsystems
     src/subsystems/ai/AISubsystem.h

@@ -19,6 +19,7 @@ add_executable(EngineTests
     persistence/PersistenceSubsystemTest.cpp
     persistence/PersistenceFacadeTest.cpp
     persistence/PersistenceFacadeIntegrationTest.cpp
+        persistence/TempFile.h
 )
 
 target_link_libraries(EngineTests PRIVATE

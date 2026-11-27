@@ -21,127 +21,82 @@ namespace engine::subsystems
     {
         using engine::DataNode;
 
-        // Een tijdelijk bestand dat zichzelf opruimt, zodat de tests niets achterlaten.
-        class TempFile
+        TEST_CASE("Data kan naar een bestand geschreven en weer uitgelezen worden", "[integration][persistence]")
         {
-        public:
-            explicit TempFile(const std::string& name)
-                : path(std::filesystem::temp_directory_path() / name)
+            const JsonSaveStrategy strategy;
+            const GameData original = makeSampleData();
+            const TempFile file("engine_save_strategy_roundtrip" + strategy.fileExtension());
+
+            writeFile(file.getPath(), strategy.serialize(original));
+            REQUIRE(std::filesystem::exists(file.getPath()));
+
+            const auto result = strategy.deserialize(readFile(file.getPath()));
+
+            REQUIRE(result.has_value());
+            CHECK(*result == original);
+        }
+
+        TEST_CASE("Tekst met regeleinden overleeft het bestand", "[integration][persistence]")
+        {
+            const JsonSaveStrategy strategy;
+            const GameData original{.version = 1, .root = DataNode("regel 1\nregel 2\r\nregel 3 é")};
+            const TempFile file("engine_save_strategy_newlines" + strategy.fileExtension());
+
+            writeFile(file.getPath(), strategy.serialize(original));
+            const auto result = strategy.deserialize(readFile(file.getPath()));
+
+            REQUIRE(result.has_value());
+            CHECK(*result == original);
+        }
+
+        TEST_CASE("Een andere strategie-instantie leest hetzelfde bestand", "[integration][persistence]")
+        {
+            // De strategie heeft geen toestand: wat de ene schrijft, leest de andere (zoals na een herstart).
+            const GameData original = makeSampleData();
+            const TempFile file("engine_save_strategy_instances.json");
+
+            writeFile(file.getPath(), JsonSaveStrategy{}.serialize(original));
+            const auto result = JsonSaveStrategy{}.deserialize(readFile(file.getPath()));
+
+            REQUIRE(result.has_value());
+            CHECK(*result == original);
+        }
+
+        TEST_CASE("Een beschadigd bestand op schijf geeft nullopt", "[integration][persistence]")
+        {
+            const JsonSaveStrategy strategy;
+            const TempFile file("engine_save_strategy_corrupt" + strategy.fileExtension());
+
+            SECTION("Afgebroken bestand, bijvoorbeeld door een crash tijdens het opslaan")
             {
-                std::filesystem::remove(path);
+                const std::string complete = strategy.serialize(makeSampleData());
+                writeFile(file.getPath(), complete.substr(0, complete.size() / 2));
+
+                CHECK_FALSE(strategy.deserialize(readFile(file.getPath())).has_value());
             }
-            ~TempFile()
+
+            SECTION("Leeg bestand")
             {
-                std::error_code ignored;
-                std::filesystem::remove(path, ignored);
+                writeFile(file.getPath(), "");
+
+                CHECK_FALSE(strategy.deserialize(readFile(file.getPath())).has_value());
             }
-            TempFile(const TempFile&) = delete;
-            auto operator=(const TempFile&) -> TempFile& = delete;
-            TempFile(TempFile&&) = delete;
-            auto operator=(TempFile&&) -> TempFile& = delete;
-
-            [[nodiscard]] const std::filesystem::path& getPath() const
-            {
-                return path;
-            }
-
-        private:
-            std::filesystem::path path;
-        };
-
-        // Binaire modus voorkomt dat Windows regeleindes (CRLF) aanpast.
-        void writeFile(const std::filesystem::path& path, const std::string& text)
-        {
-            std::ofstream output(path, std::ios::binary);
-            REQUIRE(output.is_open());
-            output << text;
         }
 
-        auto readFile(const std::filesystem::path& path) -> std::string
+        TEST_CASE("Een bestand wordt bij opnieuw opslaan volledig overschreven", "[integration][persistence]")
         {
-            std::ifstream input(path, std::ios::binary);
-            REQUIRE(input.is_open());
-            std::ostringstream buffer;
-            buffer << input.rdbuf();
-            return buffer.str();
+            const JsonSaveStrategy strategy;
+            const TempFile file("engine_save_strategy_overwrite" + strategy.fileExtension());
+            const GameData small{.version = 1, .root = DataNode(1)};
+
+            writeFile(file.getPath(), strategy.serialize(makeSampleData())); // lang
+            writeFile(file.getPath(), strategy.serialize(small));            // kort
+
+            const auto result = strategy.deserialize(readFile(file.getPath()));
+
+            REQUIRE(result.has_value());
+            // geen restanten van de eerste, langere inhoud
+            CHECK(*result == small);
         }
-    } // namespace
-
-    TEST_CASE("Data kan naar een bestand geschreven en weer uitgelezen worden", "[integration][persistence]")
-    {
-        const JsonSaveStrategy strategy;
-        const GameData original = makeSampleData();
-        const TempFile file("engine_save_strategy_roundtrip" + strategy.fileExtension());
-
-        writeFile(file.getPath(), strategy.serialize(original));
-        REQUIRE(std::filesystem::exists(file.getPath()));
-
-        const auto result = strategy.deserialize(readFile(file.getPath()));
-
-        REQUIRE(result.has_value());
-        CHECK(*result == original);
-    }
-
-    TEST_CASE("Tekst met regeleinden overleeft het bestand", "[integration][persistence]")
-    {
-        const JsonSaveStrategy strategy;
-        const GameData original{.version = 1, .root = DataNode("regel 1\nregel 2\r\nregel 3 é")};
-        const TempFile file("engine_save_strategy_newlines" + strategy.fileExtension());
-
-        writeFile(file.getPath(), strategy.serialize(original));
-        const auto result = strategy.deserialize(readFile(file.getPath()));
-
-        REQUIRE(result.has_value());
-        CHECK(*result == original);
-    }
-
-    TEST_CASE("Een andere strategie-instantie leest hetzelfde bestand", "[integration][persistence]")
-    {
-        // De strategie heeft geen toestand: wat de ene schrijft, leest de andere (zoals na een herstart).
-        const GameData original = makeSampleData();
-        const TempFile file("engine_save_strategy_instances.json");
-
-        writeFile(file.getPath(), JsonSaveStrategy{}.serialize(original));
-        const auto result = JsonSaveStrategy{}.deserialize(readFile(file.getPath()));
-
-        REQUIRE(result.has_value());
-        CHECK(*result == original);
-    }
-
-    TEST_CASE("Een beschadigd bestand op schijf geeft nullopt", "[integration][persistence]")
-    {
-        const JsonSaveStrategy strategy;
-        const TempFile file("engine_save_strategy_corrupt" + strategy.fileExtension());
-
-        SECTION("Afgebroken bestand, bijvoorbeeld door een crash tijdens het opslaan")
-        {
-            const std::string complete = strategy.serialize(makeSampleData());
-            writeFile(file.getPath(), complete.substr(0, complete.size() / 2));
-
-            CHECK_FALSE(strategy.deserialize(readFile(file.getPath())).has_value());
-        }
-
-        SECTION("Leeg bestand")
-        {
-            writeFile(file.getPath(), "");
-
-            CHECK_FALSE(strategy.deserialize(readFile(file.getPath())).has_value());
-        }
-    }
-
-    TEST_CASE("Een bestand wordt bij opnieuw opslaan volledig overschreven", "[integration][persistence]")
-    {
-        const JsonSaveStrategy strategy;
-        const TempFile file("engine_save_strategy_overwrite" + strategy.fileExtension());
-        const GameData small{.version = 1, .root = DataNode(1)};
-
-        writeFile(file.getPath(), strategy.serialize(makeSampleData())); // lang
-        writeFile(file.getPath(), strategy.serialize(small));            // kort
-
-        const auto result = strategy.deserialize(readFile(file.getPath()));
-
-        REQUIRE(result.has_value());
-        // geen restanten van de eerste, langere inhoud
-        CHECK(*result == small);
     }
 } // namespace engine::subsystems

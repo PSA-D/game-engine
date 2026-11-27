@@ -2,8 +2,8 @@
 // PersistenceSubsystem met JsonSaveStrategy en echte bestanden, zoals de engine dat koppelt.
 
 #include "core/Persistence.h"
-#include "persistence/JsonSaveStrategy.h"
-#include "persistence/PersistenceSubsystem.h"
+#include "subsystems/persistence/JsonSaveStrategy.h"
+#include "subsystems/persistence/PersistenceSubsystem.h"
 #include "core/ComponentRegistry.h"
 #include "LevelTestData.h"
 #include "PersistenceTestData.h"
@@ -14,6 +14,10 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <filesystem>
+#include <fstream>
+#include <sstream>
+#include <system_error>
 
 namespace engine
 {

@@ -1,8 +1,8 @@
 // Laag: UNIT. Geen bestanden: alleen de regels voor namen, de foutteksten en het aanmaken.
 // Wat er met echte bestanden gebeurt staat in PersistenceSubsystemIntegrationTest.cpp.
 
-#include "persistence/JsonSaveStrategy.h"
-#include "persistence/PersistenceSubsystem.h"
+#include "subsystems/persistence/JsonSaveStrategy.h"
+#include "subsystems/persistence/PersistenceSubsystem.h"
 #include "core/ComponentRegistry.h"
 #include "PersistenceTestData.h"
 
