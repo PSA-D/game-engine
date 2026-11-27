@@ -5,6 +5,7 @@
 #include "PersistenceTestData.h"
 #include "subsystems/persistence/ISaveStrategy.h"
 #include "subsystems/persistence/JsonSaveStrategy.h"
+#include "runtime/DataNode.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <filesystem>
@@ -18,7 +19,7 @@ namespace engine::subsystems
 {
     namespace
     {
-        using runtime::DataNode;
+        using engine::DataNode;
 
         // Een tijdelijk bestand dat zichzelf opruimt, zodat de tests niets achterlaten.
         class TempFile
