@@ -1,4 +1,4 @@
-#include "GameObject.h"
+#include "runtime/GameObject.h"
 
 #include "runtime/Region.h"
 

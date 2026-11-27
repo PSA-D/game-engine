@@ -2,7 +2,7 @@
 
 #include "runtime/Region.h"
 
-#include "GameObject.h"
+#include "runtime/GameObject.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <cstdint>

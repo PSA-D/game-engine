@@ -1,7 +1,8 @@
-#include "Region.h"
+#include "runtime/Region.h"
 
-#include "GameObject.h"
+#include "runtime/GameObject.h"
 
+#include <algorithm>
 #include <string>
 #include <utility>
 

@@ -1,7 +1,8 @@
-#include "Scene.h"
+#include "runtime/Scene.h"
 
-#include "Level.h"
-#include "Region.h"
+#include "runtime/GameObject.h"
+#include "runtime/Level.h"
+#include "runtime/Region.h"
 
 #include <algorithm>
 #include <stdexcept>
@@ -90,68 +91,67 @@ namespace engine
         activeLevel = incoming;
     }
 
-    // GameObject& Scene::createGameObject(std::string_view objectName)
-    // {
-    //     auto* region = getActiveRegion();
-    //     if (region == nullptr)
-    //     {
-    //         throw std::logic_error(
-    //             "Scene::createGameObject: er is geen actief level met een actieve region.");
-    //     }
-    //     return region->createGameObject(objectName);
-    // }
-    //    // TODO: Uncomment de bovenstaande method zodra GameObject beschikbaar is
-    // GameObject* Scene::findGameObject(std::uint64_t objectId)
-    // {
-    //     for (auto* gameObject : collectActiveGameObjects())
-    //     {
-    //         if (gameObject->getId() == objectId)
-    //             return gameObject;
-    //     }
-    //     return nullptr;
-    // }
-    //    // TODO: Uncomment de bovenstaande method zodra GameObject beschikbaar is
-    // GameObject* Scene::find(std::string_view objectName)
-    // {
-    //     for (auto* gameObject : collectActiveGameObjects())
-    //     {
-    //         if (gameObject->getName() == objectName)
-    //             return gameObject;
-    //     }
-    //     return nullptr;
-    // }
-    //    // TODO: Uncomment de bovenstaande method zodra GameObject beschikbaar is
-    // std::vector<GameObject*> Scene::findWithTag(std::string_view tag)
-    // {
-    //     std::vector<GameObject*> result;
-    //     for (auto* gameObject : collectActiveGameObjects())
-    //     {
-    //         if (gameObject->getTag() == tag)
-    //             result.push_back(gameObject);
-    //     }
-    //     return result;
-    // }
-    // TODO: Uncomment de bovenstaande method zodra GameObject beschikbaar is
+    GameObject& Scene::createGameObject(std::string_view objectName)
+    {
+        auto* region = getActiveRegion();
+        if (region == nullptr)
+        {
+            throw std::logic_error("Scene::createGameObject: er is geen actief level met een actieve region.");
+        }
+        return region->createGameObject(objectName);
+    }
 
-    // void Scene::processPendingDestruction()
-    // {
-    // for (auto& level : levels)
-    // {
-    //     for (auto* region : level->getRegions())
-    //         region->processPendingDestruction();
-    // }
-    // }
-    // TODO: Uncomment de bovenstaande code zodra GameObject beschikbaar is
+    GameObject* Scene::findGameObject(std::uint64_t objectId)
+    {
+        for (auto* gameObject : collectActiveGameObjects())
+        {
+            if (gameObject->getId() == objectId)
+                return gameObject;
+        }
+        return nullptr;
+    }
+
+    GameObject* Scene::find(std::string_view objectName)
+    {
+        for (auto* gameObject : collectActiveGameObjects())
+        {
+            if (gameObject->getName() == objectName)
+                return gameObject;
+        }
+        return nullptr;
+    }
+
+    std::vector<GameObject*> Scene::findWithTag(std::string_view tag)
+    {
+        std::vector<GameObject*> result;
+        for (auto* gameObject : collectActiveGameObjects())
+        {
+            if (gameObject->getTag() == tag)
+                result.push_back(gameObject);
+        }
+        return result;
+    }
+
+    void Scene::update() {}
+
+    void Scene::processPendingDestruction()
+    {
+        for (auto& level : levels)
+        {
+            for (auto* region : level->getRegions())
+                region->processPendingDestruction();
+        }
+    }
 
     Region* Scene::getActiveRegion() const
     {
         return activeLevel == nullptr ? nullptr : activeLevel->getActiveRegion();
     }
 
-    // std::vector<GameObject*> Scene::collectActiveGameObjects()
-    // {
-    //     auto* region = getActiveRegion();
-    //     return region == nullptr ? std::vector<GameObject*>{} : region->getGameObjects();
-    // }
-    // TODO: Uncomment de bovenstaande method zodra GameObject beschikbaar is
+    std::vector<GameObject*> Scene::collectActiveGameObjects()
+    {
+        auto* region = getActiveRegion();
+        return region == nullptr ? std::vector<GameObject*>{} : region->getGameObjects();
+    }
+
 } // namespace engine
