@@ -16,7 +16,7 @@ namespace subsystems
 {
 class PersistenceSubsystem;
 }
-namespace systems
+namespace subsystems
 {
 class PersistenceSubsystem;
 } // namespace systems
@@ -25,7 +25,7 @@ class EngineImpl;
 class PersistenceTestAccess;
 
 // Voor game-code die iets wil weten over een mislukte actie.
-using PersistenceError = subsystems::PersistenceError;
+using subsystems::PersistenceError;
 
 // Opslaan en laden voor game-ontwikkelaars.
 // Dit is de enige ingang: game-code hoeft nooit met een subsysteem te praten.
@@ -72,7 +72,7 @@ private:
     friend class PersistenceTestAccess;
     // alleen voor tests
 
-    static void setSystem(systems::PersistenceSubsystem* persistenceSubsystem);
+    static void setSystem(subsystems::PersistenceSubsystem* persistenceSubsystem);
 
     static subsystems::PersistenceSubsystem* subsystem;
 };

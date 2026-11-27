@@ -1,7 +1,7 @@
 #include "PersistenceSubsystem.h"
 
 #include "platform/IPlatformPaths.h"
-#include "runtime/ComponentRegistry.h"
+#include "core/ComponentRegistry.h"
 #include "runtime/Level.h"
 
 #include <algorithm>

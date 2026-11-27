@@ -10,7 +10,7 @@ namespace engine
 {
 subsystems::PersistenceSubsystem* Persistence::subsystem = nullptr;
 
-void Persistence::setSystem(systems::PersistenceSubsystem* persistenceSubsystem)
+void Persistence::setSystem(subsystems::PersistenceSubsystem* persistenceSubsystem)
 {
     subsystem = persistenceSubsystem;
 }
