@@ -105,6 +105,25 @@ add_library(engine STATIC
     # Utils
     src/utils/Interpolator.cpp
     src/utils/Rect.cpp
+        src/core/ComponentRegistry.cpp
+        src/core/ComponentRegistry.h
+        src/core/Region.cpp
+        src/core/Persistence.cpp
+        src/core/Persistence.h
+        src/persistence/PersistenceError.h
+        src/persistence/PersistenceSubsystem.cpp
+        src/persistence/PersistenceSubsystem.h
+        src/platform/IPlatformPaths.h
+)
+
+target_link_libraries(engine
+    PUBLIC
+        project_sanitizers
+        project_warnings
+        SDL3::SDL3
+
+    PRIVATE
+        nlohmann_json::nlohmann_json
 )
 
 target_include_directories(engine

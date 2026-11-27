@@ -16,6 +16,9 @@ add_executable(EngineTests
     persistence/JsonSaveStrategyIntegrationTest.cpp
     persistence/JsonSaveStrategyTest.cpp
     persistence/PersistenceTestData.h
+    persistence/PersistenceSubsystemTest.cpp
+    persistence/PersistenceFacadeTest.cpp
+    persistence/PersistenceFacadeIntegrationTest.cpp
 )
 
 target_link_libraries(EngineTests PRIVATE
@@ -99,7 +102,8 @@ target_include_directories(InputTests PRIVATE ${ENGINE_INTERNAL_INCLUDE_DIR})
 add_test(NAME InputTests COMMAND InputTests)
 
 add_executable(IntegrationTests
-    integration/InputSubsystemTests.cpp
+        integration/InputSubsystemTests.cpp
+        persistence/PersistenceSubsystemIntegrationTest.cpp
 )
 
 target_link_libraries(IntegrationTests PRIVATE
