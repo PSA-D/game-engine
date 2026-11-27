@@ -7,7 +7,6 @@
 #include "runtime/IKeyListener.h"
 #include "runtime/IMouseListener.h"
 
-#include <algorithm>
 #include <vector>
 
 namespace engine::subsystems
@@ -21,76 +20,32 @@ namespace engine::subsystems
         }
 
         void update();
-        [[nodiscard]] bool isQuitRequested() const
-        {
-            return quitRequested_;
-        }
         void processEvent(const platform::PlatformEvent& event);
 
-        void addKeyListener(IKeyListener* listener)
-        {
-            keyListeners_.add(listener);
-        }
-        void removeKeyListener(IKeyListener* listener)
-        {
-            keyListeners_.remove(listener);
-        }
-        void addMouseListener(IMouseListener* listener)
-        {
-            mouseListeners_.add(listener);
-        }
-        void removeMouseListener(IMouseListener* listener)
-        {
-            mouseListeners_.remove(listener);
-        }
+        void addKeyListener(IKeyListener* listener);
+        void removeKeyListener(IKeyListener* listener);
+        void addMouseListener(IMouseListener* listener);
+        void removeMouseListener(IMouseListener* listener);
 
-        InputHandler& getHandler()
-        {
-            return inputHandler_;
-        }
+        bool getKey(KeyCode key) const;     // Checkt of de key wordt ingedrukt
+        bool getKeyDown(KeyCode key) const; // enz.
+        bool getKeyUp(KeyCode key) const;
+        bool getMouseButton(MouseButton button) const;
+        bool getMouseButtonDown(MouseButton button) const;
+        bool getMouseButtonUp(MouseButton button) const;
 
-        bool getKey(KeyCode key)
-        {
-            const auto index = static_cast<std::size_t>(key);
-            if (index >= state_.keysDown.size())
-                return false;
+        Vector2 getMousePosition() const;
+        Vector2 getMouseDelta() const;
+        Vector2 getMouseWheel() const;
 
-            return state_.keysDown.at(index);
-        };
-        bool getKeyDown(KeyCode key)
-        {
-            const auto index = static_cast<std::size_t>(key);
-            if (index >= state_.keysPressed.size())
-                return false;
-
-            return state_.keysPressed.at(index);
-        };
-        bool getKeyUp(KeyCode key)
-        {
-            const auto index = static_cast<std::size_t>(key);
-            if (index >= state_.keysReleased.size())
-                return false;
-
-            return state_.keysReleased.at(index);
-        };
-        bool getMouseButton(MouseButton button)
-        {
-            const auto index = static_cast<std::size_t>(button);
-            if (index >= state_.mouseButtonsDown.size())
-                return false;
-
-            return state_.mouseButtonsDown.at(index);
-        };
+        InputHandler& getHandler();
+        bool isQuitRequested() const;
+        std::vector<platform::WindowEvent> takeWindowEvents(); // Neemt alle events en leegt de lijst
 
     private:
-        template <class T>
-        static bool contains(const std::vector<T*>& vec, T* item)
-        {
-            return std::find(vec.begin(), vec.end(), item) != vec.end();
-        }
-
         void beginFrame();
-        void dispatchToListeners(const platform::PlatformEvent& event);
+        void notifyListeners(const platform::PlatformEvent& e);
+        void releaseAllHeld();
 
         platform::IInputSource& source_;
         InputState state_;
