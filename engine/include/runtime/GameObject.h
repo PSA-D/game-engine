@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BehaviourScript.h"
 #include "Component.h"
 #include "Transform.h"
 
@@ -34,6 +35,10 @@ namespace engine
             static_assert(std::is_base_of_v<Component, T>);
             auto component = std::make_unique<T>(*this, std::forward<Args>(args)...);
             T& result = *component;
+
+            if (std::is_base_of_v<BehaviourScript, T>)
+                behaviourScripts.push_back(&result);
+
             components.push_back(std::move(component));
             return result;
         }
@@ -120,6 +125,7 @@ namespace engine
                 {
                     if (idx == 0)
                     {
+                        unregisterBehaviour(component->get());
                         components.erase(component);
                         return true;
                     }
@@ -135,6 +141,12 @@ namespace engine
         [[nodiscard]] std::size_t removeComponents()
         {
             static_assert(std::is_base_of_v<Component, T>);
+            for (const auto& component : components)
+            {
+                if (dynamic_cast<T*>(component.get()) != nullptr)
+                    unregisterBehaviour(component.get());
+            }
+
             const auto oldSize = components.size();
             components.erase(std::remove_if(components.begin(),
                                             components.end(),
@@ -162,10 +174,13 @@ namespace engine
         void destroy() noexcept;
         [[nodiscard]] bool isPendingDestroy() const noexcept;
 
+        void updateBehaviours() const;
+
     private:
         friend class Region;
 
         GameObject(Region& ownerRegion, std::string objectName);
+        void unregisterBehaviour(Component* component) noexcept;
 
         static std::atomic<std::uint64_t> nextId;
 
@@ -177,6 +192,10 @@ namespace engine
         std::vector<GameObject*> children;
         Transform transform;
         std::vector<std::unique_ptr<Component>> components;
+        // Look-up vector voor BehaviourScripts.
+        // Hierdoor hoeft er geen dynamic_cast<> in elke frame aangeroepen te worden
+        // en hoeft niet elke component te worden langs gegaan.
+        std::vector<BehaviourScript*> behaviourScripts;
         bool pendingDestroy{false};
     };
 } // namespace engine

@@ -12,11 +12,13 @@ namespace engine
 {
     class GameObject;
 
+    // Event voor het activeren van een scene (voor EventBus)
     struct SceneActivated
     {
         Scene* scene;
     };
 
+    // Event voor het deactiveren van een scene (voor EventBus)
     struct SceneDeactivated
     {
         Scene* scene;

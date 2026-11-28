@@ -110,6 +110,8 @@ add_library(engine STATIC
         # Utils
         src/utils/Interpolator.cpp
         src/utils/Rect.cpp
+        include/runtime/BehaviourScript.h
+        src/runtime/BehaviourScript.cpp
 )
 
 target_include_directories(engine

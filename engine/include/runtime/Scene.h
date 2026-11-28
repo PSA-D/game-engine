@@ -35,7 +35,7 @@ namespace engine
         [[nodiscard]] std::uint64_t getId() const;
         [[nodiscard]] const std::string& getName() const;
 
-        void update();
+        void updateBehaviours() const;
 
         // ---- Levels ----
 

@@ -66,6 +66,8 @@ namespace engine
                 child->parent = nullptr;
             }
         }
+        for (BehaviourScript* script : behaviourScripts)
+            script->destroy();
     }
 
     Transform& GameObject::getTransform() noexcept
@@ -98,6 +100,7 @@ namespace engine
         {
             return false;
         }
+        unregisterBehaviour(found->get());
         components.erase(found);
         return true;
     }
@@ -204,5 +207,23 @@ namespace engine
     bool GameObject::isPendingDestroy() const noexcept
     {
         return pendingDestroy;
+    }
+
+    void GameObject::unregisterBehaviour(Component* component) noexcept
+    {
+        auto* script = dynamic_cast<BehaviourScript*>(component);
+        if (script == nullptr)
+            return;
+
+        std::erase(behaviourScripts, script);
+    }
+
+    void GameObject::updateBehaviours() const
+    {
+        for (const auto& script : behaviourScripts)
+        {
+            if (script != nullptr && script->isEnabled())
+                script->update();
+        }
     }
 } // namespace engine

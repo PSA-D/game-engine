@@ -93,7 +93,7 @@ namespace engine
 
     GameObject& Scene::createGameObject(std::string_view objectName) const
     {
-        auto* region = getActiveRegion();
+        Region* region = getActiveRegion();
         if (region == nullptr)
         {
             throw std::logic_error("Scene::createGameObject: er is geen actief level met een actieve region.");
@@ -103,13 +103,13 @@ namespace engine
 
     GameObject* Scene::findGameObject(std::uint64_t objectId) const
     {
-        auto* region = getActiveRegion();
+        Region* region = getActiveRegion();
         return region != nullptr ? region->findGameObject(objectId) : nullptr;
     }
 
     GameObject* Scene::find(std::string_view objectName) const
     {
-        auto* region = getActiveRegion();
+        Region* region = getActiveRegion();
         return region != nullptr ? region->findGameObjectByName(std::string(objectName)) : nullptr;
     }
 
@@ -124,7 +124,18 @@ namespace engine
         return result;
     }
 
-    void Scene::update() {}
+    void Scene::updateBehaviours() const
+    {
+        Region* region = getActiveRegion();
+        if (region == nullptr)
+            return;
+
+        for (const auto& gameObject : region->getGameObjects())
+        {
+            if (!gameObject->isPendingDestroy())
+                gameObject->updateBehaviours();
+        }
+    }
 
     void Scene::processPendingDestruction() const
     {
@@ -142,7 +153,7 @@ namespace engine
 
     std::vector<GameObject*> Scene::collectActiveGameObjects() const
     {
-        auto* region = getActiveRegion();
+        Region* region = getActiveRegion();
         return region == nullptr ? std::vector<GameObject*>{} : region->getGameObjects();
     }
 
