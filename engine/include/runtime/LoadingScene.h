@@ -20,6 +20,7 @@ namespace engine
         LoadingScene(LoadingScene&&) = delete;
         auto operator=(LoadingScene&&) noexcept -> LoadingScene& = delete;
 
+        void load() const {}
         [[nodiscard]] float getProgress() const noexcept
         {
             return progress;
