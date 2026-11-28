@@ -5,7 +5,7 @@ on:
   # Runs on main are what fill the vcpkg cache for every new PR: a cache made
   # inside a PR can only be read by that same PR.
   push:
-    branches: [main]
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -45,9 +45,11 @@ jobs:
           - name: Windows MSVC
             os: windows-2025
             compiler: msvc
+            triplet: x64-windows
           - name: Windows MinGW
             os: windows-2025
             compiler: mingw
+            triplet: x64-mingw-dynamic
 
     steps:
       - name: Check out repository

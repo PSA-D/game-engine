@@ -1,6 +1,7 @@
 #include "core/EngineImpl.h"
 
 #include "CompositionRoot.h"
+#include "facades/InputFacade.h"
 
 #include <iostream>
 
@@ -14,6 +15,8 @@ namespace engine
         , gameLoop(
               sceneManager, input, physics, animation, audio, render, ai, ui, debug, editor, config.targetFrameRate)
     {
+        InputFacade::init(&input);
+
         const Size size = window->getSize();
         std::cout << "[Engine] Venster aangemaakt: '" << window->getTitle() << "' " << size.width << "x" << size.height
                   << '\n';
@@ -21,6 +24,7 @@ namespace engine
 
     EngineImpl::~EngineImpl()
     {
+        InputFacade::shutdown();
         std::cout << "[Engine] Afsluiten\n";
     }
 

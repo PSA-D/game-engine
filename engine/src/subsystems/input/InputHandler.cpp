@@ -51,25 +51,6 @@ namespace engine::subsystems
 
     void InputHandler::handleInput(const InputState& state) const
     {
-        for (const auto& binding : keyBindings_)
-        {
-            if (!binding.command)
-                continue;
-
-            // Maakt een index op basis van de key
-            const auto index = static_cast<std::size_t>(binding.key);
-            if (index >= state.keysDown.size())
-                continue;
-
-            if (isTriggered(binding.trigger,
-                            state.keysPressed.at(index),
-                            state.keysReleased.at(index),
-                            state.keysDown.at(index)))
-            {
-                binding.command->execute();
-            }
-        }
-
         for (const auto& binding : mouseBindings_)
         {
             if (!binding.command)
@@ -84,6 +65,25 @@ namespace engine::subsystems
                             state.mouseButtonsPressed.at(index),
                             state.mouseButtonsReleased.at(index),
                             state.mouseButtonsDown.at(index)))
+            {
+                binding.command->execute();
+            }
+        }
+
+        for (const auto& binding : keyBindings_)
+        {
+            if (!binding.command)
+                continue;
+
+            // Maakt een index op basis van de key
+            const auto index = static_cast<std::size_t>(binding.key);
+            if (index >= state.keysDown.size())
+                continue;
+
+            if (isTriggered(binding.trigger,
+                            state.keysPressed.at(index),
+                            state.keysReleased.at(index),
+                            state.keysDown.at(index)))
             {
                 binding.command->execute();
             }

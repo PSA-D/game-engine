@@ -66,6 +66,7 @@ namespace engine::platform
         bool repeat = false;
     };
 
+    // Een typedef voor alle event types
     using PlatformEvent =
         std::variant<WindowEvent, MouseWheelEvent, QuitEvent, MouseMoveEvent, MouseButtonEvent, KeyEvent>;
 
