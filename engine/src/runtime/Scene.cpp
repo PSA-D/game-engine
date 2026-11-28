@@ -91,7 +91,7 @@ namespace engine
         activeLevel = incoming;
     }
 
-    GameObject& Scene::createGameObject(std::string_view objectName)
+    GameObject& Scene::createGameObject(std::string_view objectName) const
     {
         auto* region = getActiveRegion();
         if (region == nullptr)
@@ -101,7 +101,7 @@ namespace engine
         return region->createGameObject(objectName);
     }
 
-    GameObject* Scene::findGameObject(std::uint64_t objectId)
+    GameObject* Scene::findGameObject(std::uint64_t objectId) const
     {
         for (auto* gameObject : collectActiveGameObjects())
         {
@@ -111,7 +111,7 @@ namespace engine
         return nullptr;
     }
 
-    GameObject* Scene::find(std::string_view objectName)
+    GameObject* Scene::find(std::string_view objectName) const
     {
         for (auto* gameObject : collectActiveGameObjects())
         {
@@ -121,7 +121,7 @@ namespace engine
         return nullptr;
     }
 
-    std::vector<GameObject*> Scene::findWithTag(std::string_view tag)
+    std::vector<GameObject*> Scene::findWithTag(std::string_view tag) const
     {
         std::vector<GameObject*> result;
         for (auto* gameObject : collectActiveGameObjects())
@@ -134,9 +134,9 @@ namespace engine
 
     void Scene::update() {}
 
-    void Scene::processPendingDestruction()
+    void Scene::processPendingDestruction() const
     {
-        for (auto& level : levels)
+        for (const auto& level : levels)
         {
             for (auto* region : level->getRegions())
                 region->processPendingDestruction();

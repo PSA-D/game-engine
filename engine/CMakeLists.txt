@@ -18,6 +18,8 @@ add_library(engine STATIC
         include/runtime/Scene.h
         include/runtime/Transform.h
         include/runtime/SceneManager.h
+        include/runtime/EventBus.h
+        include/runtime/Subscription.h
         include/utils/AssetHandle.h
         include/utils/BodyType.h
         include/utils/Color.h
@@ -46,6 +48,9 @@ add_library(engine STATIC
         src/runtime/Region.cpp
         src/runtime/Scene.cpp
         src/runtime/Transform.cpp
+        src/runtime/EventBus.cpp
+        src/runtime/Subscription.cpp
+        src/runtime/SceneManager.cpp
 
         # Platform
         src/platform/Events.h
@@ -105,10 +110,6 @@ add_library(engine STATIC
         # Utils
         src/utils/Interpolator.cpp
         src/utils/Rect.cpp
-        src/runtime/EventBus.cpp
-        include/runtime/EventBus.h
-        src/runtime/Subscription.cpp
-        include/runtime/Subscription.h
 )
 
 target_include_directories(engine

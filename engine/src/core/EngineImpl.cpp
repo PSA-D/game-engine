@@ -11,7 +11,7 @@ namespace engine
         , window(factory->createWindow(core::makeWindowConfig(config)))
         , inputSource(factory->createInputSource(*window))
         , input(*inputSource)
-        , sceneManager()
+        , sceneManager(eventBus)
         , gameLoop(
               sceneManager, input, physics, animation, audio, render, ai, ui, debug, editor, config.targetFrameRate)
     {

@@ -40,14 +40,18 @@ namespace engine
         [[nodiscard]] Scene* getActiveScene() noexcept;
         [[nodiscard]] const Scene* getActiveScene() const noexcept;
 
-        [[nodiscard]] GameObject* findGameObject(std::uint64_t id);
+        // Zoekt een GameObject in alle scenes
+        [[nodiscard]] GameObject* findGameObject(std::uint64_t id) const;
 
-        void processPendingDestruction();
+        // Roept op alle scenes de processPendingDestruction() aan
+        void processPendingDestruction() const;
 
     private:
         EventBus& events_;
         std::vector<std::unique_ptr<Scene>> scenes_;
         Scene* activeScene_{nullptr};
+
         std::uint64_t nextSceneId_{1};
+        std::vector<std::uint64_t> pendingDestruction;
     };
 } // namespace engine
