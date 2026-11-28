@@ -103,22 +103,14 @@ namespace engine
 
     GameObject* Scene::findGameObject(std::uint64_t objectId) const
     {
-        for (auto* gameObject : collectActiveGameObjects())
-        {
-            if (gameObject->getId() == objectId)
-                return gameObject;
-        }
-        return nullptr;
+        auto* region = getActiveRegion();
+        return region != nullptr ? region->findGameObject(objectId) : nullptr;
     }
 
     GameObject* Scene::find(std::string_view objectName) const
     {
-        for (auto* gameObject : collectActiveGameObjects())
-        {
-            if (gameObject->getName() == objectName)
-                return gameObject;
-        }
-        return nullptr;
+        auto* region = getActiveRegion();
+        return region != nullptr ? region->findGameObjectByName(std::string(objectName)) : nullptr;
     }
 
     std::vector<GameObject*> Scene::findWithTag(std::string_view tag) const
