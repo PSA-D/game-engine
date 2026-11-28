@@ -25,3 +25,5 @@ vcpkg_installed/
 # OS files
 .DS_Store
 Thumbs.db
+
+info/

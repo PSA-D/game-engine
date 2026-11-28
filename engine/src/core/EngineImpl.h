@@ -64,7 +64,8 @@ namespace engine
         subsystems::DebugSubsystem debug;
 
         // 3. SceneManager + GameLoop
-        SceneManager sceneManager; // na merge Dirk: eerst EventBus eventBus; dan sceneManager{eventBus}
+        EventBus eventBus;
+        SceneManager sceneManager;
         GameLoop gameLoop;
     };
 } // namespace engine

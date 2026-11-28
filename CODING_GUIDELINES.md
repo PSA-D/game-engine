@@ -12,31 +12,37 @@ Dit document beschrijft de afspraken waarmee het ontwikkelteam van het C++ Game 
 - hoe we de tools handig gebruiken.
 
 Wat dit document **niet** bevat:
+
 - de exacte gewenste formatting. Dat staat in `.clang-format`
-- andere toolconfiguraties in `.clang-format`, `.clang-tidy` en de CMake-bestanden; die worden door de tools automatisch toegepast;
+- andere toolconfiguraties in `.clang-format`, `.clang-tidy` en de CMake-bestanden; die worden door de tools automatisch
+  toegepast;
 - installatie- en build-instructies; die staan in **DEVELOPMENT_SETUP.md**.
 
 # 2. Technische standaard
 
 ## 2.1. C++-versie
 
-Het project gebruikt **C++20**. We gebruiken het standaard C++-dialect en geen compiler-specifieke extensies zoals `gnu++20`. CMake dwingt dit expliciet af.
+Het project gebruikt **C++20**. We gebruiken het standaard C++-dialect en geen compiler-specifieke extensies zoals
+`gnu++20`. CMake dwingt dit expliciet af.
 
 ## 2.2. Compilers
 
 Iedere developer mag de compiler gebruiken die passend is voor het eigen platform.
 
-| Platform | Compiler      |
-| -------- | ------------- |
-| Linux    | GCC           |
-| Windows  | MSVC of MinGW |
-| macOS    | Apple Clang   |
+| Platform | Compiler       |
+|----------|----------------|
+| Linux    | GCC            |
+| Windows  | MSVC of MinGW  |
+| macOS    | Niet supported |
 
-We proberen **niet** iedereen dezelfde compiler te laten gebruiken. De code moet standaard-conform zijn en wordt in CI met meerdere compilers getest. Een developer mag lokaal een andere ondersteunde compiler gebruiken dan de andere teamleden.
+We proberen **niet** iedereen dezelfde compiler te laten gebruiken. De code moet standaard-conform zijn en wordt in CI
+met meerdere compilers getest. Een developer mag lokaal een andere ondersteunde compiler gebruiken dan de andere
+teamleden.
 
 ## 2.3. Platformonafhankelijkheid
 
-Code moet standaard C++ gebruiken wanneer daar een mogelijkheid voor bestaat. Platform-specifieke code is toegestaan wanneer het noodzakelijk is, maar moet worden geisoleerd:
+Code moet standaard C++ gebruiken wanneer daar een mogelijkheid voor bestaat. Platform-specifieke code is toegestaan
+wanneer het noodzakelijk is, maar moet worden geisoleerd:
 
 ```text
 engine/
@@ -46,13 +52,13 @@ engine/
 ├── audio/
 └── platform/
     ├── Windows/
-    ├── Linux/
-    └── MacOS/
+    └── Linux/
 ```
 
 # 3. Bestandsstructuur
 
 We organiseren files **per module**. Bijvoorbeeld:
+
 ```
 /src
 ├── /core
@@ -65,7 +71,7 @@ We organiseren files **per module**. Bijvoorbeeld:
 │   ├── audio_source.cpp
 │   ├── rigidbody.h
 │   └── rigidbody.cpp
-├── /systems
+├── /subsystems
 │   ├── renderer.h
 │   └── renderer.cpp
 └── /utils
@@ -73,13 +79,15 @@ We organiseren files **per module**. Bijvoorbeeld:
     └── math.cpp
 ```
 
-Vermijd platformchecks verspreid door de volledige codebase. Als platform-specifieke implementatie noodzakelijk is, hoort deze bij voorkeur achter een gemeenschappelijke interface te zitten.
+Vermijd platformchecks verspreid door de volledige codebase. Als platform-specifieke implementatie noodzakelijk is,
+hoort deze bij voorkeur achter een gemeenschappelijke interface te zitten.
 
 Platform- en compiler-macro's mogen niet door elkaar worden gehaald: `#ifdef _WIN32` betekent Windows en niet MSVC.
 
 # 4. C++ Core Guidelines
 
-De C++ Core Guidelines van ISO C++ Foundation zijn de primaire richtlijn voor het schrijven van C++. We volgen de Guidelines waar ze van toepassing zijn en gebruiken moderne C++-constructies in plaats van legacy C++.
+De C++ Core Guidelines van ISO C++ Foundation zijn de primaire richtlijn voor het schrijven van C++. We volgen de
+Guidelines waar ze van toepassing zijn en gebruiken moderne C++-constructies in plaats van legacy C++.
 
 # 5. Ownership
 
@@ -97,11 +105,13 @@ Gebruik const waar je const kunt gebruiken.
 
 ## 7.1. `#pragma once`
 
-We gebruiken `#pragma once` als header guard. Hoewel dit formeel geen onderdeel van de ISO C++-standaard is, wordt het door alle ondersteunde compilers betrouwbaar ondersteund (GCC, Clang, Apple Clang en MSVC) en vermijdt het onnodige boilerplate.
+We gebruiken `#pragma once` als header guard. Hoewel dit formeel geen onderdeel van de ISO C++-standaard is, wordt het
+door alle ondersteunde compilers betrouwbaar ondersteund (GCC, Clang en MSVC) en vermijdt het onnodige boilerplate.
 
 ## 7.2. Include wat je gebruikt
 
-Een bestand mag niet afhankelijk zijn van transitive includes. Gebruikt een bestand `std::vector` rechtstreeks, dan include het bestand zelf de benodigde header; een header die toevallig iets meebrengt is daarvoor niet voldoende.
+Een bestand mag niet afhankelijk zijn van transitive includes. Gebruikt een bestand `std::vector` rechtstreeks, dan
+include het bestand zelf de benodigde header; een header die toevallig iets meebrengt is daarvoor niet voldoende.
 
 ## 7.3. Include-volgorde
 
@@ -120,32 +130,37 @@ Source-files eindigen op `.cpp`. Header-files eindigen op `.h` (en dus niet `.hp
 
 # 9. Naamgevingsconventies
 
-| Element    | Convention   | Voorbeeld          |
-| ---------- | ------------ | ------------------ |
-| Classes    | `PascalCase` | `RenderSystem`     |
-| Structs    | `PascalCase` | `Vertex`           |
-| Functions  | `camelCase`  | `createWindow()`   |
-| Variables  | `camelCase`  | `windowSize`       |
-| Members    | `camelCase`  | `windowHandle`     |
-| Constants  | `ALL_CAPS`   | `MAX_VERTICES`     |
-| Namespaces | `lowercase`  | `engine::graphics` |
-| Files      | `PascalCase` | `RenderSystem.h`   |
+| Element    | Convention   | Voorbeeld           |
+|------------|--------------|---------------------|
+| Classes    | `PascalCase` | `RenderSubsystem`   |
+| Structs    | `PascalCase` | `Vertex`            |
+| Functions  | `camelCase`  | `createWindow()`    |
+| Variables  | `camelCase`  | `windowSize`        |
+| Members    | `camelCase`  | `windowHandle`      |
+| Constants  | `ALL_CAPS`   | `MAX_VERTICES`      |
+| Namespaces | `lowercase`  | `engine::graphics`  |
+| Files      | `PascalCase` | `RenderSubsystem.h` |
 
-Private members krijgen geen underscore-prefix, tenzij een specifiek onderdeel van de codebase daar een expliciete reden voor heeft.
+Private members krijgen geen underscore-prefix, tenzij een specifiek onderdeel van de codebase daar een expliciete reden
+voor heeft.
 
 # 10. Waarschuwingen en undefined behavior
 
-We compileren met een strenge warning policy. Voor GCC en Clang gebruiken we minimaal `-Wall`, `-Wextra` en `-Wpedantic`; waar nuttig komen daar `-Wshadow`, `-Wconversion` en `-Wsign-conversion` bij. MSVC gebruikt de equivalente strenge instellingen. De exacte flags staan in de CMake-bestanden en worden automatisch toegepast.
+We compileren met een strenge warning policy. Voor GCC en Clang gebruiken we minimaal `-Wall`, `-Wextra` en
+`-Wpedantic`; waar nuttig komen daar `-Wshadow`, `-Wconversion` en `-Wsign-conversion` bij. MSVC gebruikt de equivalente
+strenge instellingen. De exacte flags staan in de CMake-bestanden en worden automatisch toegepast.
 
 We schrijven geen code die afhankelijk is van warnings die toevallig door slechts een compiler worden gegeven.
 
-Er wordt geen code geschreven met undefined behavior. Nieuwe code wordt zonder waarschuwingen en zonder UB-instrumentatie afgeleverd.
+Er wordt geen code geschreven met undefined behavior. Nieuwe code wordt zonder waarschuwingen en zonder
+UB-instrumentatie afgeleverd.
 
 # 11. Tools: hoe te gebruiken
 
 ## 11.1. clang-format
 
-We gebruiken **clang-format** voor formatting; de configuratie staat in `.clang-format` en wordt toegepast op `*.cpp` en `*.h`.
+We gebruiken **clang-format** voor formatting; de configuratie staat in `.clang-format` en wordt toegepast op `*.cpp` en
+`*.h`.
 
 Alle bestanden formatteren (alleen vanuit de projectroot):
 
@@ -157,7 +172,7 @@ Get-ChildItem -Recurse -File -Include *.cpp,*.h | ForEach-Object {
 }
 ```
 
-- Bash (macOS, Linux, Git Bash op Windows):
+- Bash (Linux, Git Bash op Windows):
 
 ```bash
 clang-format -i **/*.cpp **/*.h
@@ -167,7 +182,8 @@ clang-format -i **/*.cpp **/*.h
 
 We gebruiken **clang-tidy** voor automatische controle; de configuratie staat in `.clang-tidy`.
 
-Niet iedere check is altijd geschikt voor iedere situatie. Een check mag worden uitgeschakeld wanneer daar een concrete reden voor is. Zo'n uitzondering moet bij voorkeur worden beperkt tot de betreffende regel:
+Niet iedere check is altijd geschikt voor iedere situatie. Een check mag worden uitgeschakeld wanneer daar een concrete
+reden voor is. Zo'n uitzondering moet bij voorkeur worden beperkt tot de betreffende regel:
 
 ```cpp
 // NOLINT(cppcoreguidelines-...)
@@ -197,7 +213,7 @@ Get-ChildItem -Recurse -File -Include *.cpp,*.h |
     }
 ```
 
-- Bash (macOS, Linux, Git Bash op Windows):
+- Bash (Linux, Git Bash op Windows):
 
 ```bash
 find . -path './build' -prune -o -type f \( -name '*.cpp' -o -name '*.h' \) -exec clang-tidy -p build/debug {} +
@@ -214,27 +230,31 @@ find . -path './build' -prune -o -type f \( -name '*.cpp' -o -name '*.h' \) -exe
 
 ```json
 {
-    "editor.formatOnSave": true,
-    "C_Cpp.clang_format_style": "file",
-    "[cpp]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools"
-    }
+  "editor.formatOnSave": true,
+  "C_Cpp.clang_format_style": "file",
+  "[cpp]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  }
 }
 ```
 
-`C_Cpp.clang_format_style: "file"` zorgt ervoor dat de repo-eigen `.clang-format` wordt gebruikt. Bij het opslaan wordt clang-format automatisch uitgevoerd.
+`C_Cpp.clang_format_style: "file"` zorgt ervoor dat de repo-eigen `.clang-format` wordt gebruikt. Bij het opslaan wordt
+clang-format automatisch uitgevoerd.
 
 **CLion** (alle platforms):
 
-Schakel in Settings → Editor → Code Style → C/C++ de ClangFormat-integratie in. CLion leest de `.clang-format` en `.clang-tidy` uit de projectroot.
+Schakel in Settings → Editor → Code Style → C/C++ de ClangFormat-integratie in. CLion leest de `.clang-format` en
+`.clang-tidy` uit de projectroot.
 
 **Visual Studio** (Windows):
 
-Visual Studio 2022 heeft ingebouwde support voor het formatteren met `.clang-format` (Tools → Options → Text Editor → C/C++ → Formatting). Pas dit aan waar nodig.
+Visual Studio 2022 heeft ingebouwde support voor het formatteren met `.clang-format` (Tools → Options → Text Editor →
+C/C++ → Formatting). Pas dit aan waar nodig.
 
 ## 12.2. Bij het committen (pre-commit hook)
 
-Je kan er ook voor kiezen om clang-format en clang-tidy automatisch bij elke commit te runnen in plaats van bij het opslaan van een bestand, via een git hook. Maak het bestand `.githooks/pre-commit` aan met de volgende inhoud:
+Je kan er ook voor kiezen om clang-format en clang-tidy automatisch bij elke commit te runnen in plaats van bij het
+opslaan van een bestand, via een git hook. Maak het bestand `.githooks/pre-commit` aan met de volgende inhoud:
 
 ```bash
 #!/usr/bin/env bash
@@ -266,37 +286,45 @@ Activeer de hook-map (dezelfde opdracht op alle platforms):
 git config core.hooksPath .githooks
 ```
 
-Op macOS en Linux moet het script uitvoerbaar zijn:
+Op Linux moet het script uitvoerbaar zijn:
 
 ```bash
 chmod +x .githooks/pre-commit
 ```
 
-Op Windows werkt dezelfde opdracht vanuit PowerShell of cmd; het script draait dankzij de Git Bash die met Git for Windows wordt meegeleverd. Maak op Windows alleen de `.githooks`-map en het scriptbestand aan via de teksteditor en stel daarna `core.hooksPath` in.
+Op Windows werkt dezelfde opdracht vanuit PowerShell of cmd; het script draait dankzij de Git Bash die met Git for
+Windows wordt meegeleverd. Maak op Windows alleen de `.githooks`-map en het scriptbestand aan via de teksteditor en stel
+daarna `core.hooksPath` in.
 
 ## 12.3. clang-tidy (statische analyse)
 
-clang-tidy draait in de editor als live diagnostic: de tool laat bevindingen zien terwijl je typt. Daarvoor is een bestaande configuratie nodig (de `compile_commands.json` uit een eerdere configure, zie DEVELOPMENT_SETUP.md) en wordt de repo-eigen `.clang-tidy` gebruikt.
+clang-tidy draait in de editor als live diagnostic: de tool laat bevindingen zien terwijl je typt. Daarvoor is een
+bestaande configuratie nodig (de `compile_commands.json` uit een eerdere configure, zie DEVELOPMENT_SETUP.md) en wordt
+de repo-eigen `.clang-tidy` gebruikt.
 
-- **VS Code** (alle platforms): installeer de clangd-extensie (`llvm-vs-code-extensions.vscode-clangd`) en voeg aan de workspace-setting `.vscode/settings.json` toe:
+- **VS Code** (alle platforms): installeer de clangd-extensie (`llvm-vs-code-extensions.vscode-clangd`) en voeg aan de
+  workspace-setting `.vscode/settings.json` toe:
 
 ```json
 {
-    "clangd.arguments": [
-        "--clang-tidy",
-        "--background-index",
-        "--compile-commands-dir=${workspaceFolder}/build/debug"
-    ]
+  "clangd.arguments": [
+    "--clang-tidy",
+    "--background-index",
+    "--compile-commands-dir=${workspaceFolder}/build/debug"
+  ]
 }
 ```
 
-Als er ook andere live diagnostic systemen zijn (zoals Microsoft IntelliSense) die draaien krijg je daar een notificatie van. Zet deze dan uit
+Als er ook andere live diagnostic systemen zijn (zoals Microsoft IntelliSense) die draaien krijg je daar een notificatie
+van. Zet deze dan uit
 
 clangd rapporteert clang-tidy-bevindingen live in de editor.
 
-- **CLion** (alle platforms): schakel Settings → Editor → Inspections → C/C++ → Clang-Tidy in. CLion rapporteert clang-tidy-bevindingen tijdens het typen.
+- **CLion** (alle platforms): schakel Settings → Editor → Inspections → C/C++ → Clang-Tidy in. CLion rapporteert
+  clang-tidy-bevindingen tijdens het typen.
 
-- **Visual Studio** (Windows): Code Analysis kan clang-tidy gebruiken wanneer de component "C++ Clang tools for Windows" is geinstalleerd. Dat is minder geautomatiseerd dan de opties hierboven.
+- **Visual Studio** (Windows): Code Analysis kan clang-tidy gebruiken wanneer de component "C++ Clang tools for Windows"
+  is geinstalleerd. Dat is minder geautomatiseerd dan de opties hierboven.
 
 # 13. Testing
 
@@ -307,7 +335,8 @@ clangd rapporteert clang-tidy-bevindingen live in de editor.
 
 # 14. Git
 
-Commits moeten logisch en klein genoeg zijn om afzonderlijk te begrijpen. Vermijd commits zoals `fix stuff` of `changes`.
+Commits moeten logisch en klein genoeg zijn om afzonderlijk te begrijpen. Vermijd commits zoals `fix stuff` of
+`changes`.
 
 Gebruik beschrijvende commit messages, bijvoorbeeld:
 
@@ -327,7 +356,7 @@ Werk niet rechtstreeks op de gedeelde hoofdbranch. Gebruik feature branches:
 main
 │
 ├── feat/vulkan-renderer
-├── feat/input-system
+├── feat/input-subsystem
 ├── fix/entity-lifetime
 └── fix/resource-manager
 ```
@@ -354,4 +383,5 @@ CI draait via GitHub Actions. De CI controleert minimaal:
 
 # 17. Compiler-specifieke code
 
-Compiler-specifieke code is alleen toegestaan wanneer dit noodzakelijk is. In zulke gevallen moet de code duidelijk worden geisoleerd en gedocumenteerd.
+Compiler-specifieke code is alleen toegestaan wanneer dit noodzakelijk is. In zulke gevallen moet de code duidelijk
+worden geisoleerd en gedocumenteerd.

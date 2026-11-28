@@ -88,7 +88,7 @@ namespace engine
         doomed.destroy();
 
         CHECK(doomed.isPendingDestroy());
-        CHECK(region.getGameObjects().size() == 2); // nog aanwezig tot het opruimen
+        CHECK(region.getGameObjects().size() == 1); // nog aanwezig tot het opruimen
 
         region.processPendingDestruction();
 

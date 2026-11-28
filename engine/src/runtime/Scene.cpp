@@ -91,9 +91,9 @@ namespace engine
         activeLevel = incoming;
     }
 
-    GameObject& Scene::createGameObject(std::string_view objectName)
+    GameObject& Scene::createGameObject(std::string_view objectName) const
     {
-        auto* region = getActiveRegion();
+        Region* region = getActiveRegion();
         if (region == nullptr)
         {
             throw std::logic_error("Scene::createGameObject: er is geen actief level met een actieve region.");
@@ -101,27 +101,19 @@ namespace engine
         return region->createGameObject(objectName);
     }
 
-    GameObject* Scene::findGameObject(std::uint64_t objectId)
+    GameObject* Scene::findGameObject(std::uint64_t objectId) const
     {
-        for (auto* gameObject : collectActiveGameObjects())
-        {
-            if (gameObject->getId() == objectId)
-                return gameObject;
-        }
-        return nullptr;
+        Region* region = getActiveRegion();
+        return region != nullptr ? region->findGameObject(objectId) : nullptr;
     }
 
-    GameObject* Scene::find(std::string_view objectName)
+    GameObject* Scene::find(std::string_view objectName) const
     {
-        for (auto* gameObject : collectActiveGameObjects())
-        {
-            if (gameObject->getName() == objectName)
-                return gameObject;
-        }
-        return nullptr;
+        Region* region = getActiveRegion();
+        return region != nullptr ? region->findGameObjectByName(std::string(objectName)) : nullptr;
     }
 
-    std::vector<GameObject*> Scene::findWithTag(std::string_view tag)
+    std::vector<GameObject*> Scene::findWithTag(std::string_view tag) const
     {
         std::vector<GameObject*> result;
         for (auto* gameObject : collectActiveGameObjects())
@@ -132,11 +124,22 @@ namespace engine
         return result;
     }
 
-    void Scene::update() {}
-
-    void Scene::processPendingDestruction()
+    void Scene::updateBehaviours() const
     {
-        for (auto& level : levels)
+        Region* region = getActiveRegion();
+        if (region == nullptr)
+            return;
+
+        for (const auto& gameObject : region->getGameObjects())
+        {
+            if (!gameObject->isPendingDestroy())
+                gameObject->updateBehaviours();
+        }
+    }
+
+    void Scene::processPendingDestruction() const
+    {
+        for (const auto& level : levels)
         {
             for (auto* region : level->getRegions())
                 region->processPendingDestruction();
@@ -148,9 +151,9 @@ namespace engine
         return activeLevel == nullptr ? nullptr : activeLevel->getActiveRegion();
     }
 
-    std::vector<GameObject*> Scene::collectActiveGameObjects()
+    std::vector<GameObject*> Scene::collectActiveGameObjects() const
     {
-        auto* region = getActiveRegion();
+        Region* region = getActiveRegion();
         return region == nullptr ? std::vector<GameObject*>{} : region->getGameObjects();
     }
 

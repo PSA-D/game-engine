@@ -64,7 +64,10 @@ namespace engine
         std::vector<GameObject*> result;
         result.reserve(gameObjects.size());
         for (auto& gameObject : gameObjects)
-            result.push_back(gameObject.get());
+        {
+            if (!gameObject->isPendingDestroy())
+                result.push_back(gameObject.get());
+        }
         return result;
     }
 
@@ -73,7 +76,10 @@ namespace engine
         std::vector<const GameObject*> result;
         result.reserve(gameObjects.size());
         for (const auto& gameObject : gameObjects)
-            result.push_back(gameObject.get());
+        {
+            if (!gameObject->isPendingDestroy())
+                result.push_back(gameObject.get());
+        }
         return result;
     }
 
@@ -93,6 +99,26 @@ namespace engine
                                         [&gameObject](const auto& owned) { return owned.get() == &gameObject; });
         if (found != gameObjects.end())
             gameObjects.erase(found);
+    }
+
+    GameObject* Region::findGameObject(std::uint64_t id)
+    {
+        const auto found =
+            std::find_if(gameObjects.begin(),
+                         gameObjects.end(),
+                         [id](const auto& owned) { return owned->getId() == id && !owned->isPendingDestroy(); });
+
+        return found != gameObjects.end() ? found->get() : nullptr;
+    }
+
+    GameObject* Region::findGameObjectByName(std::string objectName)
+    {
+        const auto found = std::find_if(gameObjects.begin(),
+                                        gameObjects.end(),
+                                        [objectName](const auto& owned)
+                                        { return owned->getName() == objectName && !owned->isPendingDestroy(); });
+
+        return found != gameObjects.end() ? found->get() : nullptr;
     }
 
     void Region::adopt(std::unique_ptr<GameObject> gameObject)

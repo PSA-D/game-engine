@@ -28,6 +28,9 @@ namespace engine
         [[nodiscard]] std::vector<GameObject*> getGameObjects();
         [[nodiscard]] std::vector<const GameObject*> getGameObjects() const;
 
+        GameObject* findGameObject(std::uint64_t id);
+        GameObject* findGameObjectByName(std::string objectName);
+
         std::unique_ptr<GameObject> detach(uint64_t id);
         void adopt(std::unique_ptr<GameObject> gameObject);
 

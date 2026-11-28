@@ -35,7 +35,7 @@ namespace engine
         [[nodiscard]] std::uint64_t getId() const;
         [[nodiscard]] const std::string& getName() const;
 
-        void update();
+        void updateBehaviours() const;
 
         // ---- Levels ----
 
@@ -62,13 +62,13 @@ namespace engine
         // ---- GameObjects (in de actieve Region van het actieve Level) ----
 
         // Gooit std::logic_error als er geen actief Level met een actieve Region is.
-        GameObject& createGameObject(std::string_view objectName);
+        GameObject& createGameObject(std::string_view objectName) const;
 
         // nullptr als er niets gevonden wordt.
-        [[nodiscard]] GameObject* findGameObject(std::uint64_t id);
+        [[nodiscard]] GameObject* findGameObject(std::uint64_t id) const;
         // Het eerste object (in volgorde van aanmaken) met deze naam.
-        [[nodiscard]] GameObject* find(std::string_view objectName);
-        [[nodiscard]] std::vector<GameObject*> findWithTag(std::string_view tag);
+        [[nodiscard]] GameObject* find(std::string_view objectName) const;
+        [[nodiscard]] std::vector<GameObject*> findWithTag(std::string_view tag) const;
 
         // Alle componenten van type T op de objecten in de actieve Region.
         template <class T>
@@ -85,12 +85,11 @@ namespace engine
 
         // Ruimt de aangevraagde vernietigingen op, in alle Regions van alle Levels.
         // Aan te roepen aan het eind van een frame.
-        void processPendingDestruction();
-        // TODO: updateBehaviours() volgt in een aparte taak, samen met BehaviourScript.
+        void processPendingDestruction() const;
 
     private:
         [[nodiscard]] Region* getActiveRegion() const;
-        [[nodiscard]] std::vector<GameObject*> collectActiveGameObjects();
+        [[nodiscard]] std::vector<GameObject*> collectActiveGameObjects() const;
 
         std::uint64_t id;
         std::string name;
