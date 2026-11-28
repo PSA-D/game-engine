@@ -22,17 +22,19 @@ namespace engine
         auto operator=(Region&&) -> Region& = delete;
 
         [[nodiscard]] const std::string& getName() const;
+
         GameObject& createGameObject(std::string_view objectName = {});
-
-        // Zet een object op de lijst om aan het eind van het frame te vernietigen.
-        void requestDestroy(GameObject& gameObject);
-
-        // Vernietigt alle aangevraagde objecten (met hun kinderen). Aan het eind van een frame aanroepen.
-        void processPendingDestruction();
-
         // In volgorde van aanmaken. Objecten die op vernietiging wachten staan er nog in.
         [[nodiscard]] std::vector<GameObject*> getGameObjects();
         [[nodiscard]] std::vector<const GameObject*> getGameObjects() const;
+
+        std::unique_ptr<GameObject> detach(uint64_t id);
+        void adopt(std::unique_ptr<GameObject> gameObject);
+
+        // Zet een object op de lijst om aan het eind van het frame te vernietigen.
+        void requestDestroy(GameObject& gameObject);
+        // Vernietigt alle aangevraagde objecten (met hun kinderen). Aan het eind van een frame aanroepen.
+        void processPendingDestruction();
 
     private:
         // Vernietigt eerst alle kinderen, daarna het object zelf.
