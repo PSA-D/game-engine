@@ -20,6 +20,7 @@ add_library(engine STATIC
         include/runtime/SceneManager.h
         include/runtime/EventBus.h
         include/runtime/Subscription.h
+        include/runtime/BehaviourScript.h
         include/utils/AssetHandle.h
         include/utils/BodyType.h
         include/utils/Color.h
@@ -51,6 +52,7 @@ add_library(engine STATIC
         src/runtime/EventBus.cpp
         src/runtime/Subscription.cpp
         src/runtime/SceneManager.cpp
+        src/runtime/BehaviourScript.cpp
 
         # Platform
         src/platform/Events.h
@@ -110,8 +112,7 @@ add_library(engine STATIC
         # Utils
         src/utils/Interpolator.cpp
         src/utils/Rect.cpp
-        include/runtime/BehaviourScript.h
-        src/runtime/BehaviourScript.cpp
+        include/runtime/LoadingScene.h
 )
 
 target_include_directories(engine

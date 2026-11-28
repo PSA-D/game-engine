@@ -86,7 +86,7 @@ namespace engine
         if (scene != nullptr && !editor.isEditing())
         {
             physics.update(deltaTime, *scene);
-            scene->update();
+            scene->updateBehaviours();
             ai.update(deltaTime, *scene);
             animation.update(deltaTime, *scene);
             audio.update(deltaTime, *scene);

@@ -103,18 +103,20 @@ namespace engine
 
     GameObject* Region::findGameObject(std::uint64_t id)
     {
-        const auto found = std::find_if(gameObjects.begin(), gameObjects.end(), [id](const auto& owned) {
-            return owned->getId() == id && !owned->isPendingDestroy();
-        });
+        const auto found =
+            std::find_if(gameObjects.begin(),
+                         gameObjects.end(),
+                         [id](const auto& owned) { return owned->getId() == id && !owned->isPendingDestroy(); });
 
         return found != gameObjects.end() ? found->get() : nullptr;
     }
 
-    GameObject* Region::findGameObjectByName(std::string name)
+    GameObject* Region::findGameObjectByName(std::string objectName)
     {
-        const auto found = std::find_if(gameObjects.begin(), gameObjects.end(), [name](const auto& owned) {
-            return owned->getName() == name && !owned->isPendingDestroy();
-        });
+        const auto found = std::find_if(gameObjects.begin(),
+                                        gameObjects.end(),
+                                        [objectName](const auto& owned)
+                                        { return owned->getName() == objectName && !owned->isPendingDestroy(); });
 
         return found != gameObjects.end() ? found->get() : nullptr;
     }
