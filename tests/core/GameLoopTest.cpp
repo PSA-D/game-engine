@@ -18,7 +18,8 @@ namespace engine
 {
     TEST_CASE("GameLoop::run() stopt na requestQuit()", "[unit][core]")
     {
-        SceneManager sceneManager;
+        EventBus eventBus;
+        SceneManager sceneManager{eventBus};
         platform::HeadlessInputSource inputSource;
         subsystems::InputSubsystem input{inputSource};
         subsystems::PhysicsSubsystem physics;

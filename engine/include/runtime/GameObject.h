@@ -36,7 +36,7 @@ namespace engine
             auto component = std::make_unique<T>(*this, std::forward<Args>(args)...);
             T& result = *component;
 
-            if (std::is_base_of_v<BehaviourScript, T>)
+            if constexpr (std::is_base_of_v<BehaviourScript, T>)
                 behaviourScripts.push_back(&result);
 
             components.push_back(std::move(component));
